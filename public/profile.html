@@ -90,7 +90,7 @@
         <section class="container mx-auto px-6 py-10">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!-- Profile Card -->
-                <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="bg-white rounded-lg shadow-md p-6 h-fit">
                     <h2 class="text-lg font-bold mb-4">PROFILE</h2>
                     <div class="flex items-center space-x-4">
                         <div class="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center">
@@ -105,28 +105,29 @@
                     </div>
                     <a href="#" class="block text-main-dark mt-4 font-medium hover:underline">Manage Account</a>
                 </div>
-    
-                <!-- Movie Ratings -->
-                <div class="bg-white rounded-lg shadow-md p-6" x-bind: >
-                    <h2 class="text-lg font-bold mb-4">MY MOVIE RATINGS</h2>
-                    <div class="flex flex-col items-center justify-center border-dashed border-2 border-gray-300 rounded-lg p-6">
-                        <svg class="w-12 h-12 text-gray-500 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 17.25l3.5 2.205-1-4.205 3.5-2.75-4.5-.5-2-4-2 4-4.5.5 3.5 2.75-1 4.205L12 17.25z" />
-                        </svg>
-                        <p class="text-gray-500 text-center">No Movie Ratings Yet</p>
-                        <p class="text-gray-400 text-sm text-center mt-2">Rate each Movie you watched by using a 5-star scale to share your thoughts and reaction.</p>
+                <!-- section rating -->
+                <div class="w-auto lg:col-span-2">
+                    <!-- Movie Ratings -->
+                    <div class="bg-white rounded-lg shadow-md p-6" x-bind:>
+                        <h2 class="text-lg font-bold mb-4">MY MOVIE RATINGS</h2>
+                        <div class="flex flex-col items-center justify-center border-dashed border-2 border-gray-300 rounded-lg p-6">
+                            <svg class="w-12 h-12 text-gray-500 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 17.25l3.5 2.205-1-4.205 3.5-2.75-4.5-.5-2-4-2 4-4.5.5 3.5 2.75-1 4.205L12 17.25z" />
+                            </svg>
+                            <p class="text-gray-500 text-center">No Movie Ratings Yet</p>
+                            <p class="text-gray-400 text-sm text-center mt-2">Rate each Movie you watched by using a 5-star scale to share your thoughts and reaction.</p>
+                        </div>
                     </div>
-                </div>
-    
-                <!-- TV Ratings -->
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <h2 class="text-lg font-bold mb-4">MY TV RATINGS</h2>
-                    <div class="flex flex-col items-center justify-center border-dashed border-2 border-gray-300 rounded-lg p-6">
-                        <svg class="w-12 h-12 text-gray-500 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 17.25l3.5 2.205-1-4.205 3.5-2.75-4.5-.5-2-4-2 4-4.5.5 3.5 2.75-1 4.205L12 17.25z" />
-                        </svg>
-                        <p class="text-gray-500 text-center">No TV Ratings Yet</p>
-                        <p class="text-gray-400 text-sm text-center mt-2">Rate each TV show you watched by using a 5-star scale to share your thoughts and reaction.</p>
+                    <!-- TV Ratings -->
+                    <div class="bg-white rounded-lg shadow-md p-6 mt-6">
+                        <h2 class="text-lg font-bold mb-4">MY TV RATINGS</h2>
+                        <div class="flex flex-col items-center justify-center border-dashed border-2 border-gray-300 rounded-lg p-6">
+                            <svg class="w-12 h-12 text-gray-500 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 17.25l3.5 2.205-1-4.205 3.5-2.75-4.5-.5-2-4-2 4-4.5.5 3.5 2.75-1 4.205L12 17.25z" />
+                                </svg>
+                               <p class="text-gray-500 text-center">No TV Ratings Yet</p>
+                               <p class="text-gray-400 text-sm text-center mt-2">Rate each TV show you watched by using a 5-star scale to share your thoughts and reaction.</p>
+                        </div>
                     </div>
                 </div>
             </div>
