@@ -23,6 +23,21 @@
             }
         }
     </script>
+    <style>
+        .carousel {
+            position: relative;
+            overflow: hidden;
+        }
+        .carousel-inner {
+            display: flex;
+            transition: transform 0.3s ease-in-out;
+        }
+        .carousel-item {
+            flex: 0 0 auto;
+            width: 280px;
+            margin-right: 1rem;
+        }
+    </style>
     <title>Sweet Potato</title>   
 </head>
 <body class="bg-gray-100">
@@ -63,47 +78,41 @@
         </div>
     </header>
     
-    <main class="container mx-auto px-6 mt-32">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="relative group w-[500px] h-[300px]">
-                <video 
-                    class="w-full h-full rounded-lg overflow-hidden border border-gray-700 object-cover"
-                    poster="https://img.youtube.com/vi/iQo-8wx0l0Y/maxresdefault.jpg"
-                    controls
-                >
-                    <source src="https://www.youtube.com/watch?v=iQo-8wx0l0Y" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
+    <main>
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap 4">
+            <div class="relative group">
+                <video class="w-full rounded-lg overflow-hidden border border-gray-700" src="https://www.youtube.com/watch?v=iQo-8wx0l0Y" controls></video>
+            </video>
                 <button
-                    class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 
-                    group-hover:opacity-100 transition duration-300 text-white text-xl"
-                >
-                    ▶ Play
-                </button>
-            </div>
-            <div class="grid grid-cols-2 gap-4">
-                <img
-                    class="w-full h-48 object-cover rounded-lg border border-gray-700"
-                    src="https://via.placeholder.com/300x200"
-                    alt="Image 1"
-                />
-                <img
-                    class="w-full h-48 object-cover rounded-lg border border-gray-700"
-                    src="https://via.placeholder.com/300x200"
-                    alt="Image 2"
-                />
-                <img
-                    class="w-full h-48 object-cover rounded-lg border border-gray-700"
-                    src="https://via.placeholder.com/300x200"
-                    alt="Image 3"
-                />
-                <img
-                    class="w-full h-48 object-cover rounded-lg border border-gray-700"
-                    src="https://via.placeholder.com/300x200"
-                    alt="Image 4"
-                />
-            </div>
+                class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 
+                group-hover:opacity-100 transition duration-300 text-white text-xl">
+                ▶ Play
+            </button>
         </div>
+        <!-- Image Section -->
+        <div class="grid grid-cols-2 gap-2">
+            <img
+            class="w-full h-full object-cover rounded-lg border border-gray-700"
+            src="your-image1.jpg"
+                alt="Image 1"
+                />
+                <img
+                class="w-full h-full object-cover rounded-lg border border-gray-700"
+                src="your-image2.jpg"
+                alt="Image 2"
+                />
+                <img
+                class="w-full h-full object-cover rounded-lg border border-gray-700"
+                src="your-image3.jpg"
+          alt="Image 3"
+          />
+          <img
+          class="w-full h-full object-cover rounded-lg border border-gray-700"
+          src="your-image4.jpg"
+          alt="Image 4"
+          />
+        </div>
+    </div>
     </main>
 
     <script>
@@ -118,3 +127,4 @@
     </script>
 </body>
 </html>
+
