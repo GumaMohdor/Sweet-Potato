@@ -23,6 +23,21 @@
             }
         }
     </script>
+    <style>
+        .carousel {
+            position: relative;
+            overflow: hidden;
+        }
+        .carousel-inner {
+            display: flex;
+            transition: transform 0.3s ease-in-out;
+        }
+        .carousel-item {
+            flex: 0 0 auto;
+            width: 280px;
+            margin-right: 1rem;
+        }
+    </style>
     <title>Sweet Potato</title>   
 </head>
 <body class="bg-gray-100">
@@ -66,24 +81,44 @@
     </header>
 
     <main class="mt-32 container mx-auto px-6">
-        <div class="relative carousel">
-            <div class="bg-white rounded-lg shadow-lg p-4">
-                <img src="/placeholder.svg?height=200&width=300" alt="Game 1" class="w-full h-40 object-cover rounded-lg mb-4">
-                <h2 class="text-xl font-bold mb-2">Game Title 1</h2>
-                <p class="text-gray-600 text-sm">A brief description of the game goes here.</p>
-                <a href="#" class="mt-4 inline-block bg-main text-white px-4 py-2 rounded-md hover:bg-main-dark">What's New</a>
-            </div>
-            <div class="bg-white rounded-lg shadow-lg p-4">
-                <img src="/placeholder.svg?height=200&width=300" alt="Game 2" class="w-full h-40 object-cover rounded-lg mb-4">
-                <h2 class="text-xl font-bold mb-2">Game Title 2</h2>
-                <p class="text-gray-600 text-sm">Another exciting game description here.</p>
-                <a href="#" class="mt-4 inline-block bg-main text-white px-4 py-2 rounded-md hover:bg-main-dark">See More</a>
-            </div>
-            <div class="bg-white rounded-lg shadow-lg p-4">
-                <img src="/placeholder.svg?height=200&width=300" alt="Game 3" class="w-full h-40 object-cover rounded-lg mb-4">
-                <h2 class="text-xl font-bold mb-2">Game Title 3</h2>
-                <p class="text-gray-600 text-sm">The third game's description goes here.</p>
-                <a href="#" class="mt-4 inline-block bg-main text-white px-4 py-2 rounded-md hover:bg-main-dark">See More</a>
+        <div class="relative">
+            <div class="carousel">
+                <div class="carousel-inner" id="carouselInner">
+                    <div class="inline-block mr-4">
+                        <div class="bg-white rounded-lg shadow-lg p-4 w-72">
+                            <img src="/placeholder.svg?height=200&width=300" alt="Game 1" class="w-full h-40 object-cover rounded-lg mb-4">
+                            <h2 class="text-xl font-bold mb-2">Game Title 1</h2>
+                            <p class="text-gray-600 text-sm">A brief description of the game goes here.</p>
+                            <a href="#" class="mt-4 inline-block bg-main text-white px-4 py-2 rounded-md hover:bg-main-dark">What's New</a>
+                        </div>
+                    </div>
+                    <div class="inline-block mr-4">
+                        <div class="bg-white rounded-lg shadow-lg p-4 w-72">
+                            <img src="/placeholder.svg?height=200&width=300" alt="Game 2" class="w-full h-40 object-cover rounded-lg mb-4">
+                            <h2 class="text-xl font-bold mb-2">Game Title 2</h2>
+                            <p class="text-gray-600 text-sm">Another exciting game description here.</p>
+                            <a href="#" class="mt-4 inline-block bg-main text-white px-4 py-2 rounded-md hover:bg-main-dark">See More</a>
+                        </div>
+                    </div>
+                    <div class="inline-block">
+                        <div class="bg-white rounded-lg shadow-lg p-4 w-72">
+                            <img src="/placeholder.svg?height=200&width=300" alt="Game 3" class="w-full h-40 object-cover rounded-lg mb-4">
+                            <h2 class="text-xl font-bold mb-2">Game Title 3</h2>
+                            <p class="text-gray-600 text-sm">The third game's description goes here.</p>
+                            <a href="#" class="mt-4 inline-block bg-main text-white px-4 py-2 rounded-md hover:bg-main-dark">See More</a>
+                        </div>
+                    </div>
+                </div>
+                <button class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white/80 p-2 rounded-full shadow-md" id="prevBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                    </svg>
+                </button>
+                <button class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white/80 p-2 rounded-full shadow-md" id="nextBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                    </svg>
+                </button>
             </div>
         </div>
 
@@ -98,8 +133,22 @@
                 </a>
             </div>
             
-            <div class="relative carousel" id="newReleased">
-                <!-- Dynamic content will be inserted here -->
+            <div class="relative">
+                <div class="carousel">
+                    <div class="carousel-inner" id="newReleasedInner">
+                        <!-- Dynamic content will be inserted here -->
+                    </div>
+                    <button class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white/80 p-2 rounded-full shadow-md" id="prevBtnNew">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                        </svg>
+                    </button>
+                    <button class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white/80 p-2 rounded-full shadow-md" id="nextBtnNew">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -178,12 +227,12 @@
             ];
 
             function renderNewReleased() {
-                const container = document.getElementById('newReleased');
+                const container = document.getElementById('newReleasedInner');
                 newReleased.forEach(item => {
                     const itemElement = document.createElement('div');
-                    itemElement.className = 'flex-none w-[280px]';
+                    itemElement.className = 'carousel-item';
                     itemElement.innerHTML = `
-                        <div class="relative group">
+                        <div class="relative group w-[280px]">
                             <img 
                                 src="${item.image}" 
                                 alt="${item.title}"
@@ -233,7 +282,7 @@
                 });
             }
 
-            function renderpopularGames() {
+            function renderPopularGames() {
                 const container = document.getElementById('popularGames');
                 popularGames.forEach(item => {
                     const itemElement = document.createElement('div');
@@ -253,9 +302,42 @@
                 });
             }
 
+            function setupCarousel(containerId, prevBtnId, nextBtnId) {
+                const container = document.getElementById(containerId);
+                const prevBtn = document.getElementById(prevBtnId);
+                const nextBtn = document.getElementById(nextBtnId);
+                let scrollAmount = 0;
+                const cardWidth = 280; // Width of each card plus margin
+                const containerWidth = container.offsetWidth;
+                const maxScroll = container.scrollWidth - containerWidth;
+
+                prevBtn.addEventListener('click', () => {
+                    scrollAmount = Math.max(scrollAmount - cardWidth, 0);
+                    container.style.transform = `translateX(-${scrollAmount}px)`;
+                    updateButtonVisibility();
+                });
+
+                nextBtn.addEventListener('click', () => {
+                    scrollAmount = Math.min(scrollAmount + cardWidth, maxScroll);
+                    container.style.transform = `translateX(-${scrollAmount}px)`;
+                    updateButtonVisibility();
+                });
+
+                function updateButtonVisibility() {
+                    prevBtn.style.display = scrollAmount <= 0 ? 'none' : 'block';
+                    nextBtn.style.display = scrollAmount >= maxScroll ? 'none' : 'block';
+                }
+
+                // Initial button visibility
+                updateButtonVisibility();
+            }
+
             renderNewReleased();
-            renderpopularGames();
+            renderPopularGames();
+            setupCarousel('carouselInner', 'prevBtn', 'nextBtn');
+            setupCarousel('newReleasedInner', 'prevBtnNew', 'nextBtnNew');
         });
     </script>
 </body>
 </html>
+
