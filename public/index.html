@@ -3,17 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Fonts import for 'Luckiest Guy' font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN for utility-first CSS framework -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind CSS configuration for custom theme -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
+                    // Custom font family
                     fontFamily: {
                         'luckiest': ['Luckiest Guy', 'cursive']
                     },
+                    // Custom color palette
                     colors: {
                         'main': '#C39BD3',
                         'main-dark': '#A569BD',
@@ -23,6 +28,7 @@
             }
         }
     </script>
+    <!-- Custom styles for carousel functionality -->
     <style>
         .carousel {
             position: relative;
@@ -41,23 +47,28 @@
     <title>Sweet Potato</title>   
 </head>
 <body class="bg-gray-100">
+    <!-- Header section with navigation -->
     <header class="bg-main fixed top-0 w-full shadow-md z-50">
         <nav class="container mx-auto px-6 py-3">
+            <!-- Desktop navigation menu -->
             <div class="flex justify-between items-center">
+                <!-- Logo/Brand name -->
                 <a href="#" class="text-2xl font-bold text-white font-luckiest">Sweet Potato</a>
+                <!-- Desktop menu items -->
                 <div class="hidden md:flex items-center space-x-4">
-                    <a href="#" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Upcoming</a>
                     <a href="#" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Latest</a>
                     <a href="#" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Popular</a>
                     <a href="#" class="text-white hover:text-main-dark hover:bg-white px-6 py-2 rounded-md">Genre</a>
                     <a href="#" class="bg-main-dark text-white px-4 py-2 rounded-md hover:bg-white hover:text-main-dark">Masuk</a>
                 </div>
+                <!-- Mobile menu button (hamburger icon) -->
                 <button id="burger-icon" class="md:hidden text-white focus:outline-none">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                 </button>
             </div>
+            <!-- Search bar -->
             <div class="mt-4">
                 <div class="flex items-center space-x-2">
                     <input type="search" placeholder="Search" class="border bg-gray-200 border-gray-300 rounded-full px-3 py-2 focus:outline-none focus:border-main-dark w-full">
@@ -69,9 +80,9 @@
                 </div>
             </div>
         </nav>
+        <!-- Mobile side menu (hidden by default) -->
         <div id="side-menu" class="hidden absolute top-14 left-0 w-full bg-main text-white shadow-lg z-40 md:hidden">
             <ul class="flex flex-col space-y-4 px-6 py-4">
-                <li><a href="#" class="block text-white hover:text-main-light">Upcoming</a></li>
                 <li><a href="#" class="block text-white hover:text-main-light">Latest</a></li>
                 <li><a href="#" class="block text-white hover:text-main-light">Popular</a></li>
                 <li><a href="#" class="block text-white hover:text-main-light">Genre</a></li>
@@ -81,9 +92,11 @@
     </header>
 
     <main class="mt-32 container mx-auto px-6">
+        <!-- Featured games carousel -->
         <div class="relative">
             <div class="carousel">
                 <div class="carousel-inner" id="carouselInner">
+                    <!-- Featured game cards -->
                     <div class="inline-block mr-4">
                         <div class="bg-white rounded-lg shadow-lg p-4 w-72">
                             <img src="/placeholder.svg?height=200&width=300" alt="Game 1" class="w-full h-40 object-cover rounded-lg mb-4">
@@ -109,6 +122,7 @@
                         </div>
                     </div>
                 </div>
+                <!-- Carousel navigation buttons -->
                 <button class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white/80 p-2 rounded-full shadow-md" id="prevBtn">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -122,6 +136,7 @@
             </div>
         </div>
 
+        <!-- New Released games section -->
         <div class="my-12">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-bold">NEW RELEASED</h2>
@@ -136,8 +151,9 @@
             <div class="relative">
                 <div class="carousel">
                     <div class="carousel-inner" id="newReleasedInner">
-                        <!-- Dynamic content will be inserted here -->
+                        <!-- Dynamic content will be inserted here by JavaScript -->
                     </div>
+                    <!-- Carousel navigation buttons -->
                     <button class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white/80 p-2 rounded-full shadow-md" id="prevBtnNew">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -152,6 +168,7 @@
             </div>
         </div>
 
+        <!-- Popular Games section -->
         <div>
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-bold">POPULAR GAMES</h2>
@@ -164,13 +181,14 @@
             </div>
             
             <div id="popularGames" class="space-y-4">
-                <!-- Dynamic content will be inserted here -->
+                <!-- Dynamic content will be inserted here by JavaScript -->
             </div>
         </div>
     </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Mobile menu toggle functionality
             const burgerIcon = document.querySelector('#burger-icon');
             const sideMenu = document.querySelector('#side-menu');
 
@@ -178,6 +196,7 @@
                 sideMenu.classList.toggle('hidden');
             });
 
+            // Sample data for New Released games
             const newReleased = [
                 {
                     title: "Project Agni",
@@ -218,6 +237,7 @@
                 }
             ];
 
+            // Sample data for Popular Games
             const popularGames = [
                 { title: "Coral Island", score: 97 },
                 { title: "A Space For The Unbound", score: 97 },
@@ -226,6 +246,7 @@
                 { title: "Troublemaker", score: 76 }
             ];
 
+            // Function to render New Released games
             function renderNewReleased() {
                 const container = document.getElementById('newReleasedInner');
                 newReleased.forEach(item => {
@@ -238,6 +259,7 @@
                                 alt="${item.title}"
                                 class="w-full h-[400px] object-cover rounded-lg"
                             />
+                            <!-- Play button overlay -->
                             <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                 <div class="w-16 h-16 rounded-full bg-white/90 flex items-center justify-center">
                                     <div class="w-12 h-12 rounded-full border-2 border-black flex items-center justify-center">
@@ -248,6 +270,7 @@
                         </div>
                         
                         <div class="mt-4 space-y-3">
+                            <!-- Game scores -->
                             <div class="flex gap-2">
                                 ${item.criticScore !== undefined ? `
                                     <div class="flex items-center">
@@ -282,6 +305,7 @@
                 });
             }
 
+            // Function to render Popular Games
             function renderPopularGames() {
                 const container = document.getElementById('popularGames');
                 popularGames.forEach(item => {
@@ -302,6 +326,7 @@
                 });
             }
 
+            // Function to setup carousel functionality
             function setupCarousel(containerId, prevBtnId, nextBtnId) {
                 const container = document.getElementById(containerId);
                 const prevBtn = document.getElementById(prevBtnId);
@@ -332,6 +357,7 @@
                 updateButtonVisibility();
             }
 
+            // Initialize the page
             renderNewReleased();
             renderPopularGames();
             setupCarousel('carouselInner', 'prevBtn', 'nextBtn');
@@ -340,4 +366,3 @@
     </script>
 </body>
 </html>
-
