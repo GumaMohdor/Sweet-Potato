@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" />
+    <style>
+        .sidebar a.active {
+        background-color: #4F46E5; /* Highlight color */
+        color: #fff;
+        }
+    </style>
+</head>
+<body class="flex h-screen bg-gray-900 text-gray-200 font-sans">
+    <div class="min-h-screen flex flex-row bg-gray-900">
+      <div class="flex flex-col w-56 bg-gray-800 rounded-r-3xl overflow-hidden">
+        <div class="flex items-center justify-center h-20 shadow-md bg-gray-700">
+            <img src="img/logo.png" alt="Sweet Potato Logo" class="h-32">
+        </div>
+        <ul class="flex flex-col py-4">
+          <li>
+            <a href="adminDashboard.html" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-400 hover:text-gray-100">
+              <span class="inline-flex items-center justify-center h-12 w-12 text-lg"><i class="bx bx-home"></i></span>
+              <span class="text-sm font-medium">Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="adminGame.html" data-link="adminGame.html" class="flex flex-row items-center h-12 transform translate-x-2 transition-transform ease-in duration-200 text-gray-100">
+              <span class="inline-flex items-center justify-center h-12 w-12 text-lg"><i class="bx bx-joystick"></i></span>
+              <span class="text-sm font-medium">Games</span>
+            </a>
+          </li>
+          <li>
+            <a href="adminGenre.html" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-400 hover:text-gray-100">
+              <span class="inline-flex items-center justify-center h-12 w-12 text-lg"><i class="bx bx-category"></i></span>
+              <span class="text-sm font-medium">Genre</span>
+            </a>
+          </li>
+          <li>
+            <a href="adminPlatform.html" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-400 hover:text-gray-100">
+              <span class="inline-flex items-center justify-center h-12 w-12 text-lg"><i class="bx bx-devices"></i></span>
+              <span class="text-sm font-medium">Platform</span>
+            </a>
+          </li>
+          <li>
+            <a href="adminList.html" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-400 hover:text-gray-100">
+              <span class="inline-flex items-center justify-center h-12 w-12 text-lg"><i class="bx bx-user-circle"></i></span>
+              <span class="text-sm font-medium">Admin</span>
+            </a>
+          </li>
+          <li>
+          <li>
+            <a href="#" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-400 hover:text-gray-100">
+              <span class="inline-flex items-center justify-center h-12 w-12 text-lg"><i class="bx bx-log-out"></i></span>
+              <span class="text-sm font-medium">Logout</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+    <!-- Main Content -->
+    <main class="flex-1 p-6">
+        <h1 class="text-2xl font-bold mb-6">Manage Games</h1>
+         <!-- Search Section -->
+        <div class="flex justify-between items-center mb-4">
+            <div class="flex">
+                <input 
+                    type="text" 
+                    id="search-input" 
+                    placeholder="Search games..." 
+                    class="w-64 px-3 py-2 border border-gray-700 rounded-l bg-gray-700 text-white"
+                />
+                <button 
+                    onclick="searchGames()" 
+                    class="bg-indigo-500 text-white px-4 py-2 rounded-r hover:bg-indigo-600"
+                >
+                    Search
+                </button>
+            </div>
+        </div>
+
+        <!-- Table Section -->
+        <div class="bg-gray-800 p-4 rounded-lg shadow">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-semibold">Games Table</h2>
+                <button onclick="openPopup()" class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600">Add Game</button>
+            </div>
+    
+            <table class="w-full table-auto border-collapse border border-gray-700">
+                <thead>
+                    <tr class="bg-gray-700">
+                        <th class="border border-gray-700 px-4 py-2 cursor-pointer" onclick="sortTable(0)">ID</th>
+                        <th class="border border-gray-700 px-4 py-2 cursor-pointer" onclick="sortTable(1)">Title</th>
+                        <th class="border border-gray-700 px-4 py-2 cursor-pointer" onclick="sortTable(2)">Description</th>
+                        <th class="border border-gray-700 px-4 py-2 cursor-pointer" onclick="sortTable(3)">Release Date</th>
+                        <th class="border border-gray-700 px-4 py-2">Media</th>
+                        <th class="border border-gray-700 px-4 py-2">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="data-table">
+                    <!-- Data rows will be dynamically generated -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+    
+    <!-- Popup Modal -->
+    <div id="popup-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-1/3">
+            <h2 id="popup-title" class="text-lg font-bold mb-4">Add/Edit Game</h2>
+            <form id="data-form">
+                <input type="hidden" id="data-id">
+                <div class="mb-4">
+                    <label for="title" class="block text-sm font-medium mb-1">Title</label>
+                    <input type="text" id="title" class="w-full border border-gray-700 rounded px-3 py-2 bg-gray-700 text-white">
+                </div>
+                <div class="mb-4">
+                    <label for="description" class="block text-sm font-medium mb-1">Description</label>
+                    <textarea id="description" class="w-full border border-gray-700 rounded px-3 py-2 bg-gray-700 text-white"></textarea>
+                </div>
+                <div class="mb-4">
+                    <label for="release-date" class="block text-sm font-medium mb-1">Release Date</label>
+                    <input type="date" id="release-date" class="w-full border border-gray-700 rounded px-3 py-2 bg-gray-700 text-white">
+                </div>
+                <div class="mb-4">
+                    <label for="media" class="block text-sm font-medium mb-1">Media</label>
+                    <input type="file" id="media" class="w-full border border-gray-700 rounded px-3 py-2 bg-gray-700 text-white" accept="image/*,video/*">
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <button type="button" onclick="closePopup()" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">Cancel</button>
+                    <button type="submit" class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const dataTable = document.getElementById('data-table');
+        const popupModal = document.getElementById('popup-modal');
+        const form = document.getElementById('data-form');
+        const popupTitle = document.getElementById('popup-title');
+        const dataIdInput = document.getElementById('data-id');
+        const titleInput = document.getElementById('title');
+        const descriptionInput = document.getElementById('description');
+        const releaseDateInput = document.getElementById('release-date');
+        const mediaInput = document.getElementById('media');
+
+        function sortTable(columnIndex) {
+        const rows = Array.from(dataTable.querySelectorAll('tr'));
+        const isAscending = dataTable.getAttribute('data-sort') !== `column-${columnIndex}-asc`;
+        const multiplier = isAscending ? 1 : -1;
+
+        rows.sort((rowA, rowB) => {
+            const cellA = rowA.children[columnIndex].innerText.trim().toLowerCase();
+            const cellB = rowB.children[columnIndex].innerText.trim().toLowerCase();
+
+            if (isNaN(cellA) || isNaN(cellB)) {
+                return cellA.localeCompare(cellB) * multiplier;
+            }
+            return (parseFloat(cellA) - parseFloat(cellB)) * multiplier;
+        });
+
+        // Clear and re-add sorted rows
+        dataTable.innerHTML = '';
+        rows.forEach(row => dataTable.appendChild(row));
+
+        // Update sort state
+        dataTable.setAttribute('data-sort', `column-${columnIndex}-${isAscending ? 'asc' : 'desc'}`);
+        }
+
+        
+        // Search function
+        function searchGames() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const rows = Array.from(dataTable.querySelectorAll('tr'));
+
+            rows.forEach(row => {
+                const titleCell = row.querySelector('td:nth-child(2)'); // Column 2 = Title
+                const descriptionCell = row.querySelector('td:nth-child(3)'); // Column 3 = Description
+                const match = titleCell?.textContent.toLowerCase().includes(searchTerm) || 
+                            descriptionCell?.textContent.toLowerCase().includes(searchTerm);
+
+                row.style.display = match ? '' : 'none'; // Show row if match, otherwise hide
+            });
+        }
+
+        
+        function closeSidebar() {
+            document.querySelector(".sidebar").classList.add("hidden");
+        }
+
+        function dropdown() {
+            document.querySelector("#submenu").classList.toggle("hidden");
+            document.querySelector("#arrow").classList.toggle("rotate-0");
+        }
+
+        function openSidebar() {
+            document.querySelector(".sidebar").classList.toggle("hidden");
+        }
+
+        async function fetchGames() {
+            try {
+                const response = await fetch('/api/games');
+                if (!response.ok) throw new Error('Failed to fetch games');
+                const games = await response.json();
+                renderTable(games);
+            } catch (error) {
+                console.error(error.message);
+            }
+        }
+
+        function renderTable(data) {
+            dataTable.innerHTML = '';
+            data.forEach(row => {
+                dataTable.innerHTML += `
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">${row.id}</td>
+                        <td class="border border-gray-300 px-4 py-2">${row.title}</td>
+                        <td class="border border-gray-300 px-4 py-2">${row.description}</td>
+                        <td class="border border-gray-300 px-4 py-2">${row.release_date}</td>
+                        <td class="border border-gray-300 px-4 py-2"><a href="${row.media}" class="text-blue-500 underline" target="_blank">Media</a></td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">
+                            <button onclick="editGame(${row.id}, '${row.title}', '${row.description}', '${row.release_date}', '${row.media}')" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Edit</button>
+                            <button onclick="deleteGame(${row.id})" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function openPopup(id = '', title = '', description = '', releaseDate = '', media = '') {
+            popupTitle.textContent = id ? 'Edit Game' : 'Add Game';
+            dataIdInput.value = id;
+            titleInput.value = title;
+            descriptionInput.value = description;
+            releaseDateInput.value = releaseDate;
+            mediaInput.value = ''; // Reset file input
+            popupModal.classList.remove('hidden');
+        }
+
+        function closePopup() {
+            popupModal.classList.add('hidden');
+        }
+
+        async function deleteGame(id) {
+            try {
+                const response = await fetch(`/api/games/${id}`, { method: 'DELETE' });
+                if (!response.ok) throw new Error('Failed to delete game');
+                fetchGames();
+            } catch (error) {
+                console.error(error.message);
+            }
+        }
+
+        async function editGame(id, title, description, releaseDate, media) {
+            openPopup(id, title, description, releaseDate, media);
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+        const links = document.querySelectorAll('.sidebar a[data-link]');
+        const currentPath = window.location.pathname.split('/').pop(); // Mendapatkan nama file halaman saat ini
+
+        links.forEach(link => {
+            if (link.getAttribute('data-link') === currentPath) {
+            link.classList.add('active'); // Menambahkan kelas 'active' pada link yang sesuai
+            } else {
+            link.classList.remove('active'); // Menghapus kelas 'active' jika tidak sesuai
+            }
+        });
+        });
+
+        
+        form.addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const formData = new FormData();
+        formData.append('title', titleInput.value);
+        formData.append('description', descriptionInput.value);
+        formData.append('release_date', releaseDateInput.value);
+
+        if (mediaInput.files[0]) {
+            formData.append('media', mediaInput.files[0]);
+        }
+
+        const id = dataIdInput.value;
+
+        try {
+            const response = await fetch(id ? `/api/games/${id}` : '/api/games', {
+                method: id ? 'PUT' : 'POST',
+                body: formData
+            });
+
+            if (!response.ok) throw new Error('Failed to save game');
+            closePopup();
+            fetchGames();
+        } catch (error) {
+            console.error(error.message);
+        }
+        });
+
+        fetchGames();
+    </script>
+</body>
+</html>
