@@ -3,22 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Google Fonts import for 'Luckiest Guy' font -->
+    <!-- START: Font imports -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
-    <!-- Tailwind CSS CDN for utility-first CSS framework -->
+    <!-- END: Font imports -->
+
+    <!-- START: Tailwind CSS setup -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Tailwind CSS configuration for custom theme -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    // Custom font family
                     fontFamily: {
                         'luckiest': ['Luckiest Guy', 'cursive']
                     },
-                    // Custom color palette
                     colors: {
                         'main': '#C39BD3',
                         'main-dark': '#A569BD',
@@ -28,7 +27,9 @@
             }
         }
     </script>
-    <!-- Custom styles for carousel functionality -->
+    <!-- END: Tailwind CSS setup -->
+
+    <!-- START: Custom carousel styles -->
     <style>
         .carousel {
             position: relative;
@@ -44,31 +45,28 @@
             margin-right: 1rem;
         }
     </style>
+    <!-- END: Custom carousel styles -->
+
     <title>Sweet Potato</title>   
 </head>
 <body class="bg-gray-100">
-    <!-- Header section with navigation -->
+    <!-- START: Header and Navigation -->
     <header class="bg-main fixed top-0 w-full shadow-md z-50">
         <nav class="container mx-auto px-6 py-3">
-            <!-- Desktop navigation menu -->
             <div class="flex justify-between items-center">
-                <!-- Logo/Brand name -->
                 <a href="#" class="text-2xl font-bold text-white font-luckiest">Sweet Potato</a>
-                <!-- Desktop menu items -->
                 <div class="hidden md:flex items-center space-x-4">
-                    <a href="latestgames" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Latest</a>
+                    <a href="latestgames.html" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Latest</a>
                     <a href="populargames.html" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Popular</a>
                     <a href="#" class="text-white hover:text-main-dark hover:bg-white px-6 py-2 rounded-md">Genre</a>
                     <a href="sign.html" class="bg-main-dark text-white px-4 py-2 rounded-md hover:bg-white hover:text-main-dark">Log In</a>
                 </div>
-                <!-- Mobile menu button (hamburger icon) -->
                 <button id="burger-icon" class="md:hidden text-white focus:outline-none">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                 </button>
             </div>
-            <!-- Search bar -->
             <div class="mt-4">
                 <div class="flex items-center space-x-2">
                     <input type="search" placeholder="Search" class="border bg-gray-200 border-gray-300 rounded-full px-3 py-2 focus:outline-none focus:border-main-dark w-full">
@@ -80,29 +78,28 @@
                 </div>
             </div>
         </nav>
-        <!-- Mobile side menu (hidden by default) -->
         <div id="side-menu" class="hidden absolute top-14 left-0 w-full bg-main text-white shadow-lg z-40 md:hidden">
             <ul class="flex flex-col space-y-4 px-6 py-4">
                 <li><a href="latestgames.html" class="block text-white hover:text-main-light">Latest</a></li>
                 <li><a href="populargames.html" class="block text-white hover:text-main-light">Popular</a></li>
                 <li><a href="#" class="block text-white hover:text-main-light">Genre</a></li>
-                <li><a href="#" class="block bg-main-dark px-4 py-2 rounded-md text-center hover:bg-main-light hover:text-main-dark">Log In</a></li>
+                <li><a href="sign.html" class="block bg-main-dark px-4 py-2 rounded-md text-center hover:bg-main-light hover:text-main-dark">Log In</a></li>
             </ul>
         </div>
     </header>
+    <!-- END: Header and Navigation -->
 
-    <main class="mt-32 container mx-auto px-6">
-        <!-- Featured games carousel -->
+    <main class="mt-32 container mx-auto px-6 bg-gray-100">
+        <!-- START: Featured games carousel -->
         <div class="relative">
             <div class="carousel">
                 <div class="carousel-inner" id="carouselInner">
-                    <!-- Featured game cards -->
                     <div class="inline-block mr-4">
                         <div class="bg-white rounded-lg shadow-lg p-4 w-72">
                             <img src="/placeholder.svg?height=200&width=300" alt="Game 1" class="w-full h-40 object-cover rounded-lg mb-4">
                             <h2 class="text-xl font-bold mb-2">Game Title 1</h2>
                             <p class="text-gray-600 text-sm">A brief description of the game goes here.</p>
-                            <a href="#" class="mt-4 inline-block bg-main text-white px-4 py-2 rounded-md hover:bg-main-dark">What's New</a>
+                            <a href="gamedetail.html" class="mt-4 inline-block bg-main text-white px-4 py-2 rounded-md hover:bg-main-dark">What's New</a>
                         </div>
                     </div>
                     <div class="inline-block mr-4">
@@ -110,7 +107,7 @@
                             <img src="/placeholder.svg?height=200&width=300" alt="Game 2" class="w-full h-40 object-cover rounded-lg mb-4">
                             <h2 class="text-xl font-bold mb-2">Game Title 2</h2>
                             <p class="text-gray-600 text-sm">Another exciting game description here.</p>
-                            <a href="#" class="mt-4 inline-block bg-main text-white px-4 py-2 rounded-md hover:bg-main-dark">See More</a>
+                            <a href="gamedetail.html" class="mt-4 inline-block bg-main text-white px-4 py-2 rounded-md hover:bg-main-dark">See More</a>
                         </div>
                     </div>
                     <div class="inline-block">
@@ -118,11 +115,10 @@
                             <img src="/placeholder.svg?height=200&width=300" alt="Game 3" class="w-full h-40 object-cover rounded-lg mb-4">
                             <h2 class="text-xl font-bold mb-2">Game Title 3</h2>
                             <p class="text-gray-600 text-sm">The third game's description goes here.</p>
-                            <a href="#" class="mt-4 inline-block bg-main text-white px-4 py-2 rounded-md hover:bg-main-dark">See More</a>
+                            <a href="gamedetail.html" class="mt-4 inline-block bg-main text-white px-4 py-2 rounded-md hover:bg-main-dark">See More</a>
                         </div>
                     </div>
                 </div>
-                <!-- Carousel navigation buttons -->
                 <button class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white/80 p-2 rounded-full shadow-md" id="prevBtn">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -135,12 +131,13 @@
                 </button>
             </div>
         </div>
+        <!-- END: Featured games carousel -->
 
-        <!-- New Released games section -->
+        <!-- START: New Released games section -->
         <div class="my-12">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-bold">NEW RELEASED</h2>
-                <a href="#" class="text-main-dark hover:text-main flex items-center">
+                <a href="latestgames.html" class="text-main-dark hover:text-main flex items-center">
                     VIEW ALL
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
@@ -153,7 +150,6 @@
                     <div class="carousel-inner" id="newReleasedInner">
                         <!-- Dynamic content will be inserted here by JavaScript -->
                     </div>
-                    <!-- Carousel navigation buttons -->
                     <button class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white/80 p-2 rounded-full shadow-md" id="prevBtnNew">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -167,12 +163,13 @@
                 </div>
             </div>
         </div>
+        <!-- END: New Released games section -->
 
-        <!-- Popular Games section -->
+        <!-- START: Popular Games section -->
         <div>
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-bold">POPULAR GAMES</h2>
-                <a href="#" class="text-main-dark hover:text-main flex items-center">
+                <a href="populargames.html" class="text-main-dark hover:text-main flex items-center">
                     VIEW ALL
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
@@ -180,153 +177,169 @@
                 </a>
             </div>
             
-            <div id="popularGames" class="space-y-4">
+            <div id="popularGames" class="space-y-2">
                 <!-- Dynamic content will be inserted here by JavaScript -->
             </div>
         </div>
+        <!-- END: Popular Games section -->
     </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Mobile menu toggle functionality
+            // START: Mobile menu toggle functionality
             const burgerIcon = document.querySelector('#burger-icon');
             const sideMenu = document.querySelector('#side-menu');
 
             burgerIcon.addEventListener('click', () => {
                 sideMenu.classList.toggle('hidden');
             });
+            // END: Mobile menu toggle functionality
 
-            // Sample data for New Released games
+            // START: Sample data for New Released games
             const newReleased = [
                 {
                     title: "Project Agni",
-                    image: "/placeholder.svg?height=400&width=300",
-                    criticScore: 90,
+                    image: "https://static1.srcdn.com/wordpress/wp-content/uploads/2022/05/Astro-Bot-Figure-Screenshot.jpg",
                     gamerScore: 98,
-                    isNew: true
+                    isNew: true,
+                    url: "gamedetail.html?game=project-agni"
                 },
                 {
                     title: "Coffe Talks 2",
-                    image: "/placeholder.svg?height=400&width=300",
-                    criticScore: 85,
-                    gamerScore: 90
+                    image: "https://i.pinimg.com/736x/24/04/fb/2404fb1b7148761cdabe4a6330863518.jpg",
+                    gamerScore: 90,
+                    url: "gamedetail.html?game=coffee-talks-2"
                 },
                 {
                     title: "Troublemaker 2",
-                    image: "/placeholder.svg?height=400&width=300",
-                    criticScore: 79,
-                    gamerScore: 84
+                    image: "https://th.bing.com/th/id/OIP.Z9sin2bn2F9lBM4rPYVYbQHaHa?pid=ImgDet&w=208&h=208&c=7",
+                    gamerScore: 84,
+                    url: "gamedetail.html?game=troublemaker-2"
                 },
                 {
                     title: "Dreadout 2",
-                    image: "/placeholder.svg?height=400&width=300",
-                    criticScore: 100,
-                    gamerScore: 92
+                    image: "https://preview.redd.it/theory-sackboy-is-astro-bot-v0-zp1j3g48kd8d1.jpg?width=1200&format=pjpg&auto=webp&s=c405c073e52d423d75769c3a4c7f33a22fc256f4",
+                    gamerScore: 92,
+                    url: "gamedetail.html?game=dreadout-2"
                 },
                 {
                     title: "Dreadhaunt",
-                    image: "/placeholder.svg?height=400&width=300",
-                    criticScore: 83,
-                    gamerScore: null
+                    image: "https://blog.playstation.com/tachyon/2019/01/46856222711_937287ca96_h.jpg",
+                    gamerScore: 88,
+                    url: "gamedetail.html?game=dreadhaunt"
                 },
                 {
                     title: "Samudra",
-                    image: "/placeholder.svg?height=400&width=300",
-                    criticScore: 80,
-                    gamerScore: 80
+                    image: "https://th.bing.com/th/id/OIP.1LLLKfBY1Ov1HO8NdCAj2gHaEK?w=319&h=180&c=7&r=0&o=5&pid=1.7",
+                    gamerScore: 80,
+                    url: "gamedetail.html?game=samudra"
                 }
             ];
+            // END: Sample data for New Released games
 
-            // Sample data for Popular Games
+            // START: Sample data for Popular Games
             const popularGames = [
-                { title: "Coral Island", score: 97 },
-                { title: "A Space For The Unbound", score: 97 },
-                { title: "Rendevouz", score: 82 },
-                { title: "Coffe Talks", score: 90 },
-                { title: "Troublemaker", score: 76 }
+                { title: "Coral Island", gamerScore: 97, url: "gamedetail.html?game=coral-island" },
+                { title: "A Space For The Unbound", gamerScore: 97, url: "gamedetail.html?game=a-space-for-the-unbound" },
+                { title: "Rendevouz", gamerScore: 82, url: "gamedetail.html?game=rendevouz" },
+                { title: "Coffe Talks", gamerScore: 90, url: "gamedetail.html?game=coffee-talks" },
+                { title: "Troublemaker", gamerScore: 76, url: "gamedetail.html?game=troublemaker" }
             ];
+            // END: Sample data for Popular Games
 
-            // Function to render New Released games
+            // START: Function to render New Released games
             function renderNewReleased() {
                 const container = document.getElementById('newReleasedInner');
                 newReleased.forEach(item => {
                     const itemElement = document.createElement('div');
                     itemElement.className = 'carousel-item';
                     itemElement.innerHTML = `
-                        <div class="relative group w-[280px]">
-                            <img 
-                                src="${item.image}" 
-                                alt="${item.title}"
-                                class="w-full h-[400px] object-cover rounded-lg"
-                            />
-                            <!-- Play button overlay -->
-                            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                <div class="w-16 h-16 rounded-full bg-white/90 flex items-center justify-center">
-                                    <div class="w-12 h-12 rounded-full border-2 border-black flex items-center justify-center">
-                                        <div class="w-0 h-0 border-t-8 border-t-transparent border-l-12 border-l-black border-b-8 border-b-transparent ml-1"></div>
+                        <div class="bg-white rounded-lg shadow-lg p-4">
+                            <div class="relative group w-[250px]">
+                                <a href="${item.url}">
+                                    <!-- UPDATE: Changed image dimensions to fit within the card -->
+                                    <img 
+                                        src="${item.image}" 
+                                        alt="${item.title}"
+                                        class="w-full h-[200px] object-cover rounded-lg cursor-pointer"
+                                    />
+                                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <div class="w-16 h-16 rounded-full bg-white/90 flex items-center justify-center">
+                                            <div class="w-12 h-12 rounded-full border-2 border-black flex items-center justify-center">
+                                                <div class="w-0 h-0 border-t-8 border-t-transparent border-l-12 border-l-black border-b-8 border-b-transparent ml-1"></div>
+                                            </div>
+                                        </div>
                                     </div>
+                                </a>
+                            </div>
+                            
+                            <div class="mt-4 space-y-3">
+                                <div class="flex gap-2">
+                                    ${item.gamerScore !== null ? `
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold ${
+                                                item.gamerScore >= 80 ? 'bg-green-500' : 
+                                                item.gamerScore >= 60 ? 'bg-yellow-500' : 'bg-red-500'
+                                            } text-white">
+                                                ${item.gamerScore}%
+                                            </div>
+                                        </div>
+                                    ` : ''}
                                 </div>
+                                
+                                <h3 class="font-semibold text-lg leading-tight">${item.title}</h3>
+                                
+                                <button 
+                                    class="flex items-center justify-center w-full py-2 border-2 border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50 transition-colors cursor-pointer"
+                                    data-url="${item.url}"
+                                >
+                                    + Rate Now
+                                </button>
                             </div>
-                        </div>
-                        
-                        <div class="mt-4 space-y-3">
-                            <!-- Game scores -->
-                            <div class="flex gap-2">
-                                ${item.criticScore !== undefined ? `
-                                    <div class="flex items-center">
-                                        <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
-                                            item.criticScore >= 80 ? 'bg-green-500' : 
-                                            item.criticScore >= 60 ? 'bg-yellow-500' : 'bg-red-500'
-                                        } text-white">
-                                            ${item.criticScore}%
-                                        </div>
-                                    </div>
-                                ` : ''}
-                                ${item.gamerScore !== null ? `
-                                    <div class="flex items-center">
-                                        <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold ${
-                                            item.gamerScore >= 80 ? 'bg-green-500' : 
-                                            item.gamerScore >= 60 ? 'bg-yellow-500' : 'bg-red-500'
-                                        } text-white">
-                                            ${item.gamerScore}%
-                                        </div>
-                                    </div>
-                                ` : ''}
-                            </div>
-                            
-                            <h3 class="font-semibold text-lg leading-tight">${item.title}</h3>
-                            
-                            <button class="flex items-center justify-center w-full py-2 border-2 border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50 transition-colors">
-                                + LIBRARY
-                            </button>
                         </div>
                     `;
                     container.appendChild(itemElement);
                 });
-            }
 
-            // Function to render Popular Games
+                // Add click event listeners to Rate Now buttons
+                const rateButtons = container.querySelectorAll('button[data-url]');
+                rateButtons.forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        window.location.href = button.getAttribute('data-url');
+                    });
+                });
+            }
+            // END: Function to render New Released games
+
+            // START: Function to render Popular Games
             function renderPopularGames() {
                 const container = document.getElementById('popularGames');
                 popularGames.forEach(item => {
                     const itemElement = document.createElement('div');
-                    itemElement.className = 'flex items-center justify-between py-2 border-b';
+                    itemElement.className = 'flex items-center justify-between py-2 border-b cursor-pointer';
                     itemElement.innerHTML = `
                         <span class="font-medium">${item.title}</span>
                         <div class="flex items-center gap-2">
                             <div class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-xs font-bold ${
-                                            item.score >= 80 ? 'bg-green-500' : 
-                                            item.score >= 60 ? 'bg-yellow-500' : 'bg-red-500'
+                                            item.gamerScore >= 80 ? 'bg-green-500' : 
+                                            item.gamerScore >= 60 ? 'bg-yellow-500' : 'bg-red-500'
                                         } text-white">
-                                ${item.score}%
+                                ${item.gamerScore}%
                             </div>
                         </div>
                     `;
                     container.appendChild(itemElement);
+
+                    // Add click event listener
+                    itemElement.addEventListener('click', () => {
+                        window.location.href = item.url;
+                    });
                 });
             }
+            // END: Function to render Popular Games
 
-            // Function to setup carousel functionality
+            // START: Function to setup carousel functionality
             function setupCarousel(containerId, prevBtnId, nextBtnId) {
                 const container = document.getElementById(containerId);
                 const prevBtn = document.getElementById(prevBtnId);
@@ -356,12 +369,14 @@
                 // Initial button visibility
                 updateButtonVisibility();
             }
+            // END: Function to setup carousel functionality
 
-            // Initialize the page
+            // START: Initialize the page
             renderNewReleased();
             renderPopularGames();
             setupCarousel('carouselInner', 'prevBtn', 'nextBtn');
             setupCarousel('newReleasedInner', 'prevBtnNew', 'nextBtnNew');
+            // END: Initialize the page
         });
     </script>
 </body>
