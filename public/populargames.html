@@ -28,20 +28,25 @@
 <body class="bg-gray-100">
     <header class="bg-main fixed top-0 w-full shadow-md z-50">
         <nav class="container mx-auto px-6 py-3">
+            <!-- Desktop navigation menu -->
             <div class="flex justify-between items-center">
+                <!-- Logo/Brand name -->
                 <a href="#" class="text-2xl font-bold text-white font-luckiest">Sweet Potato</a>
+                <!-- Desktop menu items -->
                 <div class="hidden md:flex items-center space-x-4">
-                    <a href="#" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Top Rated</a>
-                    <a href="popular.html" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Popular</a>
+                    <a href="latestgames" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Latest</a>
+                    <a href="populargames.html" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Popular</a>
                     <a href="#" class="text-white hover:text-main-dark hover:bg-white px-6 py-2 rounded-md">Genre</a>
-                    <a href="#" class="bg-main-dark text-white px-4 py-2 rounded-md hover:bg-white hover:text-main-dark">Log In</a>
+                    <a href="sign.html" class="bg-main-dark text-white px-4 py-2 rounded-md hover:bg-white hover:text-main-dark">Log In</a>
                 </div>
+                <!-- Mobile menu button (hamburger icon) -->
                 <button id="burger-icon" class="md:hidden text-white focus:outline-none">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                 </button>
             </div>
+            <!-- Search bar -->
             <div class="mt-4">
                 <div class="flex items-center space-x-2">
                     <input type="search" placeholder="Search" class="border bg-gray-200 border-gray-300 rounded-full px-3 py-2 focus:outline-none focus:border-main-dark w-full">
@@ -53,10 +58,11 @@
                 </div>
             </div>
         </nav>
+        <!-- Mobile side menu (hidden by default) -->
         <div id="side-menu" class="hidden absolute top-14 left-0 w-full bg-main text-white shadow-lg z-40 md:hidden">
             <ul class="flex flex-col space-y-4 px-6 py-4">
-                <li><a href="#" class="block text-white hover:text-main-light">Top Rated</a></li>
-                <li><a href="#" class="block text-white hover:text-main-light">Popular</a></li>
+                <li><a href="latestgames.html" class="block text-white hover:text-main-light">Latest</a></li>
+                <li><a href="populargames.html" class="block text-white hover:text-main-light">Popular</a></li>
                 <li><a href="#" class="block text-white hover:text-main-light">Genre</a></li>
                 <li><a href="#" class="block bg-main-dark px-4 py-2 rounded-md text-center hover:bg-main-light hover:text-main-dark">Log In</a></li>
             </ul>
