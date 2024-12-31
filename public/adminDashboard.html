@@ -66,7 +66,7 @@
 
                 const games = gamesData.results.map(game => ({
                     title: game.title,
-                    genres: game.genres.map(genre => genre.name)
+                    genres: Array.isArray(game.genres) ? game.genres.map(genre => genre.name) : [] // Handle undefined or invalid genres
                 }));
 
                 calculateGenreCounts(games);
@@ -74,6 +74,7 @@
                 console.error(error.message);
             }
         }
+
 
         function calculateGenreCounts(games) {
             const genreCounts = {};
