@@ -13,7 +13,7 @@
     <div class="sticky top-0 min-h-screen flex flex-row bg-gray-900">
         <div class="flex flex-col w-56 bg-gray-800 rounded-r-3xl overflow-hidden">
             <div class="flex items-center justify-center h-20 shadow-md bg-gray-700">
-                <img src="img/logo.png" alt="Sweet Potato Logo" class="h-32">
+                <img src="img/logo.png" alt="Sweet Potato Logo" class="h-16">
             </div>
             <ul class="flex flex-col py-4">
                 <li>
@@ -51,7 +51,7 @@
         <!-- Statistik Diagram -->
         <div class="bg-gray-800 p-4 rounded-lg shadow text-center">
             <h2 class="text-lg font-semibold mb-4">Games by Genre</h2>
-            <canvas id="genreChart" width="400" height="400"></canvas>
+            <canvas id="genreChart" class="w-full h-64"></canvas>
         </div>
     </main>
 
@@ -75,32 +75,23 @@
             }
         }
 
-
         function calculateGenreCounts(games) {
             const genreCounts = {};
 
-            // Extract unique genres
             games.forEach(game => {
                 game.genres.forEach(genre => {
                     if (!genreCounts[genre]) {
                         genreCounts[genre] = 0;
                     }
+                    genreCounts[genre]++;
                 });
             });
 
-            // Count games per genre
-            for (const genre in genreCounts) {
-                genreCounts[genre] = games.filter(game => game.genres.includes(genre)).length;
-            }
-
-            renderGenreChart(
-                Object.keys(genreCounts),
-                Object.values(genreCounts)
-            );
+            renderGenreChart(Object.keys(genreCounts), Object.values(genreCounts));
         }
 
         function renderGenreChart(genreNames, gameCounts) {
-            const ctx = document.getElementById('genreChart');
+            const ctx = document.getElementById('genreChart').getContext('2d');
             new Chart(ctx, {
                 type: 'pie',
                 data: {
