@@ -23,11 +23,8 @@
             }
         }
     </script>
-    <title>Genre | Sweet Potato</title>
+    <title>Latest | Sweet Potato</title>
     <style>
-        .scroll-smooth {
-            scroll-behavior: smooth;
-        }
         .genre-dropdown {
             display: none;
             position: absolute;
@@ -76,6 +73,14 @@
         }
         #mobileGenreList a:hover {
             background-color: rgba(255, 255, 255, 0.2);
+        }
+        .star-rating {
+            display: inline-flex;
+            font-size: 1.5rem;
+            color: #FFD700;
+        }
+        .star-rating .star {
+            cursor: pointer;
         }
     </style>
 </head>
@@ -126,15 +131,17 @@
             </div>
         </div>
     </header>
-    <main class="container mx-auto px-6 mt-24 pt-12">
-        <h2 id="currentGenre" class="text-2xl font-bold mb-4">All Games</h2>
-        <div id="gameList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <!-- Game list will be populated by JavaScript -->
-        </div>
-    </main>
+    <main class="mt-24">
+        <section class="container mx-auto px-6 py-10">
+            <h2 class="text-2xl font-bold mb-6">Latest Released</h2>
+            <div id="latestReleasedGames" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Game cards will be rendered here by JavaScript -->
+            </div>
+        </section>
+    </main>    
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Mobile menu toggle functionality
             const burgerIcon = document.querySelector('#burger-icon');
             const sideMenu = document.querySelector('#side-menu');
 
@@ -142,11 +149,10 @@
                 sideMenu.classList.toggle('hidden');
             });
 
-            // Genre dropdown functionality
             const genreDropdown = document.getElementById('genreDropdown');
             const genreList = document.getElementById('genreList');
             const genres = [
-                'All', 'Action', 'Adventure', 'RPG', 'Strategy', 'Simulation', 'Sports',
+                'Action', 'Adventure', 'RPG', 'Strategy', 'Simulation', 'Sports',
                 'Puzzle', 'Racing', 'Fighting', 'Shooter', 'Platformer', 'Stealth',
                 'Horror', 'Survival', 'Open World', 'Battle Royale', 'MMORPG',
                 'Card Game', 'Visual Novel', 'Roguelike', 'Sandbox', 'Tower Defense',
@@ -154,99 +160,170 @@
                 'Trivia', 'Board Game', 'Augmented Reality', 'Virtual Reality'
             ];
 
-            // Populate genre list
             const genreListContainer = genreList.querySelector('.genre-list');
             genres.forEach(genre => {
                 const genreItem = document.createElement('a');
                 genreItem.href = `#${genre.toLowerCase()}`;
                 genreItem.className = 'genre-item text-gray-700 hover:bg-gray-100 block px-4 py-2 rounded';
                 genreItem.textContent = genre;
-                genreItem.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    filterGames(genre);
-                    genreList.classList.remove('show');
-                });
                 genreListContainer.appendChild(genreItem);
             });
 
-            // Toggle genre dropdown
             genreDropdown.addEventListener('click', (e) => {
                 e.preventDefault();
                 genreList.classList.toggle('show');
             });
 
-            // Close dropdown when clicking outside
             document.addEventListener('click', (e) => {
                 if (!genreDropdown.contains(e.target) && !genreList.contains(e.target)) {
                     genreList.classList.remove('show');
                 }
             });
 
-            // Mobile genre dropdown functionality
-            const mobileGenreDropdown = document.getElementById('mobileGenreDropdown');
-            const mobileGenreList = document.getElementById('mobileGenreList');
-
-            // Populate mobile genre list
-            genres.forEach(genre => {
-                const genreItem = document.createElement('a');
-                genreItem.href = `#${genre.toLowerCase()}`;
-                genreItem.textContent = genre;
-                genreItem.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    filterGames(genre);
-                    sideMenu.classList.add('hidden');
-                });
-                mobileGenreList.appendChild(genreItem);
-            });
-
-            // Toggle mobile genre dropdown
-            mobileGenreDropdown.addEventListener('click', (e) => {
-                e.preventDefault();
-                mobileGenreList.classList.toggle('hidden');
-            });
-
-            // Sample data for games
-            const games = [
-                { title: "Project Agni", genre: "Action", image: "https://static1.srcdn.com/wordpress/wp-content/uploads/2022/05/Astro-Bot-Figure-Screenshot.jpg", rating: 4.5 },
-                { title: "Coffee Talks 2", genre: "Adventure", image: "https://i.pinimg.com/736x/24/04/fb/2404fb1b7148761cdabe4a6330863518.jpg", rating: 5 },
-                { title: "Troublemaker 2", genre: "RPG", image: "https://th.bing.com/th/id/OIP.Z9sin2bn2F9lBM4rPYVYbQHaHa?pid=ImgDet&w=208&h=208&c=7", rating: 4 },
-                { title: "Dreadout 2", genre: "Horror", image: "https://preview.redd.it/theory-sackboy-is-astro-bot-v0-zp1j3g48kd8d1.jpg?width=1200&format=pjpg&auto=webp&s=c405c073e52d423d75769c3a4c7f33a22fc256f4", rating: 4.6 },
-                { title: "Dreadhaunt", genre: "Survival", image: "https://blog.playstation.com/tachyon/2019/01/46856222711_937287ca96_h.jpg", rating: 4 },
-                { title: "Samudra", genre: "Adventure", image: "https://th.bing.com/th/id/OIP.1LLLKfBY1Ov1HO8NdCAj2gHaEK?w=319&h=180&c=7&r=0&o=5&pid=1.7", rating: 4 }
+            const latestReleasedGames = [
+                {
+                    title: "Anora",
+                    image: "https://image.api.playstation.com/cdn/UP9000/CUSA13568_00/f4s0UiYmFBMlZdbP3PDYtHcZx7jVp95a.png",
+                    gamerScore: 90,
+                    genre: "Action",
+                    releasedDate: "Dec 17, 2024"
+                },
+                {
+                    title: "Small Things Like These",
+                    image: "https://image.api.playstation.com/cdn/UP9000/CUSA13568_00/f4s0UiYmFBMlZdbP3PDYtHcZx7jVp95a.png",
+                    gamerScore: 81,
+                    genre: "Adventure",
+                    releasedDate: "Dec 17, 2024"
+                },
+                {
+                    title: "Separated",
+                    image: "https://th.bing.com/th/id/OIP.oN9TE5I4hkgqNwRX528ajgHaHa?pid=ImgDet&w=208&h=208&c=7",
+                    gamerScore: null,
+                    genre: "RPG",
+                    releasedDate: "Dec 17, 2024"
+                },
+                {
+                    title: "Chasing Chasing Amy",
+                    image: "https://th.bing.com/th/id/OIP.gV0P4Eenf6BY_hBqwKSGCwHaHa?pid=ImgDet&w=208&h=208&c=7",
+                    gamerScore: "--",
+                    genre: "Strategy",
+                    releasedDate: "Dec 17, 2024"
+                },
+                {
+                    title: "The Little Mermaid",
+                    image: "https://th.bing.com/th/id/OIP.BzuE7uKh7La5shC5vzisIAHaEK?rs=1&pid=ImgDetMain",
+                    gamerScore: "--",
+                    genre: "Horror",
+                    releasedDate: "Dec 24, 2024"
+                },
+                {
+                    title: "Glue Trap",
+                    image: "https://i.ytimg.com/vi/gOqWdznjzy0/maxresdefault.jpg",
+                    gamerScore: "--",
+                    genre: "Survival",
+                    releasedDate: "Dec 17, 2024"
+                }
             ];
 
-            // Game filtering and rendering
-            const gameList = document.getElementById('gameList');
-            const currentGenre = document.getElementById('currentGenre');
-
-            function filterGames(genre) {
-                const filteredGames = genre === 'All' ? games : games.filter(game => game.genre === genre);
-                renderGames(filteredGames);
-                currentGenre.textContent = genre === 'All' ? 'All Games' : `${genre} Games`;
-            }
-
-            function renderGames(gamesToRender) {
-                gameList.innerHTML = '';
-                gamesToRender.forEach(game => {
-                    const gameCard = document.createElement('div');
-                    gameCard.className = 'bg-white rounded-lg shadow-md overflow-hidden';
-                    gameCard.innerHTML = `
-                        <img src="${game.image}" alt="${game.title}" class="w-full h-48 object-cover">
-                        <div class="p-4">
-                            <h3 class="font-bold text-xl mb-2">${game.title}</h3>
-                            <p class="text-gray-700 text-base mb-2">Genre: ${game.genre}</p>
-                            <div class="flex items-center">
-                                <span class="text-yellow-500 mr-1">★</span>
-                                <span>${game.rating}</span>
-                            </div>
-                        </div>
-                    `;
-                    gameList.appendChild(gameCard);
+            function sortGamesByReleaseDate(games) {
+                return games.sort((a, b) => {
+                    const dateA = new Date(a.releasedDate);
+                    const dateB = new Date(b.releasedDate);
+                    return dateB - dateA;
                 });
             }
 
-            // Initialize the page
-            filterGames('All');
+            function renderLatestGames() {
+                const container = document.getElementById("latestReleasedGames");
+                const sortedGames = sortGamesByReleaseDate(latestReleasedGames);
+
+                sortedGames.forEach(game => {
+                    const gameCard = document.createElement("div");
+                    gameCard.className = "bg-white rounded-lg shadow-md p-4 flex flex-col justify-between";
+                    gameCard.innerHTML = `
+                        <div>
+                            <div class="relative aspect-w-3 aspect-h-4 mb-4">
+                                <img src="${game.image}" alt="${game.title}" class="rounded-lg w-full h-full object-cover">
+                                <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-black/40">
+                                    <button class="bg-white rounded-full p-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132a1 1 0 0 0-1.555.832v4.264a1 1 0 0 0 1.555.832l3.197-2.132a1 1 0 0 0 0-1.664z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.341A8 8 0 1 1 4.572 8.659a8 8 0 0 1 14.856 6.682z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <h3 class="text-lg font-semibold truncate">${game.title}</h3>
+                            <div class="text-xs text-gray-500 mt-1">Released ${game.releasedDate}</div>
+                        </div>
+                        <div class="flex items-center justify-between mt-4">
+                            <div class="star-rating" data-rating="${game.gamerScore || 0}">
+                                <span class="star" data-value="1">★</span>
+                                <span class="star" data-value="2">★</span>
+                                <span class="star" data-value="3">★</span>
+                                <span class="star" data-value="4">★</span>
+                                <span class="star" data-value="5">★</span>
+                            </div>
+                            <button class="bg-main-dark text-white px-3 py-1 rounded-md text-sm hover:bg-main-light">+ Rate</button>
+                        </div>
+                    `;
+                    container.appendChild(gameCard);
+                });
+
+                initStarRatings();
+            }
+
+            function initStarRatings() {
+                const starRatings = document.querySelectorAll('.star-rating');
+                starRatings.forEach(rating => {
+                    const stars = rating.querySelectorAll('.star');
+                    const ratingValue = parseInt(rating.dataset.rating) / 20;
+
+                    stars.forEach((star, index) => {
+                        if (index < Math.floor(ratingValue)) {
+                            star.style.color = '#FFD700';
+                        } else if (index === Math.floor(ratingValue) && ratingValue % 1 !== 0) {
+                            star.style.background = `linear-gradient(90deg, #FFD700 ${(ratingValue % 1) * 100}%, #e4e4e4 ${(ratingValue % 1) * 100}%)`;
+                            star.style.webkitBackgroundClip = 'text';
+                            star.style.webkitTextFillColor = 'transparent';
+                        } else {
+                            star.style.color = '#e4e4e4';
+                        }
+                    });
+
+                    stars.forEach((star, index) => {
+                        star.addEventListener('mouseover', () => {
+                            stars.forEach((s, i) => {
+                                if (i <= index) {
+                                    s.style.color = '#FFD700';
+                                } else {
+                                    s.style.color = '#e4e4e4';
+                                }
+                            });
+                        });
+
+                        star.addEventListener('mouseout', () => {
+                            initStarRatings();
+                        });
+
+                        star.addEventListener('click', () => {
+                            rating.dataset.rating = (index + 1) * 20;
+                            initStarRatings();
+                        });
+                    });
+                });
+            }
+            // Add click event listeners to Rate Now buttons
+            const rateButtons = container.querySelectorAll('button[data-url]');
+            rateButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.location.href = button.getAttribute('data-url');
+                });
+            });
+             // END: Function to render New Released games
+
+            renderLatestGames();
         });
     </script>
 </body>
