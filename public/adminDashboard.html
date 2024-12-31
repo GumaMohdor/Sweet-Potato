@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" />
+    <style>
+        .sidebar a.active {
+        background-color: #4F46E5; /* Highlight color */
+        color: #fff;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="flex h-screen bg-gray-900 text-gray-200 font-sans">
+    <div class="sticky top-0 min-h-screen flex flex-row bg-gray-900 ">
+      <div class="flex flex-col w-56 bg-gray-800 rounded-r-3xl overflow-hidden">
+        <div class="flex items-center justify-center h-20 shadow-md bg-gray-700" >
+            <img src="img/logo.png" alt="Sweet Potato Logo" class="h-32">
+        </div>
+        <ul class="flex flex-col py-4">
+          <li>
+            <a href="adminDashboard.html" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-400 hover:text-gray-100">
+              <span class="inline-flex items-center justify-center h-12 w-12 text-lg"><i class="bx bx-home"></i></span>
+              <span class="text-sm font-medium">Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="adminGame.html" data-link="adminGame.html" class="flex flex-row items-center h-12 transform translate-x-2 transition-transform ease-in duration-200 text-gray-100">
+              <span class="inline-flex items-center justify-center h-12 w-12 text-lg"><i class="bx bx-joystick"></i></span>
+              <span class="text-sm font-medium">Games</span>
+            </a>
+          </li>
+          <li>
+            <a href="adminGenre.html" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-400 hover:text-gray-100">
+              <span class="inline-flex items-center justify-center h-12 w-12 text-lg"><i class="bx bx-category"></i></span>
+              <span class="text-sm font-medium">Genre</span>
+            </a>
+          </li>
+          <!-- <li>
+            <a href="adminPlatform.html" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-400 hover:text-gray-100">
+              <span class="inline-flex items-center justify-center h-12 w-12 text-lg"><i class="bx bx-devices"></i></span>
+              <span class="text-sm font-medium">Platform</span>
+            </a>
+          </li> -->
+          <!-- <li>
+            <a href="adminList.html" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-400 hover:text-gray-100">
+              <span class="inline-flex items-center justify-center h-12 w-12 text-lg"><i class="bx bx-user-circle"></i></span>
+              <span class="text-sm font-medium">Admin</span>
+            </a>
+          </li> -->
+          <li>
+            <a href="#" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-400 hover:text-gray-100">
+              <span class="inline-flex items-center justify-center h-12 w-12 text-lg"><i class="bx bx-log-out"></i></span>
+              <span class="text-sm font-medium">Logout</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+    <!-- Main Content -->
+    <main class="flex-1 p-6">
+        <h1 class="text-2xl font-bold mb-6">Dashboard</h1>
+        <!-- Statistik Diagram -->
+        <div class="bg-gray-800 p-4 rounded-lg shadow text-center">
+            <h2 class="text-lg font-semibold mb-4">Game vs Genre</h2>
+            <canvas id="statsChart" width="400" height="400"></canvas>
+        </div>
+    </main>
+    
+    
+  
+    <script>
+        const dataTable = document.getElementById('data-table');
+        const popupModal = document.getElementById('popup-modal');
+        const form = document.getElementById('data-form');
+        const popupTitle = document.getElementById('popup-title');
+        const dataIdInput = document.getElementById('data-id');
+        const titleInput = document.getElementById('title');
+        const descriptionInput = document.getElementById('description');
+        const releaseDateInput = document.getElementById('release-date');
+        const mediaInput = document.getElementById('media');
+
+        
+        async function fetchStatisticsAndRenderChart() {
+            const baseUrl = 'https://blitzorn.pythonanywhere.com';
+            try {
+                // Fetch total games
+                const gamesResponse = await fetch(`${baseUrl}/api/games`);
+                if (!gamesResponse.ok) throw new Error('Failed to fetch games');
+                const gamesData = await gamesResponse.json();
+
+                // Fetch total genres
+                const genresResponse = await fetch(`${baseUrl}/api/genres`);
+                if (!genresResponse.ok) throw new Error('Failed to fetch genres');
+                const genresData = await genresResponse.json();
+
+                // Calculate statistics
+                const totalGames = gamesData.results.length;
+                const totalGenres = genresData.length;
+
+                // Render chart
+                renderChart(totalGames, totalGenres);
+            } catch (error) {
+                console.error('Error fetching statistics:', error.message);
+            }
+        }
+
+        function renderChart(totalGames, totalGenres) {
+            const ctx = document.getElementById('statsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Games', 'Genres'],
+                    datasets: [{
+                        label: 'Game vs Genre',
+                        data: [totalGames, totalGenres],
+                        backgroundColor: ['#6366F1', '#34D399'], // Warna untuk setiap bagian diagram
+                        borderColor: ['#4F46E5', '#10B981'], // Warna border
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    }
+                }
+            });
+        }
+
+document.addEventListener('DOMContentLoaded', () => {
+    fetchStatisticsAndRenderChart(); // Fetch and render the chart on page load
+});
+
+
+        
+        function closeSidebar() {
+            document.querySelector(".sidebar").classList.add("hidden");
+        }
+
+        function dropdown() {
+            document.querySelector("#submenu").classList.toggle("hidden");
+            document.querySelector("#arrow").classList.toggle("rotate-0");
+        }
+
+        function openSidebar() {
+            document.querySelector(".sidebar").classList.toggle("hidden");
+        }
+
+
+        async function editGame(id, title, description, releaseDate, media) {
+            openPopup(id, title, description, releaseDate, media);
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+        const links = document.querySelectorAll('.sidebar a[data-link]');
+        const currentPath = window.location.pathname.split('/').pop(); // Mendapatkan nama file halaman saat ini
+
+        links.forEach(link => {
+            if (link.getAttribute('data-link') === currentPath) {
+            link.classList.add('active'); // Menambahkan kelas 'active' pada link yang sesuai
+            } else {
+            link.classList.remove('active'); // Menghapus kelas 'active' jika tidak sesuai
+            }
+        });
+        });
+
+        
+        form.addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const formData = new FormData();
+            formData.append('title', titleInput.value);
+            formData.append('description', descriptionInput.value);
+            formData.append('release_date', releaseDateInput.value);
+
+            if (mediaInput.files[0]) {
+                formData.append('media', mediaInput.files[0]);
+            }
+
+            const url = 'https://blitzorn.pythonanywhere.com';
+            const id = dataIdInput.value;
+            console.log(formData);
+            try {
+                const response = await fetch(id ? `${url}/api/games/${id}` : `${url}/api/games`, {
+                    method: id ? 'PATCH' : 'POST',
+                    body: formData, 
+                    headers: {
+                    'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZXhwIjoxNzM1NjYwNDE1Ljc0MjE0MX0.1L4pCaNU5vhZnzacOVcXsEG_JQnxSWd5sWLfMQgLGDE` 
+                    }
+                });
+
+                if (!response.ok) throw new Error('Failed to save game');
+                closePopup();
+                fetchGames();
+            } catch (error) {
+                console.error(error.message);
+            }
+        });
+
+        fetchGames();
+    </script>
+</body>
+</html>
