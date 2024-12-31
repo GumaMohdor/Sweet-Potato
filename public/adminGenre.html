@@ -86,7 +86,7 @@
         <!-- Table Section -->
         <div class="bg-gray-800 p-4 rounded-lg shadow">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-lg font-semibold">Games Table</h2>
+                <h2 class="text-lg font-semibold">Genre Table</h2>
                 <button onclick="openPopup()" class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600">Add Game</button>
             </div>
             <table class="w-full table-auto border-collapse border border-gray-700">
@@ -94,7 +94,6 @@
                     <tr class="bg-gray-700">
                         <th class="border border-gray-700 px-4 py-2" onclick="sortTable(0)">No</th>
                         <th class="border border-gray-700 px-4 py-2" onclick="sortTable(1)">Nama</th>
-                        <th class="border border-gray-700 px-4 py-2" onclick="sortTable(2)">Jumlah Game</th>
                         <th class="border border-gray-700 px-4 py-2">Actions</th>
                     </tr>
                 </thead>
@@ -228,7 +227,6 @@
                 <tr>
                     <td class="border border-gray-700 px-4 py-2">${index + 1}</td>
                     <td class="border border-gray-700 px-4 py-2">${genre.name}</td>
-                    <td class="border border-gray-700 px-4 py-2">${genre.game_count || 0}</td>
                     <td class="border border-gray-700 px-4 py-2 text-center">
                         <button onclick="openPopup('${genre.url}', '${genre.name}')" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Edit</button>
                         <button onclick="deleteGenre('${genre.url}')" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Delete</button>
