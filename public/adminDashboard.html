@@ -96,41 +96,62 @@
        async function fetchGameDataAndRenderChart() {
             const baseUrl = 'https://blitzorn.pythonanywhere.com';
             try {
-                // Fetch games
+                // Fetch games data
                 const gamesResponse = await fetch(`${baseUrl}/api/games`);
                 if (!gamesResponse.ok) throw new Error('Failed to fetch games');
                 const gamesData = await gamesResponse.json();
 
-                // Calculate game counts by genre
-                const genreGameCounts = gamesData.results.reduce((acc, game) => {
-                    (game.genres || []).forEach(genre => {
-                        acc[genre.name] = (acc[genre.name] || 0) + 1;
-                    });
-                    return acc;
-                }, {});
+                // Convert API data into the required format
+                const games = gamesData.results.map(game => ({
+                    title: game.title,
+                    genre: game.genres && game.genres[0]?.name, // Assuming each game belongs to at least one genre
+                    image: game.image || '',
+                    rating: game.rating || 0,
+                }));
 
-                const genreGameCountsArray = Object.entries(genreGameCounts).map(([name, count]) => ({ name, count }));
+                // Log the formatted games array for debugging
+                console.log('Games Array:', games);
 
-                // Update table with data
-                updateGenreTable(genreGameCountsArray);
+                // Initialize genre filtering
+                const currentGenre = document.getElementById('currentGenre');
+                const gameList = document.getElementById('gameList');
 
-                // Prepare data for chart
-                const genreNames = genreGameCountsArray.map(item => item.name);
-                const gameCounts = genreGameCountsArray.map(item => item.count);
-
-                console.log(genreNames)
-                console.log(gameCounts)
-
-                // Render chart
-                if (genreNames.length > 0 && gameCounts.length > 0) {
-                    renderGenreChart(genreNames, gameCounts);
-                } else {
-                    console.error('No data available for the chart.');
+                function filterGames(genre) {
+                    const filteredGames = genre === 'All' ? games : games.filter(game => game.genre === genre);
+                    renderGames(filteredGames);
+                    currentGenre.textContent = genre === 'All' ? 'All Games' : `${genre} Games`;
                 }
+
+                // Function to render games in the list
+                function renderGames(gameArray) {
+                    gameList.innerHTML = ''; // Clear existing content
+                    gameArray.forEach(game => {
+                        const gameItem = document.createElement('div');
+                        gameItem.classList.add('game-item');
+                        gameItem.innerHTML = `
+                            <img src="${game.image}" alt="${game.title}" class="game-image" />
+                            <h3>${game.title}</h3>
+                            <p>Genre: ${game.genre}</p>
+                            <p>Rating: ${game.rating}</p>
+                        `;
+                        gameList.appendChild(gameItem);
+                    });
+                }
+
+                // Render all games on initial load
+                filterGames('All');
+
+                // Example: Filter by specific genre (replace 'Action' with any genre)
+                // filterGames('Action');
+
             } catch (error) {
-                console.error('Error fetching data for the chart:', error.message);
+                console.error('Error fetching and processing games data:', error.message);
             }
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchGameDataAndRenderChart();
+        });
 
         // Fungsi untuk memperbarui tabel
         function updateGenreTable(genreGameCounts) {
