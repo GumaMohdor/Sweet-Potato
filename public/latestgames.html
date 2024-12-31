@@ -147,8 +147,8 @@
     </header>
     <main class="mt-24">
         <!-- Updated list section -->
-        <section class="container mx-auto px-6 py-10">
-            <h2 class="text-2xl font-bold mb-6">Latest Released</h2>
+        <section class="container mx-auto px-6 py-6">
+            <h2 class="text-2xl font-bold mb-4 pt-4">Latest Released</h2>
             <!-- Updated container for game cards -->
             <div id="latestReleasedGames" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <!-- Game cards will be rendered here by JavaScript -->
@@ -205,10 +205,15 @@
         
         //START: Added function to convert YYYY-MM-DD to MM DD YYYY
         function formatDate(inputDate) {
+            //Jika input date = null, kembalikan string "TBD"
+            if (!inputDate) {
+                return "TBD";
+            }
+
             // Konversi string menjadi objek Date
             const date = new Date(inputDate);
           
-            // Daftar nama bulan (untuk hasil seperti "Dec")
+            // Daftar nama bulan (Bentuk String)
             const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
           
             // Ekstrak bagian bulan, tanggal, dan tahun
@@ -220,13 +225,6 @@
             return `${month} ${day}, ${year}`;
           }
         //END: Added function to convert YYYY-MM-DD to MM DD YYYY
-
-        // START: Added function to convert percentage to star rating
-        function getStarRating(percentage) {
-            if (!percentage || percentage === '--') return 0;
-            return (percentage / 20).toFixed(1);
-        }
-        // END: Added function to convert percentage to star rating
 
         // START: Added function to navigate to game detail
         function navigateToGameDetail(gameId) {
@@ -245,7 +243,7 @@
                 gameCard.className = "game-card bg-white rounded-lg shadow-md p-4 flex flex-col justify-between";
                 gameCard.innerHTML = `
                     <div onclick="navigateToGameDetail(${game.id})">
-                        <div class="relative aspect-w-3 aspect-h-4 mb-4">
+                        <div class="relative aspect-w-3 aspect-h-4 mb-4 h-[200px] md:h-[100px] rounded-lg overflow-hidden border">
                             <img src="${game.thumbnail}" alt="${game.title}" class="rounded-lg w-full h-full object-cover">
                             <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-black/40">
                                 <button class="bg-white rounded-full p-3">
@@ -261,7 +259,7 @@
                     </div>
                     <div class="flex items-center justify-between mt-4">
                         <div class="star-rating">
-                            <span class="score text-xl">${getStarRating(game.gamer_score)}</span>
+                            <span class="score text-xl">${game.average_rating ? game.average_rating : "Unrated"}</span>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-yellow-400 text-l" viewBox="0 0 20 20" fill="currentColor">
                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
                             </svg>
