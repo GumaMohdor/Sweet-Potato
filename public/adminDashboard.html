@@ -68,7 +68,7 @@
                     title: game.title,
                     genres: Array.isArray(game.genres) ? game.genres.map(genre => genre.name) : [] // Handle undefined or invalid genres
                 }));
-
+                console.log('Formatted Games Data:', games);
                 calculateGenreCounts(games);
             } catch (error) {
                 console.error(error.message);
