@@ -307,34 +307,35 @@
 
         
         form.addEventListener('submit', async function (event) {
-        event.preventDefault();
+            event.preventDefault();
 
-        const formData = new FormData();
-        formData.append('title', titleInput.value);
-        formData.append('description', descriptionInput.value);
-        formData.append('release_date', releaseDateInput.value);
+            const formData = new FormData();
+            formData.append('title', titleInput.value);
+            formData.append('description', descriptionInput.value);
+            formData.append('release_date', releaseDateInput.value);
 
-        if (mediaInput.files[0]) {
-            formData.append('media', mediaInput.files[0]);
-        }
+            if (mediaInput.files[0]) {
+                formData.append('media', mediaInput.files[0]);
+            }
 
-        const url = 'https://blitzorn.pythonanywhere.com';
-        const id = dataIdInput.value;
-        console.log(formData);
-        try {
-            const response = await fetch(id ? `${url}/api/games/${id}` : `${url}/api/games`, {
-                method: id ? 'PATCH' : 'POST',
-                body: formData, headers: {
-                'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZXhwIjoxNzM1MjQzMzMwLjgwNzQ1OX0.1b9ZQN6PvFYZ6P1cC0HVR0XgNAUqAy_kN_yHImCJnyM` 
-                }
-            });
+            const url = 'https://blitzorn.pythonanywhere.com';
+            const id = dataIdInput.value;
+            console.log(formData);
+            try {
+                const response = await fetch(id ? `${url}/api/games/${id}` : `${url}/api/games`, {
+                    method: id ? 'PATCH' : 'POST',
+                    body: formData, 
+                    headers: {
+                    'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZXhwIjoxNzM1NjYwNDE1Ljc0MjE0MX0.1L4pCaNU5vhZnzacOVcXsEG_JQnxSWd5sWLfMQgLGDE` 
+                    }
+                });
 
-            if (!response.ok) throw new Error('Failed to save game');
-            closePopup();
-            fetchGames();
-        } catch (error) {
-            console.error(error.message);
-        }
+                if (!response.ok) throw new Error('Failed to save game');
+                closePopup();
+                fetchGames();
+            } catch (error) {
+                console.error(error.message);
+            }
         });
 
         fetchGames();
