@@ -152,14 +152,22 @@
         }
 
         function searchPlatform() {
-            const searchInput = document.getElementById('search-input').value.toLowerCase();
+            const searchInput = document.getElementById('search-input');
+            const searchTerm = searchInput.value.toLowerCase();
             const rows = Array.from(dataTable.querySelectorAll('tr'));
 
             rows.forEach(row => {
-                const platformName = row.children[1]?.innerText.toLowerCase();
-                row.style.display = platformName.includes(searchInput) ? '' : 'none';
+                const titleCell = row.querySelector('td:nth-child(2)'); // Kolom 2 = Judul
+                const descriptionCell = row.querySelector('td:nth-child(3)'); // Kolom 3 = Deskripsi
+
+                if (titleCell && descriptionCell) {
+                    const match = titleCell.textContent.toLowerCase().includes(searchTerm) || 
+                                descriptionCell.textContent.toLowerCase().includes(searchTerm);
+                    row.style.display = match ? '' : 'none'; // Tampilkan baris jika cocok, sembunyikan jika tidak
+                }
             });
         }
+        
 
         function openPopup(id = '', name = '') {
             document.getElementById('popup-title').textContent = id ? 'Edit Platform' : 'Add Platform';
