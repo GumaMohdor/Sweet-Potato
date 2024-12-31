@@ -77,42 +77,34 @@
         async function fetchGenreDataAndRenderChart() {
             const baseUrl = 'https://blitzorn.pythonanywhere.com';
             try {
-                // Fetch genres data
                 const genresResponse = await fetch(`${baseUrl}/api/genres`);
                 if (!genresResponse.ok) throw new Error('Failed to fetch genres');
                 const genresData = await genresResponse.json();
-    
-                // Fetch games data
+
                 const gamesResponse = await fetch(`${baseUrl}/api/games`);
                 if (!gamesResponse.ok) throw new Error('Failed to fetch games');
                 const gamesData = await gamesResponse.json();
 
-                console.log(genresData); // Cek data genres
-                console.log(gamesData);  // Cek data games
-
-    
-                // Calculate game count for each genre
                 const genreGameCounts = genresData.map(genre => {
-                    const gameCount = gamesData.results.filter(game =>
+                    const gameCount = (gamesData.results || []).filter(game =>
                         game.genres && game.genres.some(g => g.name === genre.name)
                     ).length;
                     return { name: genre.name, count: gameCount };
                 });
 
-                console.log(gamesData.results);
-
-    
-                // Extract genre names and game counts for the chart
                 const genreNames = genreGameCounts.map(item => item.name);
                 const gameCounts = genreGameCounts.map(item => item.count);
-    
-                // Render chart
-                renderGenreChart(genreNames, gameCounts);
+
+                if (genreNames.length > 0 && gameCounts.length > 0) {
+                    renderGenreChart(genreNames, gameCounts);
+                } else {
+                    console.error('No data available for the chart.');
+                }
             } catch (error) {
                 console.error('Error fetching data for the chart:', error.message);
             }
         }
-    
+
         function renderGenreChart(genreNames, gameCounts) {
             const ctx = document.getElementById('genreChart').getContext('2d');
             new Chart(ctx, {
@@ -149,7 +141,9 @@
         }
     
         document.addEventListener('DOMContentLoaded', () => {
+            console.log('Fetching data...');
             fetchGenreDataAndRenderChart(); // Fetch and render the chart on page load
+            console.log('Fetching data complete');
         });
     
         function closeSidebar() {
