@@ -86,6 +86,10 @@
                 const gamesResponse = await fetch(`${baseUrl}/api/games`);
                 if (!gamesResponse.ok) throw new Error('Failed to fetch games');
                 const gamesData = await gamesResponse.json();
+
+                console.log(genresData); // Cek data genres
+                console.log(gamesData);  // Cek data games
+
     
                 // Calculate game count for each genre
                 const genreGameCounts = genresData.map(genre => {
@@ -94,6 +98,9 @@
                     ).length;
                     return { name: genre.name, count: gameCount };
                 });
+
+                console.log(gamesData.results);
+
     
                 // Extract genre names and game counts for the chart
                 const genreNames = genreGameCounts.map(item => item.name);
