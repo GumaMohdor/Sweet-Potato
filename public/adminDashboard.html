@@ -78,38 +78,66 @@
     </main>
 
     <script>
-        async function fetchGameDataAndRenderChart() {
-            const baseUrl = 'https://blitzorn.pythonanywhere.com';
+        const url = 'https://blitzorn.pythonanywhere.com';
+
+        async function fetchGames() {
             try {
-                const gamesResponse = await fetch(`${baseUrl}/api/games`);
-                if (!gamesResponse.ok) throw new Error('Failed to fetch games');
-                const gamesData = await gamesResponse.json();
-
-                const games = gamesData.results.map(game => ({
-                    title: game.title,
-                    genre: game.genres && game.genres[0]?.name,
-                    image: game.image || '',
-                    rating: game.rating || 0,
-                }));
-
-                const genreCounts = {};
-                games.forEach(game => {
-                    if (game.genre) {
-                        genreCounts[game.genre] = (genreCounts[game.genre] || 0) + 1;
-                    }
-                });
-
-                const genreNames = Object.keys(genreCounts);
-                const gameCounts = Object.values(genreCounts);
-
-                updateGenreTable(genreNames.map((name, index) => ({ name, count: gameCounts[index] })));
-                renderGenreChart(genreNames, gameCounts);
-
+                const response = await fetch(`${url}/api/games`, { credentials: 'include' });
+                if (!response.ok) throw new Error('Failed to fetch games');
+                const games = await response.json();
+                renderTable(games.results);
+                calculateGenreCounts(games.results);
             } catch (error) {
-                console.error('Error fetching and processing games data:', error.message);
+                console.error(error.message);
             }
         }
+        
+        function renderTable(data) {
+        const dataTable = document.querySelector('#genreTable tbody');
+        dataTable.innerHTML = '';
+        data.forEach(row => {
+            fetch(row.url) // detail game
+                .then(response => response.json()) // Parse JSON response
+                .then(data => {
+                    // Convert genres array into a readable string
+                    const genres = data.genres.map(genre => genre.name).join(', ');
 
+                    dataTable.innerHTML += `
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">${data.id}</td>
+                            <td class="border border-gray-300 px-4 py-2">${data.title}</td>
+                            <td class="border border-gray-300 px-4 py-2">${data.description}</td>
+                            <td class="border border-gray-300 px-4 py-2">${data.release_date}</td>
+                            <td class="border border-gray-300 px-4 py-2">${genres}</td>
+                            <td class="border border-gray-300 px-4 py-2"><a href="${data.media}" class="text-blue-500 underline" target="_blank">Media</a></td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">
+                                <button onclick="editGame(${data.id}, '${data.title}', '${data.description}', '${data.release_date}', '${data.media}')" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Edit</button>
+                                <button onclick="deleteGame(${data.id})" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Delete</button>
+                            </td>
+                        </tr>
+                    `;
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        });
+    }
+
+    function calculateGenreCounts(data) {
+        const genreCounts = {};
+
+        data.forEach(game => {
+            game.genres.forEach(genre => {
+                if (!genreCounts[genre.name]) {
+                    genreCounts[genre.name] = 0;
+                }
+                genreCounts[genre.name] += 1;
+            });
+        });
+
+        updateGenreTable(Object.entries(genreCounts).map(([name, count]) => ({ name, count })));
+    }
+        
+            
+            
         function updateGenreTable(genreGameCounts) {
             const tableBody = document.querySelector('#genreTable tbody');
             tableBody.innerHTML = '';
