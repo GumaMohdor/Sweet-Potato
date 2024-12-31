@@ -62,24 +62,35 @@
             try {
                 const response = await fetch(`${url}/api/games`, { credentials: 'include' });
                 if (!response.ok) throw new Error('Failed to fetch games');
-                const games = await response.json();
-                calculateGenreCounts(games.results);
+                const gamesData = await response.json();
+
+                const games = gamesData.results.map(game => ({
+                    title: game.title,
+                    genres: game.genres.map(genre => genre.name)
+                }));
+
+                calculateGenreCounts(games);
             } catch (error) {
                 console.error(error.message);
             }
         }
 
-        function calculateGenreCounts(data) {
+        function calculateGenreCounts(games) {
             const genreCounts = {};
 
-            data.forEach(game => {
+            // Extract unique genres
+            games.forEach(game => {
                 game.genres.forEach(genre => {
-                    if (!genreCounts[genre.name]) {
-                        genreCounts[genre.name] = 0;
+                    if (!genreCounts[genre]) {
+                        genreCounts[genre] = 0;
                     }
-                    genreCounts[genre.name] += 1;
                 });
             });
+
+            // Count games per genre
+            for (const genre in genreCounts) {
+                genreCounts[genre] = games.filter(game => game.genres.includes(genre)).length;
+            }
 
             renderGenreChart(
                 Object.keys(genreCounts),
