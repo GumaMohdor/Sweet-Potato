@@ -65,6 +65,24 @@
     <!-- Main Content -->
     <main class="flex-1 p-6">
         <h1 class="text-2xl font-bold mb-6">Dashboard</h1>
+        
+        <!-- Tabel Data Games by Genre -->
+        <div class="bg-gray-800 p-4 rounded-lg shadow text-center mb-6">
+            <h2 class="text-lg font-semibold mb-4">Games Data by Genre</h2>
+            <table id="genreTable" class="table-auto w-full text-left text-gray-200">
+                <thead>
+                    <tr>
+                        <th class="px-4 py-2">Genre</th>
+                        <th class="px-4 py-2">Number of Games</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data rows akan diisi dengan JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        
         <!-- Statistik Diagram -->
         <div class="bg-gray-800 p-4 rounded-lg shadow text-center">
             <h2 class="text-lg font-semibold mb-4">Games by Genre</h2>
@@ -82,31 +100,28 @@
                 const genresResponse = await fetch(`${baseUrl}/api/genres`);
                 if (!genresResponse.ok) throw new Error('Failed to fetch genres');
                 const genresData = await genresResponse.json();
-                console.log('Genres Data:', genresData);
-
+                
                 // Fetch games
                 const gamesResponse = await fetch(`${baseUrl}/api/games`);
                 if (!gamesResponse.ok) throw new Error('Failed to fetch games');
                 const gamesData = await gamesResponse.json();
-                console.log('Games Data:', gamesData);
 
                 // Calculate game counts by genre
-                // Calculate game counts by genre
                 const genreGameCounts = genresData.map(genre => {
-                    // Pastikan gamesData.results digunakan jika gamesData adalah objek dengan properti "results"
                     const gameCount = (gamesData.results || []).filter(game =>
                         game.genres && game.genres.some(g => g.name === genre.name)
                     ).length;
                     return { name: genre.name, count: gameCount };
                 });
 
+                // Update table with data
+                updateGenreTable(genreGameCounts);
 
+                // Prepare data for chart
                 const genreNames = genreGameCounts.map(item => item.name);
                 const gameCounts = genreGameCounts.map(item => item.count);
 
-                console.log('Genre Names:', genreNames);
-                console.log('Game Counts:', gameCounts);
-
+                // Render chart
                 if (genreNames.length > 0 && gameCounts.length > 0) {
                     renderGenreChart(genreNames, gameCounts);
                 } else {
@@ -117,6 +132,27 @@
             }
         }
 
+        // Fungsi untuk memperbarui tabel
+        function updateGenreTable(genreGameCounts) {
+            const tableBody = document.querySelector('#genreTable tbody');
+            tableBody.innerHTML = '';
+
+            genreGameCounts.forEach(genre => {
+                const row = document.createElement('tr');
+
+                const genreCell = document.createElement('td');
+                genreCell.textContent = genre.name;
+                genreCell.classList.add('px-4', 'py-2');
+
+                const countCell = document.createElement('td');
+                countCell.textContent = genre.count;
+                countCell.classList.add('px-4', 'py-2');
+
+                row.appendChild(genreCell);
+                row.appendChild(countCell);
+                tableBody.appendChild(row);
+            });
+        }
 
         function renderGenreChart(genreNames, gameCounts) {
             try {
