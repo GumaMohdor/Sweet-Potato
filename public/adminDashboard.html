@@ -9,63 +9,51 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" />
     <style>
         .sidebar a.active {
-        background-color: #4F46E5; /* Highlight color */
-        color: #fff;
+            background-color: #4F46E5; /* Highlight color */
+            color: #fff;
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="flex h-screen bg-gray-900 text-gray-200 font-sans">
-    <div class="sticky top-0 min-h-screen flex flex-row bg-gray-900 ">
-      <div class="flex flex-col w-56 bg-gray-800 rounded-r-3xl overflow-hidden">
-        <div class="flex items-center justify-center h-20 shadow-md bg-gray-700" >
-            <img src="img/logo.png" alt="Sweet Potato Logo" class="h-32">
+    <div class="sticky top-0 min-h-screen flex flex-row bg-gray-900">
+        <div class="flex flex-col w-56 bg-gray-800 rounded-r-3xl overflow-hidden">
+            <div class="flex items-center justify-center h-20 shadow-md bg-gray-700">
+                <img src="img/logo.png" alt="Sweet Potato Logo" class="h-32">
+            </div>
+            <ul class="flex flex-col py-4">
+                <li>
+                    <a href="adminDashboard.html" class="flex flex-row items-center h-12 transform translate-x-2 transition-transform ease-in duration-200 text-gray-100">
+                        <span class="inline-flex items-center justify-center h-12 w-12 text-lg"><i class="bx bx-home"></i></span>
+                        <span class="text-sm font-medium">Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="adminGame.html" data-link="adminGame.html" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-400 hover:text-gray-100">
+                        <span class="inline-flex items-center justify-center h-12 w-12 text-lg"><i class="bx bx-joystick"></i></span>
+                        <span class="text-sm font-medium">Games</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="adminGenre.html" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-400 hover:text-gray-100">
+                        <span class="inline-flex items-center justify-center h-12 w-12 text-lg"><i class="bx bx-category"></i></span>
+                        <span class="text-sm font-medium">Genre</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-400 hover:text-gray-100">
+                        <span class="inline-flex items-center justify-center h-12 w-12 text-lg"><i class="bx bx-log-out"></i></span>
+                        <span class="text-sm font-medium">Logout</span>
+                    </a>
+                </li>
+            </ul>
         </div>
-        <ul class="flex flex-col py-4">
-          <li>
-            <a href="adminDashboard.html" class="flex flex-row items-center h-12 transform translate-x-2 transition-transform ease-in duration-200 text-gray-100">
-              <span class="inline-flex items-center justify-center h-12 w-12 text-lg"><i class="bx bx-home"></i></span>
-              <span class="text-sm font-medium">Dashboard</span>
-            </a>
-          </li>
-          <li>
-            <a href="adminGame.html" data-link="adminGame.html" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-400 hover:text-gray-100">
-              <span class="inline-flex items-center justify-center h-12 w-12 text-lg"><i class="bx bx-joystick"></i></span>
-              <span class="text-sm font-medium">Games</span>
-            </a>
-          </li>
-          <li>
-            <a href="adminGenre.html" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-400 hover:text-gray-100">
-              <span class="inline-flex items-center justify-center h-12 w-12 text-lg"><i class="bx bx-category"></i></span>
-              <span class="text-sm font-medium">Genre</span>
-            </a>
-          </li>
-          <!-- <li>
-            <a href="adminPlatform.html" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-400 hover:text-gray-100">
-              <span class="inline-flex items-center justify-center h-12 w-12 text-lg"><i class="bx bx-devices"></i></span>
-              <span class="text-sm font-medium">Platform</span>
-            </a>
-          </li> -->
-          <!-- <li>
-            <a href="adminList.html" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-400 hover:text-gray-100">
-              <span class="inline-flex items-center justify-center h-12 w-12 text-lg"><i class="bx bx-user-circle"></i></span>
-              <span class="text-sm font-medium">Admin</span>
-            </a>
-          </li> -->
-          <li>
-            <a href="#" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-400 hover:text-gray-100">
-              <span class="inline-flex items-center justify-center h-12 w-12 text-lg"><i class="bx bx-log-out"></i></span>
-              <span class="text-sm font-medium">Logout</span>
-            </a>
-          </li>
-        </ul>
-      </div>
     </div>
-    
+
     <!-- Main Content -->
     <main class="flex-1 p-6">
         <h1 class="text-2xl font-bold mb-6">Dashboard</h1>
-        
+
         <!-- Tabel Data Games by Genre -->
         <div class="bg-gray-800 p-4 rounded-lg shadow text-center mb-6">
             <h2 class="text-lg font-semibold mb-4">Games Data by Genre</h2>
@@ -82,78 +70,46 @@
             </table>
         </div>
 
-        
         <!-- Statistik Diagram -->
         <div class="bg-gray-800 p-4 rounded-lg shadow text-center">
             <h2 class="text-lg font-semibold mb-4">Games by Genre</h2>
             <canvas id="genreChart" width="400" height="400"></canvas>
         </div>
     </main>
-    
-    
+
     <script>
-       
-       async function fetchGameDataAndRenderChart() {
+        async function fetchGameDataAndRenderChart() {
             const baseUrl = 'https://blitzorn.pythonanywhere.com';
             try {
-                // Fetch games data
                 const gamesResponse = await fetch(`${baseUrl}/api/games`);
                 if (!gamesResponse.ok) throw new Error('Failed to fetch games');
                 const gamesData = await gamesResponse.json();
 
-                // Convert API data into the required format
                 const games = gamesData.results.map(game => ({
                     title: game.title,
-                    genre: game.genres && game.genres[0]?.name, // Assuming each game belongs to at least one genre
+                    genre: game.genres && game.genres[0]?.name,
                     image: game.image || '',
                     rating: game.rating || 0,
                 }));
 
-                // Log the formatted games array for debugging
-                console.log('Games Array:', games);
+                const genreCounts = {};
+                games.forEach(game => {
+                    if (game.genre) {
+                        genreCounts[game.genre] = (genreCounts[game.genre] || 0) + 1;
+                    }
+                });
 
-                // Initialize genre filtering
-                const currentGenre = document.getElementById('currentGenre');
-                const gameList = document.getElementById('gameList');
+                const genreNames = Object.keys(genreCounts);
+                const gameCounts = Object.values(genreCounts);
 
-                function filterGames(genre) {
-                    const filteredGames = genre === 'All' ? games : games.filter(game => game.genre === genre);
-                    renderGames(filteredGames);
-                    currentGenre.textContent = genre === 'All' ? 'All Games' : `${genre} Games`;
-                }
-
-                // Function to render games in the list
-                function renderGames(gameArray) {
-                    gameList.innerHTML = ''; // Clear existing content
-                    gameArray.forEach(game => {
-                        const gameItem = document.createElement('div');
-                        gameItem.classList.add('game-item');
-                        gameItem.innerHTML = `
-                            <img src="${game.image}" alt="${game.title}" class="game-image" />
-                            <h3>${game.title}</h3>
-                            <p>Genre: ${game.genre}</p>
-                            <p>Rating: ${game.rating}</p>
-                        `;
-                        gameList.appendChild(gameItem);
-                    });
-                }
-
-                // Render all games on initial load
-                filterGames('All');
-
-                // Example: Filter by specific genre (replace 'Action' with any genre)
-                // filterGames('Action');
+                updateGenreTable(genreNames.map((name, index) => ({ name, count: gameCounts[index] })));
+                renderGenreChart(genreNames, gameCounts);
 
             } catch (error) {
                 console.error('Error fetching and processing games data:', error.message);
             }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchGameDataAndRenderChart();
-        });
-
-        // Fungsi untuk memperbarui tabel
         function updateGenreTable(genreGameCounts) {
             const tableBody = document.querySelector('#genreTable tbody');
             tableBody.innerHTML = '';
@@ -175,7 +131,6 @@
             });
         }
 
-        // Fungsi untuk merender chart
         function renderGenreChart(genreNames, gameCounts) {
             const ctx = document.getElementById('genreChart');
             new Chart(ctx, {
@@ -206,36 +161,20 @@
             return Array.from({ length: count }, () => `hsl(${Math.random() * 360}, 70%, 50%)`);
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', function () {
             fetchGameDataAndRenderChart();
-        });
-  
-        function closeSidebar() {
-            document.querySelector(".sidebar").classList.add("hidden");
-        }
-    
-        function dropdown() {
-            document.querySelector("#submenu").classList.toggle("hidden");
-            document.querySelector("#arrow").classList.toggle("rotate-0");
-        }
-    
-        function openSidebar() {
-            document.querySelector(".sidebar").classList.toggle("hidden");
-        }
-    
-        document.addEventListener("DOMContentLoaded", function () {
+
             const links = document.querySelectorAll('.sidebar a[data-link]');
-            const currentPath = window.location.pathname.split('/').pop(); // Mendapatkan nama file halaman saat ini
-    
+            const currentPath = window.location.pathname.split('/').pop();
+
             links.forEach(link => {
                 if (link.getAttribute('data-link') === currentPath) {
-                    link.classList.add('active'); // Menambahkan kelas 'active' pada link yang sesuai
+                    link.classList.add('active');
                 } else {
-                    link.classList.remove('active'); // Menghapus kelas 'active' jika tidak sesuai
+                    link.classList.remove('active');
                 }
             });
         });
     </script>
-    
 </body>
 </html>
