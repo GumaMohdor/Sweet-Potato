@@ -105,6 +105,9 @@
             }
         }
 
+        console.log('Genre Names:', genreNames);
+        console.log('Game Counts:', gameCounts);
+
         function renderGenreChart(genreNames, gameCounts) {
             try {
                 // Validasi input
@@ -213,9 +216,12 @@
                 }
             });
         })
-        console.log(typeof Chart); // Harusnya "function"
-        console.log('Genre Names:', genreNames);
-        console.log('Game Counts:', gameCounts);
+        console.log('Fetching genres and games...');
+        console.log('Genres data:', genresData);
+        console.log('Games data:', gamesData);
+        console.log('genreGameCounts:', genreGameCounts);
+        console.log('genreNames:', genreNames, 'gameCounts:', gameCounts);
+
 
 ;
     </script>
