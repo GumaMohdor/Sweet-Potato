@@ -119,7 +119,7 @@
                     <!-- END: Updated Genre link with dropdown -->
                     <a href="latestgames.html" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Latest</a>
                     <a href="populargames.html" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Popular</a>
-                    <a href="#" id="authLink" class="bg-main-dark text-white px-4 py-2 rounded-md hover:bg-white hover:text-main-dark">Log In</a>
+                    <a href="sign.html" class="bg-main-dark text-white px-4 py-2 rounded-md hover:bg-white hover:text-main-dark">Log In</a>
                 </div>
                 <button id="burger-icon" class="md:hidden text-white focus:outline-none">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -143,7 +143,7 @@
                 <li><a href="#" class="block text-white hover:text-main-light" id="mobileGenreDropdown">Genre</a></li>
                 <li><a href="latestgames.html" class="block text-white hover:text-main-light">Latest</a></li>
                 <li><a href="populargames.html" class="block text-white hover:text-main-light">Popular</a></li>
-                <li><a href="#" id="mobileAuthLink" class="block bg-main-dark px-4 py-2 rounded-md text-center hover:bg-main-light hover:text-main-dark">Log In</a></li>
+                <li><a href="sign.html" class="block bg-main-dark px-4 py-2 rounded-md text-center hover:bg-main-light hover:text-main-dark">Log In</a></li>
             </ul>
             <div id="mobileGenreList" class="hidden px-6 py-4 space-y-2">
                 <!-- Genre list will be populated by JavaScript -->
@@ -504,7 +504,22 @@
             // END: Initialize the page
 
             // START: Auth state management
-            import { authService } from './services/auth.ts';
+            const authService = {
+                isLoggedIn: function() {
+                    return localStorage.getItem('isLoggedIn') === 'true';
+                },
+                login: function(username, password) {
+                    // This is a mock login. In a real app, you'd validate credentials server-side.
+                    if (username === 'user' && password === 'password') {
+                        localStorage.setItem('isLoggedIn', 'true');
+                        return true;
+                    }
+                    return false;
+                },
+                logout: function() {
+                    localStorage.removeItem('isLoggedIn');
+                }
+            };
 
             function updateAuthLinks() {
                 const authLink = document.getElementById('authLink');
@@ -530,6 +545,21 @@
 
             // Function to show login modal
             function showLoginModal() {
+                // Create modal if it doesn't exist
+                if (!document.getElementById('loginModal')) {
+                    const modal = document.createElement('div');
+                    modal.id = 'loginModal';
+                    modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden';
+                    modal.innerHTML = `
+                        <div class="bg-white p-8 rounded-lg">
+                            <h2 class="text-2xl font-bold mb-4">Login</h2>
+                            <input id="username" type="text" placeholder="Username" class="block w-full mb-2 p-2 border rounded">
+                            <input id="password" type="password" placeholder="Password" class="block w-full mb-4 p-2 border rounded">
+                            <button id="loginButton" class="bg-main-dark text-white px-4 py-2 rounded-md hover:bg-main">Login</button>
+                        </div>
+                    `;
+                    document.body.appendChild(modal);
+                }
                 document.getElementById('loginModal').classList.remove('hidden');
             }
 
@@ -555,23 +585,27 @@
             });
 
             // Event listener for login button
-            document.getElementById('loginButton').addEventListener('click', async () => {
-                const username = (document.getElementById('username') as HTMLInputElement).value;
-                const password = (document.getElementById('password') as HTMLInputElement).value;
-                const success = await authService.login(username, password);
-                if (success) {
-                    hideLoginModal();
-                    updateAuthLinks();
-                    alert('You are now logged in!');
-                } else {
-                    alert('Invalid credentials. Please try again.');
+            document.addEventListener('click', (e) => {
+                if (e.target && e.target.id === 'loginButton') {
+                    const username = (document.getElementById('username') as HTMLInputElement).value;
+                    const password = (document.getElementById('password') as HTMLInputElement).value;
+                    const success = authService.login(username, password);
+                    if (success) {
+                        hideLoginModal();
+                        updateAuthLinks();
+                        alert('You are now logged in!');
+                    } else {
+                        alert('Invalid credentials. Please try again.');
+                    }
                 }
             });
 
             // Initial update of auth links
             updateAuthLinks();
             // END: Auth state management
+
         });
     </script>
 </body>
 </html>
+

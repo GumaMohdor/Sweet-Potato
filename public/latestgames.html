@@ -25,31 +25,85 @@
     </script>
     <title>Latest | Sweet Potato</title>
     <style>
-        /* Remove carousel-specific styles */
+        .genre-dropdown {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.375rem;
+            padding: 0.5rem;
+            z-index: 50;
+            width: 400px; /* Adjust width as needed */
+            max-height: 600px; /* Limit height and enable scrolling */
+            overflow-y: auto;
+        }
+        .genre-dropdown.show {
+            display: block;
+        }
+        .genre-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .genre-item {
+            flex: 0 0 calc(33.333% - 0.5rem); /* Approximately 3 items per row */
+        }
+        #mobileGenreList {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 0.375rem;
+            margin-top: 0.5rem;
+            max-height: 60vh; /* Limit the height to 60% of the viewport height */
+            overflow-y: auto; /* Enable vertical scrolling */
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        }
+        #mobileGenreList::-webkit-scrollbar {
+            width: 6px;
+        }
+        #mobileGenreList::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+        }
+        #mobileGenreList::-webkit-scrollbar-track {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        #mobileGenreList a {
+            display: block;
+            padding: 0.5rem;
+            color: white;
+        }
+
+        #mobileGenreList a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
     </style>
 </head>
 <body class="bg-gray-100">
     <header class="bg-main fixed top-0 w-full shadow-md z-50">
         <nav class="container mx-auto px-6 py-3">
-            <!-- Desktop navigation menu -->
             <div class="flex justify-between items-center">
-                 <!-- Logo/Brand name -->
-                 <a href="index.html" class="text-2xl font-bold text-white font-luckiest">Sweet Potato</a>
-                <!-- Desktop menu items -->
+                <a href="#" class="text-2xl font-bold text-white font-luckiest">Sweet Potato</a>
                 <div class="hidden md:flex items-center space-x-4">
-                    <a href="#" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Latest</a>
+                    <!-- START: Updated Genre link with dropdown -->
+                    <div class="relative">
+                        <a href="#" class="text-white hover:text-main-dark hover:bg-white px-6 py-2 rounded-md" id="genreDropdown">Genre</a>
+                        <div class="genre-dropdown" id="genreList">
+                            <div class="genre-list">
+                                <!-- Genre list will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END: Updated Genre link with dropdown -->
+                    <a href="latestgames.html" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Latest</a>
                     <a href="populargames.html" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Popular</a>
-                    <a href="#" class="text-white hover:text-main-dark hover:bg-white px-6 py-2 rounded-md">Genre</a>
                     <a href="sign.html" class="bg-main-dark text-white px-4 py-2 rounded-md hover:bg-white hover:text-main-dark">Log In</a>
                 </div>
-                <!-- Mobile menu button (hamburger icon) -->
                 <button id="burger-icon" class="md:hidden text-white focus:outline-none">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                 </button>
             </div>
-            <!-- Search bar -->
             <div class="mt-4">
                 <div class="flex items-center space-x-2">
                     <input type="search" placeholder="Search" class="border bg-gray-200 border-gray-300 rounded-full px-3 py-2 focus:outline-none focus:border-main-dark w-full">
@@ -61,14 +115,16 @@
                 </div>
             </div>
         </nav>
-        <!-- Mobile side menu (hidden by default) -->
         <div id="side-menu" class="hidden absolute top-14 left-0 w-full bg-main text-white shadow-lg z-40 md:hidden">
             <ul class="flex flex-col space-y-4 px-6 py-4">
+                <li><a href="#" class="block text-white hover:text-main-light" id="mobileGenreDropdown">Genre</a></li>
                 <li><a href="latestgames.html" class="block text-white hover:text-main-light">Latest</a></li>
                 <li><a href="populargames.html" class="block text-white hover:text-main-light">Popular</a></li>
-                <li><a href="#" class="block text-white hover:text-main-light">Genre</a></li>
-                <li><a href="#" class="block bg-main-dark px-4 py-2 rounded-md text-center hover:bg-main-light hover:text-main-dark">Log In</a></li>
+                <li><a href="sign.html" class="block bg-main-dark px-4 py-2 rounded-md text-center hover:bg-main-light hover:text-main-dark">Log In</a></li>
             </ul>
+            <div id="mobileGenreList" class="hidden px-6 py-4 space-y-2">
+                <!-- Genre list will be populated by JavaScript -->
+            </div>
         </div>
     </header>
     <main class="mt-24">
@@ -81,6 +137,7 @@
             </div>
         </section>
     </main>    
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const burgerIcon = document.querySelector('#burger-icon');
@@ -90,6 +147,42 @@
                 sideMenu.classList.toggle('hidden');
             });
         });
+
+        // START: Added code for genre dropdown
+        const genreDropdown = document.getElementById('genreDropdown');
+        const genreList = document.getElementById('genreList');
+        const genres = [
+            'Action', 'Adventure', 'RPG', 'Strategy', 'Simulation', 'Sports',
+            'Puzzle', 'Racing', 'Fighting', 'Shooter', 'Platformer', 'Stealth',
+            'Horror', 'Survival', 'Open World', 'Battle Royale', 'MMORPG',
+            'Card Game', 'Visual Novel', 'Roguelike', 'Sandbox', 'Tower Defense',
+            'Rhythm', 'MOBA', 'Idle', 'Clicker', 'Educational', 'Party Game',
+            'Trivia', 'Board Game', 'Augmented Reality', 'Virtual Reality'
+        ];
+
+        // Populate genre list
+        const genreListContainer = genreList.querySelector('.genre-list');
+        genres.forEach(genre => {
+            const genreItem = document.createElement('a');
+            genreItem.href = `#${genre.toLowerCase()}`;
+            genreItem.className = 'genre-item text-gray-700 hover:bg-gray-100 block px-4 py-2 rounded';
+            genreItem.textContent = genre;
+            genreListContainer.appendChild(genreItem);
+        });
+
+        // Toggle genre dropdown
+        genreDropdown.addEventListener('click', (e) => {
+            e.preventDefault();
+            genreList.classList.toggle('show');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!genreDropdown.contains(e.target) && !genreList.contains(e.target)) {
+                genreList.classList.remove('show');
+            }
+        });
+        // END: Added code for genre dropdown
 
         // Latest released games data
         const latestReleasedGames = [
