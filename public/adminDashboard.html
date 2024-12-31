@@ -91,11 +91,15 @@
                 console.log('Games Data:', gamesData);
 
                 // Calculate game counts by genre
+                // Calculate game counts by genre
                 const genreGameCounts = genresData.map(genre => {
-                    const gameCount = gamesData.filter(game => game.genres.some(g => g.name === genre.name)
+                    // Pastikan gamesData.results digunakan jika gamesData adalah objek dengan properti "results"
+                    const gameCount = (gamesData.results || []).filter(game =>
+                        game.genres && game.genres.some(g => g.name === genre.name)
                     ).length;
                     return { name: genre.name, count: gameCount };
                 });
+
 
                 const genreNames = genreGameCounts.map(item => item.name);
                 const gameCounts = genreGameCounts.map(item => item.count);
