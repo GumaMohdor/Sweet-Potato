@@ -74,7 +74,8 @@
     
     
     <script>
-        async function fetchGenreDataAndRenderChart() {
+       
+       async function fetchGenreDataAndRenderChart() {
             const baseUrl = 'https://blitzorn.pythonanywhere.com';
             try {
                 const genresResponse = await fetch(`${baseUrl}/api/genres`);
@@ -95,6 +96,9 @@
                 const genreNames = genreGameCounts.map(item => item.name);
                 const gameCounts = genreGameCounts.map(item => item.count);
 
+                console.log('Genre Names:', genreNames);
+                console.log('Game Counts:', gameCounts);
+
                 if (genreNames.length > 0 && gameCounts.length > 0) {
                     renderGenreChart(genreNames, gameCounts);
                 } else {
@@ -105,8 +109,6 @@
             }
         }
 
-        console.log('Genre Names:', genreNames);
-        console.log('Game Counts:', gameCounts);
 
         function renderGenreChart(genreNames, gameCounts) {
             try {
@@ -215,15 +217,7 @@
                     link.classList.remove('active'); // Menghapus kelas 'active' jika tidak sesuai
                 }
             });
-        })
-        console.log('Fetching genres and games...');
-        console.log('Genres data:', genresData);
-        console.log('Games data:', gamesData);
-        console.log('genreGameCounts:', genreGameCounts);
-        console.log('genreNames:', genreNames, 'gameCounts:', gameCounts);
-
-
-;
+        });
     </script>
     
 </body>
