@@ -73,7 +73,6 @@
             } catch (error) {
                 console.error(error.message);
             }
-            console.log(genreNames)
         }
 
         function calculateGenreCounts(games) {
@@ -89,7 +88,7 @@
             });
 
             console.log(genreCounts)
-
+            onsole.log(genreNames)
             renderGenreChart(Object.keys(genreCounts), Object.values(genreCounts));
         }
 
