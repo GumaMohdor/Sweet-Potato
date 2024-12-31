@@ -93,33 +93,30 @@
     
     <script>
        
-       async function fetchGenreDataAndRenderChart() {
+       async function fetchGameDataAndRenderChart() {
             const baseUrl = 'https://blitzorn.pythonanywhere.com';
             try {
-                // Fetch genres
-                const genresResponse = await fetch(`${baseUrl}/api/genres`);
-                if (!genresResponse.ok) throw new Error('Failed to fetch genres');
-                const genresData = await genresResponse.json();
-                
                 // Fetch games
                 const gamesResponse = await fetch(`${baseUrl}/api/games`);
                 if (!gamesResponse.ok) throw new Error('Failed to fetch games');
                 const gamesData = await gamesResponse.json();
 
                 // Calculate game counts by genre
-                const genreGameCounts = genresData.map(genre => {
-                    const gameCount = (gamesData.results || []).filter(game =>
-                        game.genres && game.genres.some(g => g.name === genre.name)
-                    ).length;
-                    return { name: genre.name, count: gameCount };
-                });
+                const genreGameCounts = gamesData.results.reduce((acc, game) => {
+                    (game.genres || []).forEach(genre => {
+                        acc[genre.name] = (acc[genre.name] || 0) + 1;
+                    });
+                    return acc;
+                }, {});
+
+                const genreGameCountsArray = Object.entries(genreGameCounts).map(([name, count]) => ({ name, count }));
 
                 // Update table with data
-                updateGenreTable(genreGameCounts);
+                updateGenreTable(genreGameCountsArray);
 
                 // Prepare data for chart
-                const genreNames = genreGameCounts.map(item => item.name);
-                const gameCounts = genreGameCounts.map(item => item.count);
+                const genreNames = genreGameCountsArray.map(item => item.name);
+                const gameCounts = genreGameCountsArray.map(item => item.count);
 
                 // Render chart
                 if (genreNames.length > 0 && gameCounts.length > 0) {
@@ -154,89 +151,41 @@
             });
         }
 
+        // Fungsi untuk merender chart
         function renderGenreChart(genreNames, gameCounts) {
-            try {
-                // Validasi input
-                if (!Array.isArray(genreNames) || !Array.isArray(gameCounts)) {
-                    throw new Error("Input data harus berupa array.");
-                }
-
-                if (genreNames.length !== gameCounts.length) {
-                    throw new Error("Jumlah genreNames dan gameCounts harus sama.");
-                }
-
-                if (genreNames.length === 0) {
-                    throw new Error("Tidak ada data untuk ditampilkan.");
-                }
-
-                const ctx = document.getElementById('genreChart');
-                if (!ctx) {
-                    throw new Error("Elemen canvas dengan ID 'genreChart' tidak ditemukan.");
-                }
-
-                const chartContext = ctx.getContext('2d');
-                if (!chartContext) {
-                    throw new Error("Tidak dapat mengakses context 2D dari elemen canvas.");
-                }
-
-                // Render chart
-                new Chart(chartContext, {
-                    type: 'pie',
-                    data: {
-                        labels: genreNames, // Names of the genres
-                        datasets: [{
-                            label: 'Games by Genre',
-                            data: gameCounts, // Number of games for each genre
-                            backgroundColor: generateColors(genreNames.length), // Generate colors dynamically
-                            borderColor: '#1F2937', // Border color for better contrast
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                display: true,
-                                position: 'top'
-                            }
+            const ctx = document.getElementById('genreChart');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: genreNames,
+                    datasets: [{
+                        label: 'Games by Genre',
+                        data: gameCounts,
+                        backgroundColor: generateColors(genreNames.length),
+                        borderColor: '#1F2937',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
                         }
                     }
-                });
-            } catch (error) {
-                console.error("Error rendering the chart:", error.message);
-
-                // Menampilkan pesan error di tempat canvas
-                const canvasContainer = document.getElementById('genreChart').parentNode;
-                const errorElement = document.createElement('p');
-                errorElement.textContent = `Error: ${error.message}`;
-                errorElement.style.color = "red";
-                errorElement.style.fontWeight = "bold";
-                errorElement.style.textAlign = "center";
-
-                // Hapus canvas jika error terjadi
-                if (canvasContainer) {
-                    canvasContainer.innerHTML = ""; // Clear the container
-                    canvasContainer.appendChild(errorElement); // Append error message
                 }
-            }
+            });
         }
-
 
         function generateColors(count) {
-            // Generate a list of random colors
-            const colors = [];
-            for (let i = 0; i < count; i++) {
-                colors.push(`hsl(${Math.random() * 360}, 70%, 50%)`);
-            }
-            return colors;
+            return Array.from({ length: count }, () => `hsl(${Math.random() * 360}, 70%, 50%)`);
         }
-    
+
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('Fetching data...');
-            fetchGenreDataAndRenderChart(); // Fetch and render the chart on page load
-            console.log('Fetching data complete');
+            fetchGameDataAndRenderChart();
         });
-    
+  
         function closeSidebar() {
             document.querySelector(".sidebar").classList.add("hidden");
         }
