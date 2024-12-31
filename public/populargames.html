@@ -127,17 +127,18 @@
             </div>
         </div>
     </header>
+
     <main class="mt-24">
-        <!-- Updated list section -->
         <section class="container mx-auto px-6 py-10">
             <h2 class="text-2xl font-bold mb-6">Popular Among Gamers</h2>
-            <!-- Updated container for game cards -->
             <div id="topRatedGames" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <!-- Game cards will be rendered here by JavaScript -->
             </div>
         </section>
-    </main>    
+    </main>   
+
     <script>
+        // Existing burger menu code remains unchanged
         document.addEventListener('DOMContentLoaded', () => {
             const burgerIcon = document.querySelector('#burger-icon');
             const sideMenu = document.querySelector('#side-menu');
@@ -147,71 +148,89 @@
             });
         });
 
-        // Game data
+        // START: Updated game data with IDs for navigation
         const games = [
             {
+                id: 1,
                 title: "Anora",
                 image: "/placeholder.svg?height=400&width=300",
                 gamerScore: 90,
                 releasedDate: "Dec 17, 2024"
             },
             {
+                id: 2,
                 title: "Small Things Like These",
                 image: "/placeholder.svg?height=400&width=300",
                 gamerScore: 81,
                 releasedDate: "Dec 17, 2024"
             },
             {
+                id: 3,
                 title: "Separated",
                 image: "/placeholder.svg?height=400&width=300",
                 gamerScore: 79,
                 releasedDate: "Dec 17, 2024"
             },
             {
+                id: 4,
                 title: "Chasing Chasing Amy",
                 image: "/placeholder.svg?height=400&width=300",
                 gamerScore: 75,
                 releasedDate: "Dec 17, 2024"
             },
             {
+                id: 5,
                 title: "The Little Mermaid",
                 image: "/placeholder.svg?height=400&width=300",
                 gamerScore: 85,
                 releasedDate: "Dec 17, 2024"
             },
             {
+                id: 6,
                 title: "Glue Trap",
                 image: "/placeholder.svg?height=400&width=300",
                 gamerScore: 95,
                 releasedDate: "Dec 17, 2024"
             }
         ];
+        // END: Updated game data
 
-        // START: New sorting function based on gamerScore
+        // START: Added function to convert percentage to star rating
+        function getStarRating(percentage) {
+            if (!percentage) return 0;
+            return (percentage / 20).toFixed(1);
+        }
+        // END: Added function to convert percentage to star rating
+
+        // START: Added function to navigate to game detail
+        function navigateToGameDetail(gameId) {
+            window.location.href = `gamedetail.html?id=${gameId}`;
+        }
+        // END: Added function to navigate to game detail
+
         function sortGamesByRating(games) {
             return games.sort((a, b) => {
                 const scoreA = typeof a.gamerScore === 'number' ? a.gamerScore : -1;
                 const scoreB = typeof b.gamerScore === 'number' ? b.gamerScore : -1;
-                return scoreB - scoreA; // Sort in descending order (highest score first)
+                return scoreB - scoreA;
             });
         }
-        // END: New sorting function
 
-        // START: Updated renderTopRatedGames function
+        // START: Updated renderTopRatedGames function with star rating and navigation
         function renderTopRatedGames() {
             const container = document.getElementById("topRatedGames");
             const sortedGames = sortGamesByRating(games);
 
             sortedGames.forEach(game => {
                 const gameCard = document.createElement("div");
-                gameCard.className = "bg-white rounded-lg shadow-md p-4 flex flex-col justify-between";
+                gameCard.className = "game-card bg-white rounded-lg shadow-md p-4 flex flex-col justify-between";
                 gameCard.innerHTML = `
-                    <div>
+                    <div onclick="navigateToGameDetail(${game.id})">
                         <div class="relative aspect-w-3 aspect-h-4 mb-4">
                             <img src="${game.image}" alt="${game.title}" class="rounded-lg w-full h-full object-cover">
                             <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-black/40">
                                 <button class="bg-white rounded-full p-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-black " fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132a1 1 0 0 0-1.555.832v4.264a1 1 0 0 0 1.555.832l3.197-2.132a1 1 0 0 0 0-1.664z" />
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.341A8 8 0 1 1 4.572 8.659a8 8 0 0 1 14.856 6.682z" />
                                     </svg>
@@ -222,10 +241,16 @@
                         <div class="text-xs text-gray-500 mt-1">Released ${game.releasedDate}</div>
                     </div>
                     <div class="flex items-center justify-between mt-4">
-                        <div class="flex items-center space-x-2">
-                            <span class="${typeof game.gamerScore === 'number' ? 'text-green-500' : 'text-gray-400'} font-semibold">${typeof game.gamerScore === 'number' ? game.gamerScore + '%' : 'Not Rated'}</span>
+                        <div class="star-rating">
+                            <span class="score">${getStarRating(game.gamerScore)}</span>
+                            <span class="star text-yellow-400 text-2xl">★</span>
                         </div>
-                        <button class="bg-main-dark text-white px-3 py-1 rounded-md text-sm hover:bg-main-light">+ Rate</button>
+                        <button 
+                            onclick="navigateToGameDetail(${game.id})"
+                            class="bg-main-dark text-white px-3 py-1 rounded-md text-sm hover:bg-main-light"
+                        >
+                            + Rate
+                        </button>
                     </div>
                 `;
                 container.appendChild(gameCard);
@@ -233,43 +258,39 @@
         }
         // END: Updated renderTopRatedGames function
 
-// START: Added code for genre dropdown
-            const genreDropdown = document.getElementById('genreDropdown');
-            const genreList = document.getElementById('genreList');
-            const genres = [
-                'Action', 'Adventure', 'RPG', 'Strategy', 'Simulation', 'Sports',
-                'Puzzle', 'Racing', 'Fighting', 'Shooter', 'Platformer', 'Stealth',
-                'Horror', 'Survival', 'Open World', 'Battle Royale', 'MMORPG',
-                'Card Game', 'Visual Novel', 'Roguelike', 'Sandbox', 'Tower Defense',
-                'Rhythm', 'MOBA', 'Idle', 'Clicker', 'Educational', 'Party Game',
-                'Trivia', 'Board Game', 'Augmented Reality', 'Virtual Reality'
-            ];
+        // Existing genre dropdown code remains unchanged
+        const genreDropdown = document.getElementById('genreDropdown');
+        const genreList = document.getElementById('genreList');
+        const genres = [
+            'Action', 'Adventure', 'RPG', 'Strategy', 'Simulation', 'Sports',
+            'Puzzle', 'Racing', 'Fighting', 'Shooter', 'Platformer', 'Stealth',
+            'Horror', 'Survival', 'Open World', 'Battle Royale', 'MMORPG',
+            'Card Game', 'Visual Novel', 'Roguelike', 'Sandbox', 'Tower Defense',
+            'Rhythm', 'MOBA', 'Idle', 'Clicker', 'Educational', 'Party Game',
+            'Trivia', 'Board Game', 'Augmented Reality', 'Virtual Reality'
+        ];
 
-            // Populate genre list
-            const genreListContainer = genreList.querySelector('.genre-list');
-            genres.forEach(genre => {
-                const genreItem = document.createElement('a');
-                genreItem.href = `#${genre.toLowerCase()}`;
-                genreItem.className = 'genre-item text-gray-700 hover:bg-gray-100 block px-4 py-2 rounded';
-                genreItem.textContent = genre;
-                genreListContainer.appendChild(genreItem);
-            });
+        const genreListContainer = genreList.querySelector('.genre-list');
+        genres.forEach(genre => {
+            const genreItem = document.createElement('a');
+            genreItem.href = `#${genre.toLowerCase()}`;
+            genreItem.className = 'genre-item text-gray-700 hover:bg-gray-100 block px-4 py-2 rounded';
+            genreItem.textContent = genre;
+            genreListContainer.appendChild(genreItem);
+        });
 
-            // Toggle genre dropdown
-            genreDropdown.addEventListener('click', (e) => {
-                e.preventDefault();
-                genreList.classList.toggle('show');
-            });
+        genreDropdown.addEventListener('click', (e) => {
+            e.preventDefault();
+            genreList.classList.toggle('show');
+        });
 
-            // Close dropdown when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!genreDropdown.contains(e.target) && !genreList.contains(e.target)) {
-                    genreList.classList.remove('show');
-                }
-            });
-            // END: Added code for genre dropdown
+        document.addEventListener('click', (e) => {
+            if (!genreDropdown.contains(e.target) && !genreList.contains(e.target)) {
+                genreList.classList.remove('show');
+            }
+        });
 
-        // Call function to render
+        // Initialize the page
         renderTopRatedGames();
     </script>
 </body>

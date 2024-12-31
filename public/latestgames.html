@@ -76,6 +76,28 @@
         #mobileGenreList a:hover {
             background-color: rgba(255, 255, 255, 0.2);
         }
+        /* START: Added styles for star rating */
+        .star-rating {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .star-rating .score {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+        .star-rating .star {
+            color: #FFD700;
+            font-size: 1.25rem;
+        }
+        .game-card {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .game-card:hover {
+            transform: translateY(-4px);
+        }
+        /* END: Added styles for star rating */
     </style>
 </head>
 <body class="bg-gray-100">
@@ -139,6 +161,7 @@
     </main>    
 
     <script>
+        // Existing burger menu code remains unchanged
         document.addEventListener('DOMContentLoaded', () => {
             const burgerIcon = document.querySelector('#burger-icon');
             const sideMenu = document.querySelector('#side-menu');
@@ -148,52 +171,18 @@
             });
         });
 
-        // START: Added code for genre dropdown
-        const genreDropdown = document.getElementById('genreDropdown');
-        const genreList = document.getElementById('genreList');
-        const genres = [
-            'Action', 'Adventure', 'RPG', 'Strategy', 'Simulation', 'Sports',
-            'Puzzle', 'Racing', 'Fighting', 'Shooter', 'Platformer', 'Stealth',
-            'Horror', 'Survival', 'Open World', 'Battle Royale', 'MMORPG',
-            'Card Game', 'Visual Novel', 'Roguelike', 'Sandbox', 'Tower Defense',
-            'Rhythm', 'MOBA', 'Idle', 'Clicker', 'Educational', 'Party Game',
-            'Trivia', 'Board Game', 'Augmented Reality', 'Virtual Reality'
-        ];
-
-        // Populate genre list
-        const genreListContainer = genreList.querySelector('.genre-list');
-        genres.forEach(genre => {
-            const genreItem = document.createElement('a');
-            genreItem.href = `#${genre.toLowerCase()}`;
-            genreItem.className = 'genre-item text-gray-700 hover:bg-gray-100 block px-4 py-2 rounded';
-            genreItem.textContent = genre;
-            genreListContainer.appendChild(genreItem);
-        });
-
-        // Toggle genre dropdown
-        genreDropdown.addEventListener('click', (e) => {
-            e.preventDefault();
-            genreList.classList.toggle('show');
-        });
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!genreDropdown.contains(e.target) && !genreList.contains(e.target)) {
-                genreList.classList.remove('show');
-            }
-        });
-        // END: Added code for genre dropdown
-
-        // Latest released games data
+        // START: Updated latest released games data with IDs
         const latestReleasedGames = [
             {
+                id: 1,
                 title: "Anora",
                 image: "https://image.api.playstation.com/cdn/UP9000/CUSA13568_00/f4s0UiYmFBMlZdbP3PDYtHcZx7jVp95a.png",
                 gamerScore: 90,
                 genre: "Action",
-                releasedDate: "Dec 17, 2024"
+                releasedDate: "Dec 30, 2024"
             },
             {
+                id: 2,
                 title: "Small Things Like These",
                 image: "https://image.api.playstation.com/cdn/UP9000/CUSA13568_00/f4s0UiYmFBMlZdbP3PDYtHcZx7jVp95a.png",
                 gamerScore: 81,
@@ -201,6 +190,7 @@
                 releasedDate: "Dec 17, 2024"
             },
             {
+                id: 3,
                 title: "Separated",
                 image: "https://th.bing.com/th/id/OIP.oN9TE5I4hkgqNwRX528ajgHaHa?pid=ImgDet&w=208&h=208&c=7",
                 gamerScore: null,
@@ -208,6 +198,7 @@
                 releasedDate: "Dec 17, 2024"
             },
             {
+                id: 4,
                 title: "Chasing Chasing Amy",
                 image: "https://th.bing.com/th/id/OIP.gV0P4Eenf6BY_hBqwKSGCwHaHa?pid=ImgDet&w=208&h=208&c=7",
                 gamerScore: "--",
@@ -215,6 +206,7 @@
                 releasedDate: "Dec 17, 2024"
             },
             {
+                id: 5,
                 title: "The Little Mermaid",
                 image: "https://th.bing.com/th/id/OIP.BzuE7uKh7La5shC5vzisIAHaEK?rs=1&pid=ImgDetMain",
                 gamerScore: "--",
@@ -222,6 +214,7 @@
                 releasedDate: "Dec 24, 2024"
             },
             {
+                id: 6,
                 title: "Glue Trap",
                 image: "https://i.ytimg.com/vi/gOqWdznjzy0/maxresdefault.jpg",
                 gamerScore: "--",
@@ -229,27 +222,39 @@
                 releasedDate: "Dec 17, 2024"
             }
         ];
+        // END: Updated latest released games data
 
-        // START: New sorting function
         function sortGamesByReleaseDate(games) {
             return games.sort((a, b) => {
                 const dateA = new Date(a.releasedDate);
                 const dateB = new Date(b.releasedDate);
-                return dateB - dateA; // Sort in descending order (newest first)
+                return dateB - dateA;
             });
         }
-        // END: New sorting function
 
-        // START: Updated renderLatestGames function
+        // START: Added function to convert percentage to star rating
+        function getStarRating(percentage) {
+            if (!percentage || percentage === '--') return 0;
+            return (percentage / 20).toFixed(1);
+        }
+        // END: Added function to convert percentage to star rating
+
+        // START: Added function to navigate to game detail
+        function navigateToGameDetail(gameId) {
+            window.location.href = `gamedetail.html?id=${gameId}`;
+        }
+        // END: Added function to navigate to game detail
+
+        // START: Updated renderLatestGames function with star rating and navigation
         function renderLatestGames() {
             const container = document.getElementById("latestReleasedGames");
             const sortedGames = sortGamesByReleaseDate(latestReleasedGames);
 
             sortedGames.forEach(game => {
                 const gameCard = document.createElement("div");
-                gameCard.className = "bg-white rounded-lg shadow-md p-4 flex flex-col justify-between";
+                gameCard.className = "game-card bg-white rounded-lg shadow-md p-4 flex flex-col justify-between";
                 gameCard.innerHTML = `
-                    <div>
+                    <div onclick="navigateToGameDetail(${game.id})">
                         <div class="relative aspect-w-3 aspect-h-4 mb-4">
                             <img src="${game.image}" alt="${game.title}" class="rounded-lg w-full h-full object-cover">
                             <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-black/40">
@@ -265,10 +270,16 @@
                         <div class="text-xs text-gray-500 mt-1">Released ${game.releasedDate}</div>
                     </div>
                     <div class="flex items-center justify-between mt-4">
-                        <div class="flex items-center space-x-2">
-                            <span class="text-green-500 font-semibold">${game.gamerScore || "--"}%</span>
+                        <div class="star-rating">
+                            <span class="score">${getStarRating(game.gamerScore)}</span>
+                            <span class="star">★</span>
                         </div>
-                        <button class="bg-main-dark text-white px-3 py-1 rounded-md text-sm hover:bg-main-light">+ Rate</button>
+                        <button 
+                            onclick="navigateToGameDetail(${game.id})"
+                            class="bg-main-dark text-white px-3 py-1 rounded-md text-sm hover:bg-main-light"
+                        >
+                            + Rate
+                        </button>
                     </div>
                 `;
                 container.appendChild(gameCard);
@@ -276,7 +287,39 @@
         }
         // END: Updated renderLatestGames function
 
-        // Call function to render
+        // Existing genre dropdown code remains unchanged
+        const genreDropdown = document.getElementById('genreDropdown');
+        const genreList = document.getElementById('genreList');
+        const genres = [
+            'Action', 'Adventure', 'RPG', 'Strategy', 'Simulation', 'Sports',
+            'Puzzle', 'Racing', 'Fighting', 'Shooter', 'Platformer', 'Stealth',
+            'Horror', 'Survival', 'Open World', 'Battle Royale', 'MMORPG',
+            'Card Game', 'Visual Novel', 'Roguelike', 'Sandbox', 'Tower Defense',
+            'Rhythm', 'MOBA', 'Idle', 'Clicker', 'Educational', 'Party Game',
+            'Trivia', 'Board Game', 'Augmented Reality', 'Virtual Reality'
+        ];
+
+        const genreListContainer = genreList.querySelector('.genre-list');
+        genres.forEach(genre => {
+            const genreItem = document.createElement('a');
+            genreItem.href = `#${genre.toLowerCase()}`;
+            genreItem.className = 'genre-item text-gray-700 hover:bg-gray-100 block px-4 py-2 rounded';
+            genreItem.textContent = genre;
+            genreListContainer.appendChild(genreItem);
+        });
+
+        genreDropdown.addEventListener('click', (e) => {
+            e.preventDefault();
+            genreList.classList.toggle('show');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!genreDropdown.contains(e.target) && !genreList.contains(e.target)) {
+                genreList.classList.remove('show');
+            }
+        });
+
+        // Initialize the page
         renderLatestGames();
     </script>
 </body>
