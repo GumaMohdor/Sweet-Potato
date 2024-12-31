@@ -227,32 +227,33 @@
             }
         }
 
-
         async function fetchGames() {
-            try {
-                
-                const response = await fetch(`${url}/api/games`, {credentials: 'include'});
-                if (!response.ok) throw new Error('Failed to fetch games');
-                const games = await response.json();
-                renderTable(games.results);
-            } catch (error) {
-                console.error(error.message);
-            }
-        }
+    try {
+        const response = await fetch(`${url}/api/games`, { credentials: 'include' });
+        if (!response.ok) throw new Error('Failed to fetch games');
+        const games = await response.json();
+        renderTable(games.results);
+    } catch (error) {
+        console.error(error.message);
+    }
+}
 
-        function renderTable(data) {
-            dataTable.innerHTML = '';
-            data.forEach(row => {
-                fetch(row.url) // detail game
-                .then(response => response.json()) // Parse JSON response
-                .then(data => {
-                    dataTable.innerHTML += `
+function renderTable(data) {
+    dataTable.innerHTML = '';
+    data.forEach(row => {
+        fetch(row.url) // detail game
+            .then(response => response.json()) // Parse JSON response
+            .then(data => {
+                // Convert genres array into a readable string
+                const genres = data.genres.map(genre => genre.name).join(', ');
+
+                dataTable.innerHTML += `
                     <tr>
                         <td class="border border-gray-300 px-4 py-2">${data.id}</td>
                         <td class="border border-gray-300 px-4 py-2">${data.title}</td>
                         <td class="border border-gray-300 px-4 py-2">${data.description}</td>
                         <td class="border border-gray-300 px-4 py-2">${data.release_date}</td>
-                        <td class="border border-gray-300 px-4 py-2">${data.genres}</td>
+                        <td class="border border-gray-300 px-4 py-2">${genres}</td>
                         <td class="border border-gray-300 px-4 py-2"><a href="${data.media}" class="text-blue-500 underline" target="_blank">Media</a></td>
                         <td class="border border-gray-300 px-4 py-2 text-center">
                             <button onclick="editGame(${data.id}, '${data.title}', '${data.description}', '${data.release_date}', '${data.media}')" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Edit</button>
@@ -260,12 +261,11 @@
                         </td>
                     </tr>
                 `;
-                })  // Tampilkan data
-                .catch(error => console.error('Error fetching data:', error));
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    });
+}
 
-                
-            });
-        }
 
         function openPopup(id = '', title = '', description = '', releaseDate = '', media = '') {
             popupTitle.textContent = id ? 'Edit Game' : 'Add Game';
