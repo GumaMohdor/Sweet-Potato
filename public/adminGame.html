@@ -252,8 +252,8 @@
                         <td class="border border-gray-300 px-4 py-2">${data.title}</td>
                         <td class="border border-gray-300 px-4 py-2">${data.description}</td>
                         <td class="border border-gray-300 px-4 py-2">${data.release_date}</td>
-                        <td class="border border-gray-300 px-4 py-2"><a href="${data.media}" class="text-blue-500 underline" target="_blank">Media</a></td>
                         <td class="border border-gray-300 px-4 py-2">${data.genres}</td>
+                        <td class="border border-gray-300 px-4 py-2"><a href="${data.media}" class="text-blue-500 underline" target="_blank">Media</a></td>
                         <td class="border border-gray-300 px-4 py-2 text-center">
                             <button onclick="editGame(${data.id}, '${data.title}', '${data.description}', '${data.release_date}', '${data.media}')" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Edit</button>
                             <button onclick="deleteGame(${data.id})" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Delete</button>
