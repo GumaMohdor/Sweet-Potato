@@ -118,6 +118,9 @@
                 const genreNames = genreGameCountsArray.map(item => item.name);
                 const gameCounts = genreGameCountsArray.map(item => item.count);
 
+                console.log(genreNames)
+                console.log(gameCounts)
+
                 // Render chart
                 if (genreNames.length > 0 && gameCounts.length > 0) {
                     renderGenreChart(genreNames, gameCounts);
