@@ -7,12 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" />
-    <style>
-        .sidebar a.active {
-            background-color: #4F46E5; /* Highlight color */
-            color: #fff;
-        }
-    </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="flex h-screen bg-gray-900 text-gray-200 font-sans">
@@ -54,22 +48,6 @@
     <main class="flex-1 p-6">
         <h1 class="text-2xl font-bold mb-6">Dashboard</h1>
 
-        <!-- Tabel Data Games by Genre -->
-        <div class="bg-gray-800 p-4 rounded-lg shadow text-center mb-6">
-            <h2 class="text-lg font-semibold mb-4">Games Data by Genre</h2>
-            <table id="genreTable" class="table-auto w-full text-left text-gray-200">
-                <thead>
-                    <tr>
-                        <th class="px-4 py-2">Genre</th>
-                        <th class="px-4 py-2">Number of Games</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Data rows akan diisi dengan JavaScript -->
-                </tbody>
-            </table>
-        </div>
-
         <!-- Statistik Diagram -->
         <div class="bg-gray-800 p-4 rounded-lg shadow text-center">
             <h2 class="text-lg font-semibold mb-4">Games by Genre</h2>
@@ -85,78 +63,28 @@
                 const response = await fetch(`${url}/api/games`, { credentials: 'include' });
                 if (!response.ok) throw new Error('Failed to fetch games');
                 const games = await response.json();
-                renderTable(games.results);
                 calculateGenreCounts(games.results);
             } catch (error) {
                 console.error(error.message);
             }
         }
-        
-        function renderTable(data) {
-        const dataTable = document.querySelector('#genreTable tbody');
-        dataTable.innerHTML = '';
-        data.forEach(row => {
-            fetch(row.url) // detail game
-                .then(response => response.json()) // Parse JSON response
-                .then(data => {
-                    // Convert genres array into a readable string
-                    const genres = data.genres.map(genre => genre.name).join(', ');
 
-                    dataTable.innerHTML += `
-                        <tr>
-                            <td class="border border-gray-300 px-4 py-2">${data.id}</td>
-                            <td class="border border-gray-300 px-4 py-2">${data.title}</td>
-                            <td class="border border-gray-300 px-4 py-2">${data.description}</td>
-                            <td class="border border-gray-300 px-4 py-2">${data.release_date}</td>
-                            <td class="border border-gray-300 px-4 py-2">${genres}</td>
-                            <td class="border border-gray-300 px-4 py-2"><a href="${data.media}" class="text-blue-500 underline" target="_blank">Media</a></td>
-                            <td class="border border-gray-300 px-4 py-2 text-center">
-                                <button onclick="editGame(${data.id}, '${data.title}', '${data.description}', '${data.release_date}', '${data.media}')" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Edit</button>
-                                <button onclick="deleteGame(${data.id})" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Delete</button>
-                            </td>
-                        </tr>
-                    `;
-                })
-                .catch(error => console.error('Error fetching data:', error));
-        });
-    }
+        function calculateGenreCounts(data) {
+            const genreCounts = {};
 
-    function calculateGenreCounts(data) {
-        const genreCounts = {};
-
-        data.forEach(game => {
-            game.genres.forEach(genre => {
-                if (!genreCounts[genre.name]) {
-                    genreCounts[genre.name] = 0;
-                }
-                genreCounts[genre.name] += 1;
+            data.forEach(game => {
+                game.genres.forEach(genre => {
+                    if (!genreCounts[genre.name]) {
+                        genreCounts[genre.name] = 0;
+                    }
+                    genreCounts[genre.name] += 1;
+                });
             });
-        });
 
-        updateGenreTable(Object.entries(genreCounts).map(([name, count]) => ({ name, count })));
-    }
-        
-            
-            
-        function updateGenreTable(genreGameCounts) {
-            const tableBody = document.querySelector('#genreTable tbody');
-            tableBody.innerHTML = '';
-
-            genreGameCounts.forEach(genre => {
-                const row = document.createElement('tr');
-
-                const genreCell = document.createElement('td');
-                genreCell.textContent = genre.name;
-                genreCell.classList.add('px-4', 'py-2');
-
-                const countCell = document.createElement('td');
-                countCell.textContent = genre.count;
-                countCell.classList.add('px-4', 'py-2');
-
-                row.appendChild(genreCell);
-                row.appendChild(countCell);
-                tableBody.appendChild(row);
-            });
+            renderGenreChart(
+                Object.keys(genreCounts),
+                Object.values(genreCounts)
+            );
         }
 
         function renderGenreChart(genreNames, gameCounts) {
@@ -189,20 +117,6 @@
             return Array.from({ length: count }, () => `hsl(${Math.random() * 360}, 70%, 50%)`);
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            fetchGameDataAndRenderChart();
-
-            const links = document.querySelectorAll('.sidebar a[data-link]');
-            const currentPath = window.location.pathname.split('/').pop();
-
-            links.forEach(link => {
-                if (link.getAttribute('data-link') === currentPath) {
-                    link.classList.add('active');
-                } else {
-                    link.classList.remove('active');
-                }
-            });
-        })
         document.addEventListener('DOMContentLoaded', () => {
             fetchGames();
         });
