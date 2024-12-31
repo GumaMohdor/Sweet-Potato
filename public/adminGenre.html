@@ -208,36 +208,35 @@
             }
         }
 
-
         async function fetchGames() {
             try {
-                const url = 'https://blitzorn.pythonanywhere.com';
-                const response = await fetch(`${url}/api/genres`);
+                const url = 'https://blitzorn.pythonanywhere.com/api/genres';
+                const response = await fetch(url);
                 if (!response.ok) throw new Error('Failed to fetch genres');
-                const games = await response.json();
-                renderTable(games.results);
+                const genres = await response.json();
+                renderTable(genres); // Call renderTable with the received data
             } catch (error) {
-                console.error(error.message);
+                console.error('Error fetching genres:', error.message);
             }
         }
 
         function renderTable(data) {
-            dataTable.innerHTML = '';
-            data.forEach((row, index) => {
+            dataTable.innerHTML = ''; // Clear the existing table content
+
+            data.forEach((genre, index) => {
                 dataTable.innerHTML += `
                 <tr>
-                    <td class="border border-gray-300 px-4 py-2">${index + 1}</td>
-                    <td class="border border-gray-300 px-4 py-2">${data.name}</td>
-                    <td class="border border-gray-300 px-4 py-2">${data.game_count || 0}</td>
-                    <td class="border border-gray-300 px-4 py-2 text-center">
-                            <button onclick="editGame(${data.id}, '${data.name}')" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Edit</button>
-                            <button onclick="deleteGame(${data.id})" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Delete</button>
+                    <td class="border border-gray-700 px-4 py-2">${index + 1}</td>
+                    <td class="border border-gray-700 px-4 py-2">${genre.name}</td>
+                    <td class="border border-gray-700 px-4 py-2">${genre.game_count || 0}</td>
+                    <td class="border border-gray-700 px-4 py-2 text-center">
+                        <button onclick="openPopup('${genre.url}', '${genre.name}')" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Edit</button>
+                        <button onclick="deleteGenre('${genre.url}')" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Delete</button>
                     </td>
                 </tr>
                 `;
             });
         }
-
     
         function openPopup(id = '', name = '') {
             popupTitle.textContent = id ? 'Edit Genre' : 'Add Genre';
