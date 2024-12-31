@@ -67,10 +67,11 @@
         <h1 class="text-2xl font-bold mb-6">Dashboard</h1>
         <!-- Statistik Diagram -->
         <div class="bg-gray-800 p-4 rounded-lg shadow text-center">
-            <h2 class="text-lg font-semibold mb-4">Game vs Genre</h2>
-            <canvas id="statsChart" width="400" height="400"></canvas>
+            <h2 class="text-lg font-semibold mb-4">Games by Genre</h2>
+            <canvas id="genreChart" width="400" height="400"></canvas>
         </div>
     </main>
+    
     
     
   
@@ -86,41 +87,36 @@
         const mediaInput = document.getElementById('media');
 
         
-        async function fetchStatisticsAndRenderChart() {
+        async function fetchGenreDataAndRenderChart() {
             const baseUrl = 'https://blitzorn.pythonanywhere.com';
             try {
-                // Fetch total games
-                const gamesResponse = await fetch(`${baseUrl}/api/games`);
-                if (!gamesResponse.ok) throw new Error('Failed to fetch games');
-                const gamesData = await gamesResponse.json();
+                // Fetch genres data
+                const response = await fetch(`${baseUrl}/api/genres`);
+                if (!response.ok) throw new Error('Failed to fetch genres');
+                const genresData = await response.json();
 
-                // Fetch total genres
-                const genresResponse = await fetch(`${baseUrl}/api/genres`);
-                if (!genresResponse.ok) throw new Error('Failed to fetch genres');
-                const genresData = await genresResponse.json();
-
-                // Calculate statistics
-                const totalGames = gamesData.results.length;
-                const totalGenres = genresData.length;
+                // Extract genre names and their corresponding game counts
+                const genreNames = genresData.map(genre => genre.name);
+                const gameCounts = genresData.map(genre => genre.game_count || 0);
 
                 // Render chart
-                renderChart(totalGames, totalGenres);
+                renderGenreChart(genreNames, gameCounts);
             } catch (error) {
-                console.error('Error fetching statistics:', error.message);
+                console.error('Error fetching genre data:', error.message);
             }
         }
 
-        function renderChart(totalGames, totalGenres) {
-            const ctx = document.getElementById('statsChart').getContext('2d');
+        function renderGenreChart(genreNames, gameCounts) {
+            const ctx = document.getElementById('genreChart').getContext('2d');
             new Chart(ctx, {
                 type: 'pie',
                 data: {
-                    labels: ['Games', 'Genres'],
+                    labels: genreNames, // Names of the genres
                     datasets: [{
-                        label: 'Game vs Genre',
-                        data: [totalGames, totalGenres],
-                        backgroundColor: ['#6366F1', '#34D399'], // Warna untuk setiap bagian diagram
-                        borderColor: ['#4F46E5', '#10B981'], // Warna border
+                        label: 'Games by Genre',
+                        data: gameCounts, // Number of games for each genre
+                        backgroundColor: generateColors(genreNames.length), // Generate colors dynamically
+                        borderColor: '#1F2937', // Border color for better contrast
                         borderWidth: 1
                     }]
                 },
@@ -136,9 +132,19 @@
             });
         }
 
-document.addEventListener('DOMContentLoaded', () => {
-    fetchStatisticsAndRenderChart(); // Fetch and render the chart on page load
-});
+        function generateColors(count) {
+            // Generate a list of random colors
+            const colors = [];
+            for (let i = 0; i < count; i++) {
+                colors.push(`hsl(${Math.random() * 360}, 70%, 50%)`);
+            }
+            return colors;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchGenreDataAndRenderChart(); // Fetch and render the chart on page load
+        });
+
 
 
         
