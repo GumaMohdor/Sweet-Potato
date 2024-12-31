@@ -106,31 +106,73 @@
         }
 
         function renderGenreChart(genreNames, gameCounts) {
-            const ctx = document.getElementById('genreChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: genreNames, // Names of the genres
-                    datasets: [{
-                        label: 'Games by Genre',
-                        data: gameCounts, // Number of games for each genre
-                        backgroundColor: generateColors(genreNames.length), // Generate colors dynamically
-                        borderColor: '#1F2937', // Border color for better contrast
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top'
+            try {
+                // Validasi input
+                if (!Array.isArray(genreNames) || !Array.isArray(gameCounts)) {
+                    throw new Error("Input data harus berupa array.");
+                }
+
+                if (genreNames.length !== gameCounts.length) {
+                    throw new Error("Jumlah genreNames dan gameCounts harus sama.");
+                }
+
+                if (genreNames.length === 0) {
+                    throw new Error("Tidak ada data untuk ditampilkan.");
+                }
+
+                const ctx = document.getElementById('genreChart');
+                if (!ctx) {
+                    throw new Error("Elemen canvas dengan ID 'genreChart' tidak ditemukan.");
+                }
+
+                const chartContext = ctx.getContext('2d');
+                if (!chartContext) {
+                    throw new Error("Tidak dapat mengakses context 2D dari elemen canvas.");
+                }
+
+                // Render chart
+                new Chart(chartContext, {
+                    type: 'pie',
+                    data: {
+                        labels: genreNames, // Names of the genres
+                        datasets: [{
+                            label: 'Games by Genre',
+                            data: gameCounts, // Number of games for each genre
+                            backgroundColor: generateColors(genreNames.length), // Generate colors dynamically
+                            borderColor: '#1F2937', // Border color for better contrast
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top'
+                            }
                         }
                     }
+                });
+            } catch (error) {
+                console.error("Error rendering the chart:", error.message);
+
+                // Menampilkan pesan error di tempat canvas
+                const canvasContainer = document.getElementById('genreChart').parentNode;
+                const errorElement = document.createElement('p');
+                errorElement.textContent = `Error: ${error.message}`;
+                errorElement.style.color = "red";
+                errorElement.style.fontWeight = "bold";
+                errorElement.style.textAlign = "center";
+
+                // Hapus canvas jika error terjadi
+                if (canvasContainer) {
+                    canvasContainer.innerHTML = ""; // Clear the container
+                    canvasContainer.appendChild(errorElement); // Append error message
                 }
-            });
+            }
         }
-    
+
+
         function generateColors(count) {
             // Generate a list of random colors
             const colors = [];
