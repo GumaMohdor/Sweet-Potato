@@ -73,20 +73,7 @@
     </main>
     
     
-    
-  
     <script>
-        const dataTable = document.getElementById('data-table');
-        const popupModal = document.getElementById('popup-modal');
-        const form = document.getElementById('data-form');
-        const popupTitle = document.getElementById('popup-title');
-        const dataIdInput = document.getElementById('data-id');
-        const titleInput = document.getElementById('title');
-        const descriptionInput = document.getElementById('description');
-        const releaseDateInput = document.getElementById('release-date');
-        const mediaInput = document.getElementById('media');
-
-        
         async function fetchGenreDataAndRenderChart() {
             const baseUrl = 'https://blitzorn.pythonanywhere.com';
             try {
@@ -94,31 +81,31 @@
                 const genresResponse = await fetch(`${baseUrl}/api/genres`);
                 if (!genresResponse.ok) throw new Error('Failed to fetch genres');
                 const genresData = await genresResponse.json();
-
+    
                 // Fetch games data
                 const gamesResponse = await fetch(`${baseUrl}/api/games`);
                 if (!gamesResponse.ok) throw new Error('Failed to fetch games');
                 const gamesData = await gamesResponse.json();
-
+    
                 // Calculate game count for each genre
                 const genreGameCounts = genresData.map(genre => {
                     const gameCount = gamesData.results.filter(game =>
-                        game.genres.some(g => g.name === genre.name)
+                        game.genres && game.genres.some(g => g.name === genre.name)
                     ).length;
                     return { name: genre.name, count: gameCount };
                 });
-
+    
                 // Extract genre names and game counts for the chart
                 const genreNames = genreGameCounts.map(item => item.name);
                 const gameCounts = genreGameCounts.map(item => item.count);
-
+    
                 // Render chart
                 renderGenreChart(genreNames, gameCounts);
             } catch (error) {
                 console.error('Error fetching data for the chart:', error.message);
             }
         }
-
+    
         function renderGenreChart(genreNames, gameCounts) {
             const ctx = document.getElementById('genreChart').getContext('2d');
             new Chart(ctx, {
@@ -144,7 +131,7 @@
                 }
             });
         }
-
+    
         function generateColors(count) {
             // Generate a list of random colors
             const colors = [];
@@ -153,38 +140,37 @@
             }
             return colors;
         }
-
+    
         document.addEventListener('DOMContentLoaded', () => {
             fetchGenreDataAndRenderChart(); // Fetch and render the chart on page load
-        })
-        
+        });
+    
         function closeSidebar() {
             document.querySelector(".sidebar").classList.add("hidden");
         }
-
+    
         function dropdown() {
             document.querySelector("#submenu").classList.toggle("hidden");
             document.querySelector("#arrow").classList.toggle("rotate-0");
         }
-
+    
         function openSidebar() {
             document.querySelector(".sidebar").classList.toggle("hidden");
         }
-
+    
         document.addEventListener("DOMContentLoaded", function () {
-        const links = document.querySelectorAll('.sidebar a[data-link]');
-        const currentPath = window.location.pathname.split('/').pop(); // Mendapatkan nama file halaman saat ini
-
+            const links = document.querySelectorAll('.sidebar a[data-link]');
+            const currentPath = window.location.pathname.split('/').pop(); // Mendapatkan nama file halaman saat ini
+    
             links.forEach(link => {
                 if (link.getAttribute('data-link') === currentPath) {
-                link.classList.add('active'); // Menambahkan kelas 'active' pada link yang sesuai
+                    link.classList.add('active'); // Menambahkan kelas 'active' pada link yang sesuai
                 } else {
-                link.classList.remove('active'); // Menghapus kelas 'active' jika tidak sesuai
+                    link.classList.remove('active'); // Menghapus kelas 'active' jika tidak sesuai
                 }
             });
         });
-
-        fetchGames();
     </script>
+    
 </body>
 </html>
