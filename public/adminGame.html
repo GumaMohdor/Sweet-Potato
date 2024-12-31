@@ -149,7 +149,8 @@
         const releaseDateInput = document.getElementById('release-date');
         const mediaInput = document.getElementById('media');
 
-        const url = 'https://blitzorn.pythonanywhere.com'
+        // const url = 'https://blitzorn.pythonanywhere.com'
+        const url = 'http://192.168.1.9:5000'
         function sortTable(columnIndex) {
         const rows = Array.from(dataTable.querySelectorAll('tr'));
         const isAscending = dataTable.getAttribute('data-sort') !== `column-${columnIndex}-asc`;
