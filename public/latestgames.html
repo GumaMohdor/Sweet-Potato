@@ -168,8 +168,9 @@
         });
 
         // START: Updated latest released games data with IDs
+        const latestReleasedGames = []; // Array untuk menyimpan data game
+        // Fetch data game dari API
         const url="http://192.168.1.9:5000";
-        const latestReleasedGames = [];
         fetch(`${url}/api/games/`)
             .then(response => response.json())
             .then(data => {
@@ -237,7 +238,7 @@
             const container = document.getElementById("latestReleasedGames");
             const sortedGames = sortGamesByReleaseDate(latestReleasedGames);
 
-            console.log(sortedGames);console.log("ini ada");
+            container.innerHTML = ""; // Kosongkan container
             sortedGames.forEach(game => {
                 const gameCard = document.createElement("div");
                 gameCard.className = "game-card bg-white rounded-lg shadow-md p-4 flex flex-col justify-between";
@@ -271,8 +272,9 @@
                             + Rate
                         </button>
                     </div>
-                `; console.log(gameCard);
+                `;
                 container.appendChild(gameCard);
+                console.log('Rendered');
             });
         }
         // END: Updated renderLatestGames function
@@ -308,6 +310,48 @@
                 genreList.classList.remove('show');
             }
         });
+
+        // START: Search game
+        const searchInput = document.querySelector('input[type="search"]');
+        let debounceTimer; // Variabel untuk menyimpan timer debounce
+        const debounceDelay = 500; // Delay dalam milidetik (misalnya 300ms)
+
+        document.addEventListener('DOMContentLoaded', () => {
+            searchInput?.focus(); // Kosongkan input search
+        });
+        
+        searchInput?.addEventListener('input', () => {
+            clearTimeout(debounceTimer); // Hapus timer jika ada input baru
+
+            debounceTimer = setTimeout(() => {
+                const query = searchInput ? searchInput.value.toLowerCase() : '';
+
+                latestReleasedGames.length = 0; // Kosongkan array game
+                fetch(`${url}/api/games?search=${query}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const gameFetches = data.results.map(game => {
+                            return fetch(game.url)
+                                .then(response => response.json())
+                                .then(gameData => {
+                                    gameData.release_date = formatDate(gameData.release_date);
+                                    return gameData; // Kembalikan data game
+                                });
+                        });
+
+                        // Tunggu semua `fetch` selesai
+                        return Promise.all(gameFetches);
+                    })
+                    .then(fetchedGames => {
+                        latestReleasedGames.push(...fetchedGames); // Masukkan semua data game
+                        renderLatestGames(); // Render game
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }, debounceDelay); // Set timer untuk delay eksekusi
+        });
+        // END: Search game
     </script>
 </body>
 </html>

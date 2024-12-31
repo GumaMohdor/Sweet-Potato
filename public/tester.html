@@ -23,7 +23,7 @@
             }
         }
     </script>
-    <title>Latest | Sweet Potato</title>
+    <title>Popular Games | Sweet Potato</title>
     <style>
         .genre-dropdown {
             display: none;
@@ -72,11 +72,9 @@
             padding: 0.5rem;
             color: white;
         }
-
         #mobileGenreList a:hover {
             background-color: rgba(255, 255, 255, 0.2);
         }
-        /* START: Added styles for star rating */
         .star-rating {
             display: inline-flex;
             align-items: center;
@@ -93,10 +91,9 @@
         .game-card:hover {
             transform: translateY(-4px);
         }
-        /* END: Added styles for star rating */
     </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100 mb-4">
     <header class="bg-main fixed top-0 w-full shadow-md z-50">
         <nav class="container mx-auto px-6 py-3">
             <div class="flex justify-between items-center">
@@ -145,16 +142,15 @@
             </div>
         </div>
     </header>
+
     <main class="mt-24">
-        <!-- Updated list section -->
         <section class="container mx-auto px-6 py-10">
-            <h2 class="text-2xl font-bold mb-6">Latest Released</h2>
-            <!-- Updated container for game cards -->
-            <div id="latestReleasedGames" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <h2 class="text-2xl font-bold mb-6">Popular Among Gamers</h2>
+            <div id="topRatedGames" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <!-- Game cards will be rendered here by JavaScript -->
             </div>
         </section>
-    </main>    
+    </main>   
 
     <script>
         // Existing burger menu code remains unchanged
@@ -167,70 +163,63 @@
             });
         });
 
-        // START: Updated latest released games data with IDs
-        const latestReleasedGames = [
+        // START: Updated game data with IDs for navigation
+        const games = [
             {
                 id: 1,
                 title: "Anora",
-                image: "https://image.api.playstation.com/cdn/UP9000/CUSA13568_00/f4s0UiYmFBMlZdbP3PDYtHcZx7jVp95a.png",
+                image: "https://th.bing.com/th/id/OIP.HlSzDMSrbrmd_EForv3pXAHaDt?w=286&h=174&c=7&r=0&o=5&pid=1.7",
                 gamerScore: 90,
-                genre: "Action",
-                releasedDate: "Dec 30, 2024"
+                releasedDate: "Dec 17, 2024"
             },
             {
                 id: 2,
                 title: "Small Things Like These",
-                image: "https://image.api.playstation.com/cdn/UP9000/CUSA13568_00/f4s0UiYmFBMlZdbP3PDYtHcZx7jVp95a.png",
+                image: "https://th.bing.com/th/id/OIP.jkEjjfWEzce3loJSNwfYfwHaEK?w=297&h=180&c=7&r=0&o=5&pid=1.7",
                 gamerScore: 81,
-                genre: "Adventure",
                 releasedDate: "Dec 17, 2024"
             },
             {
                 id: 3,
                 title: "Separated",
-                image: "https://th.bing.com/th/id/OIP.oN9TE5I4hkgqNwRX528ajgHaHa?pid=ImgDet&w=208&h=208&c=7",
-                gamerScore: null,
-                genre: "RPG",
+                image: "https://th.bing.com/th/id/OIP.bWBisE_jO8ahfmJBNPYFNwHaEo?w=309&h=174&c=7&r=0&o=5&pid=1.7",
+                gamerScore: 79,
                 releasedDate: "Dec 17, 2024"
             },
             {
                 id: 4,
                 title: "Chasing Chasing Amy",
-                image: "https://th.bing.com/th/id/OIP.gV0P4Eenf6BY_hBqwKSGCwHaHa?pid=ImgDet&w=208&h=208&c=7",
-                gamerScore: "--",
-                genre: "Strategy",
+                image: "https://th.bing.com/th/id/OIP.EFt2LOK7J6BdnKzqqRkVnAHaDt?w=277&h=174&c=7&r=0&o=5&pid=1.7",
+                gamerScore: 75,
                 releasedDate: "Dec 17, 2024"
             },
             {
                 id: 5,
                 title: "The Little Mermaid",
-                image: "https://th.bing.com/th/id/OIP.BzuE7uKh7La5shC5vzisIAHaEK?rs=1&pid=ImgDetMain",
-                gamerScore: "--",
-                genre: "Horror",
-                releasedDate: "Dec 24, 2024"
+                image: "https://th.bing.com/th/id/OIP.0xZ1KCs0g917hWBvMMfp-wHaEK?w=284&h=180&c=7&r=0&o=5&pid=1.7",
+                gamerScore: 85,
+                releasedDate: "Dec 17, 2024"
             },
             {
                 id: 6,
                 title: "Glue Trap",
-                image: "https://i.ytimg.com/vi/gOqWdznjzy0/maxresdefault.jpg",
-                gamerScore: "--",
-                genre: "Survival",
+                image: "https://th.bing.com/th/id/OIP.cHMm-veQ6bf3Qo1wMRSMMQHaEK?w=297&h=180&c=7&r=0&o=5&pid=1.7",
+                gamerScore: 95,
                 releasedDate: "Dec 17, 2024"
+            },
+            {
+                id: 7,
+                title: "Makhluk Durjana",
+                image: "https://th.bing.com/th/id/OIP.cHMm-veQ6bf3Qo1wMRSMMQHaEK?w=297&h=180&c=7&r=0&o=5&pid=1.7",
+                gamerScore: 100,
+                releasedDate: "Dec 1, 2022"
             }
         ];
-        // END: Updated latest released games data
-
-        function sortGamesByReleaseDate(games) {
-            return games.sort((a, b) => {
-                const dateA = new Date(a.releasedDate);
-                const dateB = new Date(b.releasedDate);
-                return dateB - dateA;
-            });
-        }
+        // END: Updated game data
 
         // START: Added function to convert percentage to star rating
         function getStarRating(percentage) {
-            if (!percentage || percentage === '--') return 0;
+            if (!percentage) return 0;
             return (percentage / 20).toFixed(1);
         }
         // END: Added function to convert percentage to star rating
@@ -241,10 +230,18 @@
         }
         // END: Added function to navigate to game detail
 
-        // START: Updated renderLatestGames function with star rating and navigation
-        function renderLatestGames() {
-            const container = document.getElementById("latestReleasedGames");
-            const sortedGames = sortGamesByReleaseDate(latestReleasedGames);
+        function sortGamesByRating(games) {
+            return games.sort((a, b) => {
+                const scoreA = typeof a.gamerScore === 'number' ? a.gamerScore : -1;
+                const scoreB = typeof b.gamerScore === 'number' ? b.gamerScore : -1;
+                return scoreB - scoreA;
+            });
+        }
+
+        // START: Updated renderTopRatedGames function with star rating and navigation
+        function renderTopRatedGames() {
+            const container = document.getElementById("topRatedGames");
+            const sortedGames = sortGamesByRating(games);
 
             sortedGames.forEach(game => {
                 const gameCard = document.createElement("div");
@@ -255,7 +252,7 @@
                             <img src="${game.image}" alt="${game.title}" class="rounded-lg w-full h-full object-cover">
                             <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-black/40">
                                 <button class="bg-white rounded-full p-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-black " fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132a1 1 0 0 0-1.555.832v4.264a1 1 0 0 0 1.555.832l3.197-2.132a1 1 0 0 0 0-1.664z" />
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.341A8 8 0 1 1 4.572 8.659a8 8 0 0 1 14.856 6.682z" />
                                     </svg>
@@ -283,7 +280,7 @@
                 container.appendChild(gameCard);
             });
         }
-        // END: Updated renderLatestGames function
+        // END: Updated renderTopRatedGames function
 
         // Existing genre dropdown code remains unchanged
         const genreDropdown = document.getElementById('genreDropdown');
@@ -318,7 +315,7 @@
         });
 
         // Initialize the page
-        renderLatestGames();
+        renderTopRatedGames();
     </script>
 </body>
-</html> 
+</html>
