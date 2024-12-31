@@ -148,6 +148,7 @@
         const releaseDateInput = document.getElementById('release-date');
         const mediaInput = document.getElementById('media');
 
+        const url = 'https://blitzorn.pythonanywhere.com'
         function sortTable(columnIndex) {
         const rows = Array.from(dataTable.querySelectorAll('tr'));
         const isAscending = dataTable.getAttribute('data-sort') !== `column-${columnIndex}-asc`;
@@ -228,8 +229,8 @@
 
         async function fetchGames() {
             try {
-                const url = 'https://blitzorn.pythonanywhere.com';
-                const response = await fetch(`${url}/api/games`);
+                
+                const response = await fetch(`${url}/api/games`, {credentials: 'include'});
                 if (!response.ok) throw new Error('Failed to fetch games');
                 const games = await response.json();
                 renderTable(games.results);
@@ -318,7 +319,6 @@
                 formData.append('media', mediaInput.files[0]);
             }
 
-            const url = 'https://blitzorn.pythonanywhere.com';
             const id = dataIdInput.value;
             console.log(formData);
             try {
@@ -328,6 +328,7 @@
                     headers: {
                     'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZXhwIjoxNzM1NjYwNDE1Ljc0MjE0MX0.1L4pCaNU5vhZnzacOVcXsEG_JQnxSWd5sWLfMQgLGDE` 
                     }
+                    ,credentials: 'include'
                 });
 
                 if (!response.ok) throw new Error('Failed to save game');
