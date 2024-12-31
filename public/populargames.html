@@ -72,9 +72,24 @@
             padding: 0.5rem;
             color: white;
         }
-
         #mobileGenreList a:hover {
             background-color: rgba(255, 255, 255, 0.2);
+        }
+        .star-rating {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .star-rating .score {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+        .game-card {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .game-card:hover {
+            transform: translateY(-4px);
         }
     </style>
 </head>
@@ -153,44 +168,51 @@
             {
                 id: 1,
                 title: "Anora",
-                image: "/placeholder.svg?height=400&width=300",
+                image: "https://th.bing.com/th/id/OIP.HlSzDMSrbrmd_EForv3pXAHaDt?w=286&h=174&c=7&r=0&o=5&pid=1.7",
                 gamerScore: 90,
                 releasedDate: "Dec 17, 2024"
             },
             {
                 id: 2,
                 title: "Small Things Like These",
-                image: "/placeholder.svg?height=400&width=300",
+                image: "https://th.bing.com/th/id/OIP.jkEjjfWEzce3loJSNwfYfwHaEK?w=297&h=180&c=7&r=0&o=5&pid=1.7",
                 gamerScore: 81,
                 releasedDate: "Dec 17, 2024"
             },
             {
                 id: 3,
                 title: "Separated",
-                image: "/placeholder.svg?height=400&width=300",
+                image: "https://th.bing.com/th/id/OIP.bWBisE_jO8ahfmJBNPYFNwHaEo?w=309&h=174&c=7&r=0&o=5&pid=1.7",
                 gamerScore: 79,
                 releasedDate: "Dec 17, 2024"
             },
             {
                 id: 4,
                 title: "Chasing Chasing Amy",
-                image: "/placeholder.svg?height=400&width=300",
+                image: "https://th.bing.com/th/id/OIP.EFt2LOK7J6BdnKzqqRkVnAHaDt?w=277&h=174&c=7&r=0&o=5&pid=1.7",
                 gamerScore: 75,
                 releasedDate: "Dec 17, 2024"
             },
             {
                 id: 5,
                 title: "The Little Mermaid",
-                image: "/placeholder.svg?height=400&width=300",
+                image: "https://th.bing.com/th/id/OIP.0xZ1KCs0g917hWBvMMfp-wHaEK?w=284&h=180&c=7&r=0&o=5&pid=1.7",
                 gamerScore: 85,
                 releasedDate: "Dec 17, 2024"
             },
             {
                 id: 6,
                 title: "Glue Trap",
-                image: "/placeholder.svg?height=400&width=300",
+                image: "https://th.bing.com/th/id/OIP.cHMm-veQ6bf3Qo1wMRSMMQHaEK?w=297&h=180&c=7&r=0&o=5&pid=1.7",
                 gamerScore: 95,
                 releasedDate: "Dec 17, 2024"
+            },
+            {
+                id: 7,
+                title: "Makhluk Durjana",
+                image: "https://th.bing.com/th/id/OIP.cHMm-veQ6bf3Qo1wMRSMMQHaEK?w=297&h=180&c=7&r=0&o=5&pid=1.7",
+                gamerScore: 100,
+                releasedDate: "Dec 1, 2022"
             }
         ];
         // END: Updated game data
@@ -242,8 +264,10 @@
                     </div>
                     <div class="flex items-center justify-between mt-4">
                         <div class="star-rating">
-                            <span class="score">${getStarRating(game.gamerScore)}</span>
-                            <span class="star text-yellow-400 text-2xl">★</span>
+                            <span class="score text-xl">${getStarRating(game.gamerScore)}</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-yellow-400 text-l" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                            </svg>
                         </div>
                         <button 
                             onclick="navigateToGameDetail(${game.id})"
