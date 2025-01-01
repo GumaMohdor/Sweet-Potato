@@ -370,6 +370,90 @@
                     if (!video.hasAttribute('data-listeners')) {
                         video.setAttribute('data-listeners', 'true');
                     }
+                    fetch(`${url}/api/games/`,  { mode: 'cors' })
+                .then(response => response.json())
+                .then(data => {
+                    const gameFetches = data.results.map(game => {
+                        return fetch(game.url)
+                            .then(response => response.json())
+                            .then(gameData => {
+                                gameData.release_date = formatDate(gameData.release_date);
+                                return gameData; // Kembalikan data game
+                            });
+                    });
+
+                    // Tunggu semua `fetch` selesai
+                    return Promise.all(gameFetches);
+                })
+                .then(fetchedGames => {
+                    // Ambil URL saat ini
+                    const currentUrl = window.location.href;
+                    // Buat instance URLSearchParams dari bagian query string URL
+                    const urlParams = new URLSearchParams(new URL(currentUrl).search);
+                    // Ambil nilai parameter "id"
+                    const id = parseInt(urlParams.get('id'));
+                    // Cetak nilai id
+                    console.log(id); // Output: 1 (sesuai dengan contoh URL)
+                    
+                    console.log(fetchedGames)// Masukkan semua data game
+                    const index = findIndexById(fetchedGames, id)
+                    console.log(index)
+                    gameData = fetchedGames[index];
+
+                    fetch(gameData.media)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Filter untuk mendapatkan URL dengan ekstensi .mp4
+                        const mp4Urls = data.filter(url => url.endsWith('.mp4'));
+                        const imageUrls = data.filter(url => url.endsWith('.jpg') || url.endsWith('.png'));
+                        
+                        console.log(imageUrls)
+
+                          // Render gambar secara dinamis
+                            imageUrls.forEach((url, index) => {
+                                // Membuat elemen div untuk setiap item gambar
+                                const carouselItem = document.createElement("div");
+                                carouselItem.className = "carousel-item";
+
+                                // Membuat elemen img
+                                const img = document.createElement("img");
+                                img.className = "w-full h-[200px] md:h-[400px] object-cover rounded-lg border border-gray-700";
+                                img.src = url;
+                                img.alt = `Image ${index + 1}`;
+
+                                // Menambahkan elemen img ke dalam div item
+                                carouselItem.appendChild(img);
+
+                                console.log("carousel item: " + carouselItem.outerHTML)
+                                
+                                // Menambahkan div item ke dalam carousel
+                                carouselContainer.appendChild(carouselItem);
+                                console.log("conatiner : " + carouselContainer.outerHTML)
+                            });
+
+                        // Jika ada file .mp4, ambil yang pertama
+                        if (mp4Urls.length > 0) {
+                        console.log("URL file .mp4:", mp4Urls[0]); // Output: "http://192.168.1.9:5000/upload/trailer.mp4"
+                        trailer.setAttribute('src', mp4Urls[0])
+                    } else {
+                        console.log("Tidak ada file .mp4 di array.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Terjadi kesalahan:", error);
+                    });
+
+
+                    title.textContent = gameData.title
+                    date.textContent = gameData.release_date
+                    rating.textContent = gameData.average_rating
+                    description.textContent = gameData.description
+
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
                 }
             }
         });
