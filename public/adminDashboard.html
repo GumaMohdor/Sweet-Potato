@@ -13,7 +13,7 @@
     <div class="sticky top-0 min-h-screen flex flex-row bg-gray-900">
         <div class="flex flex-col w-56 bg-gray-800 rounded-r-3xl overflow-hidden">
             <div class="flex items-center justify-center h-20 shadow-md bg-gray-700">
-                <img src="img/logo.png" alt="Sweet Potato Logo" class="h-16">
+                <img src="img/logo.png" alt="Sweet Potato Logo" class="h-32">
             </div>
             <ul class="flex flex-col py-4">
                 <li>
@@ -35,7 +35,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-400 hover:text-gray-100">
+                    <a href="sign.html"  id="logoutBtn" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-400 hover:text-gray-100">
                         <span class="inline-flex items-center justify-center h-12 w-12 text-lg"><i class="bx bx-log-out"></i></span>
                         <span class="text-sm font-medium">Logout</span>
                     </a>
@@ -66,42 +66,60 @@
         <!-- Section 2: Grafik Lingkaran Games by Genre -->
         <section class="bg-gray-800 p-4 rounded-lg shadow">
             <h2 class="text-lg font-semibold mb-4">Games by Genre</h2>
-            <canvas id="genreChart" class="w-full h-64"></canvas>
+            <div class="relative w-full max-w-md mx-auto" style="height: 500px;">
+                <canvas id="genreChart" class="w-full h-full"></canvas>
+            </div>
         </section>
     </main>
 
     <script>
         const url = 'http://192.168.1.9:5000';
-
+    
         async function fetchGames() {
-            try {
+            try { 
                 const response = await fetch(`${url}/api/games`);
                 if (!response.ok) throw new Error('Failed to fetch games');
                 const gamesData = await response.json();
-
+    
                 const games = gamesData.results.map(game => ({
                     title: game.title,
                     genres: Array.isArray(game.genres) ? game.genres.map(genre => genre.name) : []
                 }));
-
+    
                 updateSummary(games);
                 calculateGenreCounts(games);
             } catch (error) {
                 console.error(error.message);
             }
         }
-
+    
+        async function fetchGenres() {
+            try {
+                const response = await fetch(`${url}/api/genres`);
+                if (!response.ok) throw new Error('Failed to fetch genres');
+                const genresData = await response.json();
+    
+                // Ensure the genres are extracted correctly
+                const genres = genresData.map(genre => genre.name);
+                updateGenreSummary(genres);
+            } catch (error) {
+                console.error(error.message);
+            }
+        }
+    
+        function updateGenreSummary(genres) {
+            const totalGenres = genres.length;
+            document.getElementById('totalGenres').textContent = totalGenres;
+        }
+    
         function updateSummary(games) {
             const totalGames = games.length;
-            const uniqueGenres = new Set(games.flatMap(game => game.genres));
-            
             document.getElementById('totalGames').textContent = totalGames;
-            document.getElementById('totalGenres').textContent = uniqueGenres.size;
         }
-
+    
         function calculateGenreCounts(games) {
             const genreCounts = {};
-
+    
             games.forEach(game => {
                 game.genres.forEach(genre => {
                     if (!genreCounts[genre]) {
@@ -110,20 +128,24 @@
                     genreCounts[genre]++;
                 });
             });
-
+    
             renderGenreChart(Object.keys(genreCounts), Object.values(genreCounts));
         }
-
+    
         function renderGenreChart(genreNames, gameCounts) {
+            // Use dummy data for now
+            const dummyGenreNames = ["Adventure", "Horror", "Strategy", "Multiplayer", "MOBA", "Action"];
+            const dummyGameCounts = [15, 8, 20, 10, 12, 30];
+
             const ctx = document.getElementById('genreChart').getContext('2d');
             new Chart(ctx, {
                 type: 'pie',
                 data: {
-                    labels: genreNames,
+                    labels: dummyGenreNames,
                     datasets: [{
                         label: 'Games by Genre',
-                        data: gameCounts,
-                        backgroundColor: generateColors(genreNames.length),
+                        data: dummyGameCounts,
+                        backgroundColor: generateColors(dummyGenreNames.length),
                         borderColor: '#1F2937',
                         borderWidth: 1
                     }]
@@ -133,7 +155,13 @@
                     plugins: {
                         legend: {
                             display: true,
-                            position: 'top'
+                            position: 'left',
+                            labels:{
+                                color: '#FFFFFF',
+                                font: {
+                                    size: 17
+                                }
+                            }
                         }
                     }
                 }
@@ -141,12 +169,48 @@
         }
 
         function generateColors(count) {
-            return Array.from({ length: count }, () => `hsl(${Math.random() * 360}, 70%, 50%)`);
+            const colors = [];
+            const hueStep = 360 / count; // Jarak hue antara setiap warna
+
+            for (let i = 0; i < count; i++) {
+                const hue = (i * hueStep) % 360; // Menghitung hue dengan jarak tertentu
+                const color = `hsl(${hue}, 70%, 50%)`; // Membuat warna HSL dengan saturasi 70% dan kecerahan 50%
+                colors.push(color);
+            }
+
+            return colors;
         }
 
+    
         document.addEventListener('DOMContentLoaded', () => {
-            fetchGames();
+            const token = localStorage.getItem('token');
+        
+            // Jika token tidak ada, tampilkan alert dan redirect ke sign.html
+            if (!token) {
+                alert('You must be logged in to access this page.');
+                window.location.href = 'sign.html';
+                return; // Stop script execution to prevent further page load
+            }
+
+            // Lanjutkan dengan memuat data jika token ada
+
+                fetchGames();
+                fetchGenres();
+            });
+
+            document.getElementById('logoutBtn').addEventListener('click', function(event) {
+            // Clear localStorage
+            localStorage.clear();
+            
+            // Optional: You can add a small delay to make sure localStorage is cleared before navigation
+            setTimeout(() => {
+                window.location.href = 'sign.html'; // Redirect to sign.html
+            }, 100);
+            
+            // Prevent default behavior (to prevent the immediate page transition)
+            event.preventDefault();
         });
     </script>
+    
 </body>
 </html>

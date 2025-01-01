@@ -83,7 +83,8 @@
                     alert("Registration successful! Please login.");
                     registerForm.reset();
                 } else {
-                    alert(`Error: ${data.message}`);
+                    console.log(data.message)
+                    alert(`${data.message}`);
                 }
             } catch (error) {
                 console.error("Registration error:", error);

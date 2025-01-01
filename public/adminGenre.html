@@ -52,11 +52,11 @@
             </a>
           </li> -->
           <li>
-            <a href="#" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-400 hover:text-gray-100">
-              <span class="inline-flex items-center justify-center h-12 w-12 text-lg"><i class="bx bx-log-out"></i></span>
-              <span class="text-sm font-medium">Logout</span>
+            <a href="sign.html"  id="logoutBtn" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-400 hover:text-gray-100">
+                <span class="inline-flex items-center justify-center h-12 w-12 text-lg"><i class="bx bx-log-out"></i></span>
+                <span class="text-sm font-medium">Logout</span>
             </a>
-          </li>
+        </li>
         </ul>
       </div>
     </div>
@@ -134,7 +134,9 @@
         const isAscending = dataTable.getAttribute('data-sort') !== `column-${columnIndex}-asc`;
         const multiplier = isAscending ? 1 : -1;
 
-        const url = 'https://blitzorn.pythonanywhere.com';
+        // const url = 'https://blitzorn.pythonanywhere.com';
+        const url = 'http://192.168.1.9:5000';
+
 
         rows.sort((rowA, rowB) => {
             const cellA = rowA.children[columnIndex].innerText.trim().toLowerCase();
@@ -209,8 +211,15 @@
         }
 
         async function fetchGames() {
+            const url = 'http://192.168.1.9:5000';
+            const token = localStorage.getItem('token'); // Ambil token dari localStorage
+            if (!token) {
+                console.error('Token not found. Redirecting to login page...');
+                window.location.href = './sign.html'; // Redirect jika token tidak ada
+                return;
+            }
             try {
-                const response = await fetch(url);
+                const response = await fetch(`${url}/api/genres`, { mode: 'cors' });
                 if (!response.ok) throw new Error('Failed to fetch genres');
                 const genres = await response.json();
                 renderTable(genres); // Call renderTable with the received data
@@ -274,11 +283,15 @@
             }
         });
         });
-
         
         form.addEventListener('submit', async function (event) {
             event.preventDefault();
-
+            const token = localStorage.getItem('token'); // Ambil token dari localStorage
+            if (!token) {
+                console.error('Token not found. Redirecting to login page...');
+                window.location.href = '/login.html'; // Redirect jika token tidak ada
+                return;
+            }
             const formData = new FormData();
             formData.append('name', nameInput.value);
             formData.append('description', descriptionInput.value);
@@ -305,7 +318,17 @@
                 console.error(error.message);
             }
         });
-
+        document.getElementById('logoutBtn').addEventListener('click', function(event) {
+            // Clear localStorage
+            localStorage.clear();
+            
+            // Optional: You can add a small delay to make sure localStorage is cleared before navigation
+            setTimeout(() => {
+                window.location.href = 'sign.html'; // Redirect to sign.html
+            }, 100);
+            
+            // Prevent default behavior (to prevent the immediate page transition)
+            event.preventDefault();});
         fetchGames();
     </script>
 </body>

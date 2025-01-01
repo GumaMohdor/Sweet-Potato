@@ -52,11 +52,11 @@
             </a>
           </li> -->
           <li>
-            <a href="#" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-400 hover:text-gray-100">
-              <span class="inline-flex items-center justify-center h-12 w-12 text-lg"><i class="bx bx-log-out"></i></span>
-              <span class="text-sm font-medium">Logout</span>
+            <a href="sign.html"  id="logoutBtn" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-400 hover:text-gray-100">
+                <span class="inline-flex items-center justify-center h-12 w-12 text-lg"><i class="bx bx-log-out"></i></span>
+                <span class="text-sm font-medium">Logout</span>
             </a>
-          </li>
+        </li>
         </ul>
       </div>
     </div>
@@ -127,6 +127,12 @@
                     <input type="date" id="release-date" name="release_date" class="w-full border border-gray-700 rounded px-3 py-2 bg-gray-700 text-white">
                 </div>
                 <div class="mb-4">
+                    <label for="genre-dropdown" class="block text-sm font-medium mb-1">Genres</label>
+                    <select id="genre-dropdown" name="genres" multiple class="w-full border border-gray-700 rounded px-3 py-2 bg-gray-700 text-white">
+                        <!-- Options will be populated dynamically -->
+                    </select>
+                </div> 
+                <div class="mb-4">
                     <label for="media" class="block text-sm font-medium mb-1">Media</label>
                     <input type="file" id="media" name="media" class="w-full border border-gray-700 rounded px-3 py-2 bg-gray-700 text-white" accept="image/*,video/*">
                 </div>
@@ -148,10 +154,10 @@
         const descriptionInput = document.getElementById('description');
         const releaseDateInput = document.getElementById('release-date');
         const mediaInput = document.getElementById('media');
+        const genres = document.getElementById('genre-dropdown');
 
         // const url = 'https://blitzorn.pythonanywhere.com'
         const url = 'http://192.168.1.9:5000';
-        console.log(url);
         function sortTable(columnIndex) {
         const rows = Array.from(dataTable.querySelectorAll('tr'));
         const isAscending = dataTable.getAttribute('data-sort') !== `column-${columnIndex}-asc`;
@@ -209,26 +215,6 @@
             document.querySelector(".sidebar").classList.toggle("hidden");
         }
 
-      
-        async function submit() {
-            const formData = new FormData(document.getElementById('data-form'));
-            const id = formData.get('data-id');
-
-            console.log(formData);
-            try {
-            const response = await fetch(id ? `/api/games/${id}` : '/api/games', {
-                method: id ? 'PATCH' : 'POST',
-                body: formData
-            });
-
-            if (!response.ok) throw new Error('Failed to save game');
-            closePopup();
-            fetchGames();
-            } catch (error) {
-            console.error(error.message);
-            }
-        }
-
         async function fetchGames() {
             try {
                 const response = await fetch(`${url}/api/games`, { mode: 'cors' });
@@ -239,43 +225,96 @@
                 console.error(error.message);
             }
         }
+        
+        // async function fetchGenres() {
+        //     try {
+        //         const response = await fetch(`${url}/api/genres`);
+        //         const genres = await response.json();
 
-function renderTable(data) {
-    dataTable.innerHTML = '';
-    data.forEach(row => {
-        fetch(row.url) // detail game
-            .then(response => response.json()) // Parse JSON response
-            .then(data => {
-                // Convert genres array into a readable string
-                const genres = data.genres.map(genre => genre.name).join(', ');
+        //         let genreDropdown = document.getElementById('genre-dropdown');
+        //         genreDropdown.innerHTML = ''; // Clear previous options
 
-                dataTable.innerHTML += `
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2">${data.id}</td>
-                        <td class="border border-gray-300 px-4 py-2">${data.title}</td>
-                        <td class="border border-gray-300 px-4 py-2">${data.description}</td>
-                        <td class="border border-gray-300 px-4 py-2">${data.release_date}</td>
-                        <td class="border border-gray-300 px-4 py-2">${genres}</td>
-                        <td class="border border-gray-300 px-4 py-2"><a href="${data.media}" class="text-blue-500 underline" target="_blank">Media</a></td>
-                        <td class="border border-gray-300 px-4 py-2 text-center">
-                            <button onclick="editGame(${data.id}, '${data.title}', '${data.description}', '${data.release_date}', '${data.media}')" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Edit</button>
-                            <button onclick="deleteGame(${data.id})" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Delete</button>
-                        </td>
-                    </tr>
-                `;
-            })
-            .catch(error => console.error('Error fetching data:', error));
-    });
-}
+        //         genres.forEach(genre => {
+        //             const option = document.createElement('option');
+        //             option.value = genre.name; // Use the genre name as the value
+        //             option.textContent = genre.name; // Display the genre name
+        //             genreDropdown.appendChild(option);
+        //         });
+        //     } catch (error) {
+        //         console.error('Error fetching genres:', error);
+        //     }
+        // }
 
+        async function fetchGenres() {
+            const genreDropdown = document.getElementById('genre-dropdown'); // Pastikan ada elemen dengan id="genre"
 
-        function openPopup(id = '', title = '', description = '', releaseDate = '', media = '') {
+            fetch(`${url}/api/genres`)
+                .then(response => response.json()) // Parse JSON response
+                .then(genres => {
+                    // Kosongkan dropdown sebelum mengisinya
+                    genreDropdown.innerHTML = '';
+
+                    // Tambahkan opsi default
+                    const defaultOption = document.createElement('option');
+                    defaultOption.value = '';
+                    defaultOption.textContent = '-- Select Genre --';
+                    genreDropdown.appendChild(defaultOption);
+
+                    // Tambahkan opsi genre
+                    genres.forEach(genre => {
+                        const option = document.createElement('option');
+                        option.value = genre.name; // Gunakan nama genre sebagai nilai
+                        option.textContent = genre.name; // Tampilkan nama genre sebagai teks
+                        genreDropdown.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching genres:', error));
+        }
+
+ 
+
+        function renderTable(data) {
+            dataTable.innerHTML = '';
+            data.forEach(row => {
+                fetch(row.url) // detail game
+                    .then(response => response.json()) // Parse JSON response
+                    .then(data => {
+                        // Convert genres array into a readable string
+                        const genres = data.genres.map(genre => genre.name).join(', ');
+
+                        dataTable.innerHTML += `
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2">${data.id}</td>
+                                <td class="border border-gray-300 px-4 py-2">${data.title}</td>
+                                <td class="border border-gray-300 px-4 py-2">${data.description}</td>
+                                <td class="border border-gray-300 px-4 py-2">${data.release_date}</td>
+                                <td class="border border-gray-300 px-4 py-2">${genres}</td>
+                                <td class="border border-gray-300 px-4 py-2"><a href="${data.media}" class="text-blue-500 underline" target="_blank">Media</a></td>
+                                <td class="border border-gray-300 px-4 py-2 text-center">
+                                    <button onclick="editGame(${data.id}, '${data.title}', '${data.description}', '${data.release_date}', '${data.media}, ${JSON.stringify(data.genres.map(g => g.url))}')" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Edit</button>
+                                    <button onclick="deleteGame(${data.id})" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Delete</button>
+                                </td>
+                            </tr>
+                        `;
+                    })
+                    .catch(error => console.error('Error fetching data:', error));
+            });
+        }
+
+        function openPopup(id = '', title = '', description = '', releaseDate = '', media = '', selectedGenres = []) {
             popupTitle.textContent = id ? 'Edit Game' : 'Add Game';
             dataIdInput.value = id;
             titleInput.value = title;
             descriptionInput.value = description;
             releaseDateInput.value = releaseDate;
             mediaInput.value = ''; // Reset file input
+            // Fetch and populate genres dropdown
+            fetchGenres().then(() => {
+                const genreDropdown = document.getElementById('genre-dropdown');
+                Array.from(genreDropdown.options).forEach(option => {
+                    option.selected = selectedGenres.includes(option.value);
+                })});
+
             popupModal.classList.remove('hidden');
         }
 
@@ -285,7 +324,15 @@ function renderTable(data) {
 
         async function deleteGame(id) {
             try {
-                const response = await fetch(`/api/games/${id}`, { method: 'DELETE' });
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${url}/api/games/${id}`, { 
+                    method: 'DELETE',
+                    credentials: 'includes',
+                    headers: {
+                        'Authorization': `Bearer ${token}` 
+                    }, 
+                    credentials: 'include'
+                });
                 if (!response.ok) throw new Error('Failed to delete game');
                 fetchGames();
             } catch (error) {
@@ -298,19 +345,27 @@ function renderTable(data) {
         }
 
         document.addEventListener("DOMContentLoaded", function () {
-        const links = document.querySelectorAll('.sidebar a[data-link]');
-        const currentPath = window.location.pathname.split('/').pop(); // Mendapatkan nama file halaman saat ini
-
-        links.forEach(link => {
-            if (link.getAttribute('data-link') === currentPath) {
-            link.classList.add('active'); // Menambahkan kelas 'active' pada link yang sesuai
-            } else {
-            link.classList.remove('active'); // Menghapus kelas 'active' jika tidak sesuai
-            }
-        });
-        });
-
+            const links = document.querySelectorAll('.sidebar a[data-link]');
+            const currentPath = window.location.pathname.split('/').pop(); // Mendapatkan nama file halaman saat ini
+            const token = localStorage.getItem('token');
         
+            // Jika token tidak ada, tampilkan alert dan redirect ke sign.html
+            if (!token) {
+                alert('You must be logged in to access this page.');
+                window.location.href = 'sign.html';
+                return; // Stop script execution to prevent further page load
+            }
+
+
+            links.forEach(link => {
+                if (link.getAttribute('data-link') === currentPath) {
+                    link.classList.add('active'); // Menambahkan kelas 'active' pada link yang sesuai
+                } else {
+                    link.classList.remove('active'); // Menghapus kelas 'active' jika tidak sesuai
+                }
+            });
+        });
+
         form.addEventListener('submit', async function (event) {
             event.preventDefault();
 
@@ -318,30 +373,50 @@ function renderTable(data) {
             formData.append('title', titleInput.value);
             formData.append('description', descriptionInput.value);
             formData.append('release_date', releaseDateInput.value);
+            const selectedGenres = Array.from(genres.selectedOptions).map(option => option.value);
+            selectedGenres.forEach(genre => formData.append('genres', genre));
+            //formData.append('genres', selectedGenres);
 
             if (mediaInput.files[0]) {
                 formData.append('media', mediaInput.files[0]);
             }
 
             const id = dataIdInput.value;
-            console.log(formData);
             try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    console.error('No token found, redirecting to login');
+                    return;
+                }
                 const response = await fetch(id ? `${url}/api/games/${id}` : `${url}/api/games`, {
                     method: id ? 'PATCH' : 'POST',
                     body: formData, 
                     headers: {
-                    'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZXhwIjoxNzM1NjYwNDE1Ljc0MjE0MX0.1L4pCaNU5vhZnzacOVcXsEG_JQnxSWd5sWLfMQgLGDE` 
-                    }
-                    ,credentials: 'include'
+                        'Authorization': `Bearer ${token}` 
+                    }, 
+                    credentials: 'include'
                 });
 
-                if (!response.ok) throw new Error('Failed to save game');
+                if (!response.ok) throw new Error(`Error: ${response.status} - ${response.statusText}`);
+
                 closePopup();
                 fetchGames();
             } catch (error) {
                 console.error(error.message);
             }
         });
+
+        document.getElementById('logoutBtn').addEventListener('click', function(event) {
+            // Clear localStorage
+            localStorage.clear();
+            
+            // Optional: You can add a small delay to make sure localStorage is cleared before navigation
+            setTimeout(() => {
+                window.location.href = 'sign.html'; // Redirect to sign.html
+            }, 100);
+            
+            // Prevent default behavior (to prevent the immediate page transition)
+            event.preventDefault();});
 
         fetchGames();
     </script>
