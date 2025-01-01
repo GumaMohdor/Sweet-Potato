@@ -13,21 +13,21 @@
 
     <div class="container" id="container">
         <div class="form-container sign-up">
-            <form>
+            <form id="registerForm">
                 <h1>Create Account</h1>
                 <span></span>
-                <input type="text" placeholder="Userame">
-                <input type="password" placeholder="Password">                
-                <input type="password" placeholder="Confirm Password">
+                <input type="text" id="registerUsername" placeholder="Username">
+                <input type="password" id="registerPassword" placeholder="Password">
+                <input type="password" id="registerConfirmPassword" placeholder="Confirm Password">
                 <button>Register</button>
             </form>
         </div>
         <div class="form-container sign-in">
-            <form>
+            <form id="loginForm">
                 <h1>Login</h1>
                 <span></span>
-                <input type="text" placeholder="Username">
-                <input type="password" placeholder="Password">
+                <input type="text" id="loginUsername" placeholder="Username">
+                <input type="password" id="loginPassword" placeholder="Password">
                 <a href="#">Forget Your Password?</a>
                 <button>Login</button>
             </form>
@@ -51,6 +51,78 @@
     </div>
 
     <script src="js/sign.js"></script>
+
+    <script>
+        const API_BASE_URL = "http://192.168.1.9:5000"; // Sesuaikan dengan URL API Flask Anda
+    
+        // Handle Register
+        const registerForm = document.querySelector("#registerForm");
+        registerForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+    
+            const username = document.querySelector("#registerUsername").value;
+            const password = document.querySelector("#registerPassword").value;
+            const confirmPassword = document.querySelector("#registerConfirmPassword").value;
+    
+            if (password !== confirmPassword) {
+                alert("Password and Confirm Password do not match!");
+                return;
+            }
+    
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/register`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+    
+                const data = await response.json();
+                if (response.ok) {
+                    alert("Registration successful! Please login.");
+                    registerForm.reset();
+                } else {
+                    alert(`Error: ${data.message}`);
+                }
+            } catch (error) {
+                console.error("Registration error:", error);
+                alert("An error occurred during registration. Please try again.");
+            }
+        });
+    
+        // Handle Login
+        const loginForm = document.querySelector("#loginForm");
+        loginForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+    
+            const username = document.querySelector("#loginUsername").value;
+            const password = document.querySelector("#loginPassword").value;
+    
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+    
+                const data = await response.json();
+                if (response.ok) {
+                    alert("Login successful!");
+                    localStorage.setItem("token", data.token); // Simpan token jika dibutuhkan
+                    window.location.href = "./index.html"; // Redirect ke halaman dashboard
+                } else {
+                    alert(`Error: ${data.message}`);
+                }
+            } catch (error) {
+                console.error("Login error:", error);
+                alert("An error occurred during login. Please try again.");
+            }
+        });
+    </script>
+    
 </body>
 
 </html>
