@@ -260,39 +260,6 @@
             });
         }
         // END: Updated renderTopRatedGames function
-
-        // Existing genre dropdown code remains unchanged
-        const genreDropdown = document.getElementById('genreDropdown');
-        const genreList = document.getElementById('genreList');
-        const genres = [
-            'Action', 'Adventure', 'RPG', 'Strategy', 'Simulation', 'Sports',
-            'Puzzle', 'Racing', 'Fighting', 'Shooter', 'Platformer', 'Stealth',
-            'Horror', 'Survival', 'Open World', 'Battle Royale', 'MMORPG',
-            'Card Game', 'Visual Novel', 'Roguelike', 'Sandbox', 'Tower Defense',
-            'Rhythm', 'MOBA', 'Idle', 'Clicker', 'Educational', 'Party Game',
-            'Trivia', 'Board Game', 'Augmented Reality', 'Virtual Reality'
-        ];
-
-        const genreListContainer = genreList.querySelector('.genre-list');
-        genres.forEach(genre => {
-            const genreItem = document.createElement('a');
-            genreItem.href = `#${genre.toLowerCase()}`;
-            genreItem.className = 'genre-item text-gray-700 hover:bg-gray-100 block px-4 py-2 rounded';
-            genreItem.textContent = genre;
-            genreListContainer.appendChild(genreItem);
-        });
-
-        genreDropdown.addEventListener('click', (e) => {
-            e.preventDefault();
-            genreList.classList.toggle('show');
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!genreDropdown.contains(e.target) && !genreList.contains(e.target)) {
-                genreList.classList.remove('show');
-            }
-        });
-
         // Initialize the page
         renderTopRatedGames();
     </script>
