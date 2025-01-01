@@ -75,7 +75,7 @@
 
         async function fetchGames() {
             try {
-                const response = await fetch(`${url}/api/games`, { credentials: 'include' });
+                const response = await fetch(`${url}/api/games`);
                 if (!response.ok) throw new Error('Failed to fetch games');
                 const gamesData = await response.json();
 
