@@ -134,6 +134,8 @@
         const isAscending = dataTable.getAttribute('data-sort') !== `column-${columnIndex}-asc`;
         const multiplier = isAscending ? 1 : -1;
 
+        const url = 'https://blitzorn.pythonanywhere.com';
+
         rows.sort((rowA, rowB) => {
             const cellA = rowA.children[columnIndex].innerText.trim().toLowerCase();
             const cellB = rowB.children[columnIndex].innerText.trim().toLowerCase();
@@ -208,7 +210,6 @@
 
         async function fetchGames() {
             try {
-                const url = 'https://blitzorn.pythonanywhere.com/api/genres';
                 const response = await fetch(url);
                 if (!response.ok) throw new Error('Failed to fetch genres');
                 const genres = await response.json();
@@ -287,7 +288,6 @@
                 formData.append('media', mediaInput.files[0]);
             }
 
-            const url = 'https://blitzorn.pythonanywhere.com';
             const id = dataIdInput.value;
             console.log(formData);
             try {

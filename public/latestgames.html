@@ -171,7 +171,7 @@
         const latestReleasedGames = []; // Array untuk menyimpan data game
         // Fetch data game dari API
         const url="http://192.168.1.9:5000";
-        fetch(`${url}/api/games/`)
+        fetch(`${url}/api/games/`,  { mode: 'cors' })
             .then(response => response.json())
             .then(data => {
                 const gameFetches = data.results.map(game => {

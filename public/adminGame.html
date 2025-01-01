@@ -150,7 +150,8 @@
         const mediaInput = document.getElementById('media');
 
         // const url = 'https://blitzorn.pythonanywhere.com'
-        const url = 'http://192.168.1.9:5000'
+        const url = 'http://192.168.1.9:5000';
+        console.log(url);
         function sortTable(columnIndex) {
         const rows = Array.from(dataTable.querySelectorAll('tr'));
         const isAscending = dataTable.getAttribute('data-sort') !== `column-${columnIndex}-asc`;
@@ -229,15 +230,15 @@
         }
 
         async function fetchGames() {
-    try {
-        const response = await fetch(`${url}/api/games`, { credentials: 'include' });
-        if (!response.ok) throw new Error('Failed to fetch games');
-        const games = await response.json();
-        renderTable(games.results);
-    } catch (error) {
-        console.error(error.message);
-    }
-}
+            try {
+                const response = await fetch(`${url}/api/games`, { mode: 'cors' });
+                if (!response.ok) throw new Error('Failed to fetch games');
+                const games = await response.json();
+                renderTable(games.results);
+            } catch (error) {
+                console.error(error.message);
+            }
+        }
 
 function renderTable(data) {
     dataTable.innerHTML = '';
