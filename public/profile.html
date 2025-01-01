@@ -164,56 +164,76 @@
                             <p class="text-gray-500 text-center">No Movie Ratings Yet</p>
                             <p class="text-gray-400 text-sm text-center mt-2">Rate each Movie you watched by using a 5-star scale to share your thoughts and reaction.</p>
                         </div>
+
                     </div>
                 </div>
             </div>
         </section>
     </main>    
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const burgerIcon = document.querySelector('#burger-icon');
-            const sideMenu = document.querySelector('#side-menu');
-
-            burgerIcon.addEventListener('click', () => {
-                sideMenu.classList.toggle('hidden');
-            });
-
-            // START: Added code for genre dropdown
-            const genreDropdown = document.getElementById('genreDropdown');
-            const genreList = document.getElementById('genreList');
-            const genres = [
-                'Action', 'Adventure', 'RPG', 'Strategy', 'Simulation', 'Sports',
-                'Puzzle', 'Racing', 'Fighting', 'Shooter', 'Platformer', 'Stealth',
-                'Horror', 'Survival', 'Open World', 'Battle Royale', 'MMORPG',
-                'Card Game', 'Visual Novel', 'Roguelike', 'Sandbox', 'Tower Defense',
-                'Rhythm', 'MOBA', 'Idle', 'Clicker', 'Educational', 'Party Game',
-                'Trivia', 'Board Game', 'Augmented Reality', 'Virtual Reality'
-            ];
-
-            // Populate genre list
-            const genreListContainer = genreList.querySelector('.genre-list');
-            genres.forEach(genre => {
-                const genreItem = document.createElement('a');
-                genreItem.href = `#${genre.toLowerCase()}`;
-                genreItem.className = 'genre-item text-gray-700 hover:bg-gray-100 block px-4 py-2 rounded';
-                genreItem.textContent = genre;
-                genreListContainer.appendChild(genreItem);
-            });
-
-            // Toggle genre dropdown
-            genreDropdown.addEventListener('click', (e) => {
-                e.preventDefault();
-                genreList.classList.toggle('show');
-            });
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!genreDropdown.contains(e.target) && !genreList.contains(e.target)) {
-                    genreList.classList.remove('show');
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('token'); // Token disimpan di localStorage
+            const loginButton = document.querySelector('a[href="sign.html"]');
+            const navbar = document.querySelector('.md\\:flex.items-center');
+            const url = "http://192.168.1.9:5000";
+    
+            console.log(token);
+    
+            if (token) {
+                try {
+                    // Validasi token dengan API
+                    const response = await fetch(`${url}/auth/me`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+    
+                    if (!response.ok) throw new Error('Token invalid');
+                    const userData = await response.json();
+    
+                    // Ubah navbar dengan informasi akun
+                    const userMenu = `
+                        <div class="relative">
+                            <div class="flex items-center space-x-2 cursor-pointer" id="userMenuToggle">
+                                <img src="${userData.profilePicture || 'default-avatar.png'}" alt="Profile Picture" class="w-8 h-8 rounded-full">
+                                <span class="text-white">${userData.name || 'User'}</span>
+                            </div>
+                            <div class="absolute right-0 mt-2 bg-white text-black rounded-lg shadow-md hidden" id="userMenu">
+                                <a href="profile.html" class="block px-4 py-2 hover:bg-gray-200">Profile</a>
+                                <a href="#" id="logoutButton" class="block px-4 py-2 hover:bg-gray-200">Log Out</a>
+                            </div>
+                        </div>
+                    `;
+                    loginButton.remove();
+                    navbar.insertAdjacentHTML('beforeend', userMenu);
+    
+                    // Tambahkan logika dropdown menu user
+                    const userMenuToggle = document.getElementById('userMenuToggle');
+                    const userMenuDropdown = document.getElementById('userMenu');
+                    const logoutButton = document.getElementById('logoutButton');
+    
+                    userMenuToggle.addEventListener('click', () => {
+                        userMenuDropdown.classList.toggle('hidden');
+                    });
+    
+                    logoutButton.addEventListener('click', () => {
+                        localStorage.removeItem('token'); // Gunakan 'token' yang konsisten
+                        window.location.href = 'sign.html'; // Arahkan pengguna ke halaman login setelah logout
+                    });
+    
+                    document.addEventListener('click', (e) => {
+                        if (!userMenuToggle.contains(e.target) && !userMenuDropdown.contains(e.target)) {
+                            userMenuDropdown.classList.add('hidden');
+                        }
+                    });
+                } catch (err) {
+                    console.error('Error validating token:', err);
+                    localStorage.removeItem('token'); // Gunakan 'token' yang konsisten
                 }
-            });
-            // END: Added code for genre dropdown
+            }
         });
-    </script>
+    </script>    
 </body>
 </html>

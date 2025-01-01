@@ -48,15 +48,30 @@
     <main class="flex-1 p-6">
         <h1 class="text-2xl font-bold mb-6">Dashboard</h1>
 
-        <!-- Statistik Diagram -->
-        <div class="bg-gray-800 p-4 rounded-lg shadow text-center">
+        <!-- Section 1: Statistik Jumlah Games dan Genre -->
+        <section class="bg-gray-800 p-4 rounded-lg shadow mb-6">
+            <h2 class="text-lg font-semibold mb-4">Summary</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-gray-700 p-4 rounded">
+                    <p class="text-sm font-medium">Total Games</p>
+                    <p id="totalGames" class="text-2xl font-bold">0</p>
+                </div>
+                <div class="bg-gray-700 p-4 rounded">
+                    <p class="text-sm font-medium">Total Genres</p>
+                    <p id="totalGenres" class="text-2xl font-bold">0</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Grafik Lingkaran Games by Genre -->
+        <section class="bg-gray-800 p-4 rounded-lg shadow">
             <h2 class="text-lg font-semibold mb-4">Games by Genre</h2>
             <canvas id="genreChart" class="w-full h-64"></canvas>
-        </div>
+        </section>
     </main>
 
     <script>
-        const url = 'https://blitzorn.pythonanywhere.com';
+        const url = 'http://192.168.1.9:5000';
 
         async function fetchGames() {
             try {
@@ -66,13 +81,22 @@
 
                 const games = gamesData.results.map(game => ({
                     title: game.title,
-                    genres: Array.isArray(game.genres) ? game.genres.map(genre => genre.name) : [] // Handle undefined or invalid genres
+                    genres: Array.isArray(game.genres) ? game.genres.map(genre => genre.name) : []
                 }));
-                console.log('Formatted Games Data:', games);
+
+                updateSummary(games);
                 calculateGenreCounts(games);
             } catch (error) {
                 console.error(error.message);
             }
+        }
+
+        function updateSummary(games) {
+            const totalGames = games.length;
+            const uniqueGenres = new Set(games.flatMap(game => game.genres));
+            
+            document.getElementById('totalGames').textContent = totalGames;
+            document.getElementById('totalGenres').textContent = uniqueGenres.size;
         }
 
         function calculateGenreCounts(games) {
@@ -87,8 +111,6 @@
                 });
             });
 
-            console.log(genreCounts)
-            console.log(genreNames)
             renderGenreChart(Object.keys(genreCounts), Object.values(genreCounts));
         }
 
