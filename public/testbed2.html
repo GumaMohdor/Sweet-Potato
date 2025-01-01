@@ -160,7 +160,6 @@
             </ul>
         </div>
     </header>
-    
     <!-- Main content -->
     <main class="container mx-auto px-6 mt-32">
         <div>
@@ -329,13 +328,11 @@
                                 const videoItem = document.createElement("div");
                                 videoItem.className = "carousel-item";
                                 videoItem.innerHTML = `
-                                    <div class="relative group">
+                                    <div class="video-container relative group">
                                         <video class="w-full h-[200px] md:h-[400px] rounded-lg overflow-hidden border" id="gameVideo">
                                             <source src="${mp4Urls[0]}" type="video/mp4">
                                         </video>
-                                        <button class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-100 group-hover:opacity-0 transition duration-300 text-white text-xl play-button">
-                                            ▶ Play
-                                        </button>
+                                        <button class="play-pause-button">▶</button>
                                     </div>
                                 `;
                                 carouselContainer.appendChild(videoItem);
@@ -413,122 +410,51 @@
                 window.addEventListener('resize', updateCarouselSize);
             }
 
-            // Review submission
-            const submitReviewBtn = document.querySelector('button');
-            submitReviewBtn.addEventListener('click', () => {
-                const rating = document.querySelector('input[name="rating"]:checked');
-                const review = document.querySelector('#review').value;
-                if (rating && review) {
-                    console.log(`Submitted rating: ${rating.value}, Review: ${review}`);
-                    // Here you can add logic to send the review to a server
-                    alert('Thank you for your review!');
-                } else {
-                    alert('Please select a rating and write a review before submitting.');
-                }
-            });
-
             function findIndexById(array, id) {
                 return array.findIndex(item => item.id === id);
             }
 
-            // New function to handle video playback 
             function handleVideoPlayback() {
                 const video = document.getElementById('gameVideo');
-                const playButton = document.querySelector('.play-button');
+                const playPauseButton = document.querySelector('.play-pause-button');
 
-                if (video && playButton) {
-                    // Toggle play/pause on button click
-                    playButton.addEventListener('click', () => {
+                if (video && playPauseButton) {
+                    playPauseButton.addEventListener('click', () => {
                         if (video.paused) {
                             video.play();
-                            playButton.style.opacity = '0';
-                            playButton.style.pointerEvents = 'none';
+                            playPauseButton.textContent = '❚❚';
                         } else {
                             video.pause();
-                            playButton.style.opacity = '1';
-                            playButton.style.pointerEvents = 'auto';
+                            playPauseButton.textContent = '▶';
                         }
                     });
 
-                    // Show play button when video ends
-                    video.addEventListener('ended', () => {
-                        playButton.style.opacity = '1';
-                        playButton.style.pointerEvents = 'auto';
-                    });
-
-                    // Handle play and pause events
                     video.addEventListener('play', () => {
-                        playButton.style.opacity = '0';
-                        playButton.style.pointerEvents = 'none';
+                        playPauseButton.textContent = '❚❚';
                     });
 
                     video.addEventListener('pause', () => {
-                        playButton.style.opacity = '1';
-                        playButton.style.pointerEvents = 'auto';
+                        playPauseButton.textContent = '▶';
                     });
 
-                    // Pause video if the document is not visible
+                    video.addEventListener('ended', () => {
+                        playPauseButton.textContent = '▶';
+                    });
+
                     function handleVisibilityChange() {
                         if (document.hidden) {
                             video.pause();
-                            playButton.style.opacity = '1';
-                            playButton.style.pointerEvents = 'auto';
-                            console.log('Tab not visible, video paused.');
+                            playPauseButton.textContent = '▶';
                         }
                     }
 
                     document.addEventListener('visibilitychange', handleVisibilityChange);
 
-                    // Ensure event listeners are added only once
                     if (!video.hasAttribute('data-listeners')) {
                         video.setAttribute('data-listeners', 'true');
                     }
                 }
-                function findIndexById(array, id) {
-                    return array.findIndex(item => item.id === id);
-                }
-    
-                function handleVideoPlayback() {
-                    const video = document.getElementById('gameVideo');
-                    const playPauseButton = document.querySelector('.play-pause-button');
-    
-                    if (video && playPauseButton) {
-                        playPauseButton.addEventListener('click', () => {
-                            if (video.paused) {
-                                video.play();
-                                playPauseButton.textContent = '❚❚';
-                            } else {
-                                video.pause();
-                                playPauseButton.textContent = '▶';
-                            }
-                        });
-    
-                        video.addEventListener('play', () => {
-                            playPauseButton.textContent = '❚❚';
-                        });
-    
-                        video.addEventListener('pause', () => {
-                            playPauseButton.textContent = '▶';
-                        });
-    
-                        video.addEventListener('ended', () => {
-                            playPauseButton.textContent = '▶';
-                        });
-    
-                        function handleVisibilityChange() {
-                            if (document.hidden) {
-                                video.pause();
-                                playPauseButton.textContent = '▶';
-                            }
-                        }
-    
-                        document.addEventListener('visibilitychange', handleVisibilityChange);
-    
-                        if (!video.hasAttribute('data-listeners')) {
-                            video.setAttribute('data-listeners', 'true');
-                        }
-                    }
-                }}
+            }
         });
     </script>
 </body>

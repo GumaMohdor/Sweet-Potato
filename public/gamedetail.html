@@ -90,59 +90,32 @@
         .star-rating input:checked ~ label {
             color: #FBBF24; /* Tailwind's yellow-400 */
         }
-        .genre-dropdown {
-            display: none;
+        .play-pause-button {
             position: absolute;
-            background-color: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.375rem;
-            padding: 0.5rem;
-            z-index: 50;
-            width: 400px; /* Adjust width as needed */
-            max-height: 600px; /* Limit height and enable scrolling */
-            overflow-y: auto;
-        }
-        .genre-dropdown.show {
-            display: block;
-        }
-        .genre-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-        .genre-item {
-            flex: 0 0 calc(33.333% - 0.5rem); /* Approximately 3 items per row */
-        }
-        #mobileGenreList {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 0.375rem;
-            margin-top: 0.5rem;
-            max-height: 60vh; /* Limit the height to 60% of the viewport height */
-            overflow-y: auto; /* Enable vertical scrolling */
-            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-        }
-        #mobileGenreList::-webkit-scrollbar {
-            width: 6px;
-        }
-        #mobileGenreList::-webkit-scrollbar-thumb {
-            background-color: rgba(255, 255, 255, 0.3);
-            border-radius: 3px;
-        }
-        #mobileGenreList::-webkit-scrollbar-track {
-            background-color: rgba(0, 0, 0, 0.1);
-        }
-
-        #mobileGenreList a {
-            display: block;
-            padding: 0.5rem;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.5);
             color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
-
-        #mobileGenreList a:hover {
-            background-color: rgba(255, 255, 255, 0.2);
+        .video-container:hover .play-pause-button {
+            display: flex;
+            opacity: 1;
         }
     </style>
-    <title>A Space for The Unbound | Sweet Potato</title>   
+    <title>Game Detail | Sweet Potato</title>   
+    <link rel="icon" href="https://liquipedia.net/commons/images/7/70/OG_RB_allmode.png" type="image/png">
 </head>
 <body class="bg-gray-100">
     <!-- Header with navigation -->
@@ -188,7 +161,6 @@
             </ul>
         </div>
     </header>
-    
     <!-- Main content -->
     <main class="container mx-auto px-6 mt-32">
         <div>
@@ -215,19 +187,7 @@
             <!-- Carousel container -->
             <div class="carousel relative w-full md:w-auto">
                 <div class="carousel-inner" id="carousel">
-                    <!-- Video item -->
-                    <div class="carousel-item">
-                        <div class="relative group">
-                            <video class="w-full h-[200px] md:h-[400px] rounded-lg overflow-hidden border border-gray-700" controls autoplay>
-                                <!-- link to video  -->
-                                <source src="/placeholder.mp4" type="video/mp4" id="trailer">
-                            </video>
-                            <button class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition duration-300 text-white text-xl">
-                                ▶ Play
-                            </button>
-                        </div>
                     </div>
-                </div>
                 <!-- Carousel navigation buttons -->
                 <button class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none" id="prevBtn">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -287,68 +247,9 @@
 
             // Carousel functionality
             const carousel = document.querySelector('.carousel-inner');
-            const items = document.querySelectorAll('.carousel-item');
             const prevBtn = document.querySelector('#prevBtn');
             const nextBtn = document.querySelector('#nextBtn');
-            let currentIndex = 0;
-
-            function showItem(index) {
-                carousel.style.transform = `translateX(-${index * 100}%)`;
-            }
             
-            function showNext() {
-                currentIndex = (currentIndex + 1) % items.length;
-                showItem(currentIndex);
-            }
-            
-            function showPrev() {
-                currentIndex = (currentIndex - 1 + items.length) % items.length;
-                showItem(currentIndex);
-            }
-
-            function updateCarouselSize() {
-                const isMobile = window.innerWidth <= 768;
-                items.forEach(item => {
-                    if (isMobile) {
-                        item.style.width = '100%';
-                        item.style.height = '200px';
-                    } else {
-                        item.style.width = '100%';
-                        item.style.height = '400px';
-                    }
-                });
-                showItem(currentIndex); // Refresh current item position
-            }
-            
-            
-            nextBtn.addEventListener('click', showNext);
-            prevBtn.addEventListener('click', showPrev);
-            
-            // Call updateCarouselSize on load and resize
-            updateCarouselSize();
-            window.addEventListener('resize', updateCarouselSize);
-            
-            // Optional: Auto-play functionality
-            setInterval(showNext, 5000); // Change slide every 5 seconds
-            
-
-            // Review submission
-            // const submitReviewBtn = document.querySelector('button');
-            // submitReviewBtn.addEventListener('click', () => {
-            //     const rating = document.querySelector('input[name="rating"]:checked');
-            //     const review = document.querySelector('#review').value;
-            //     if (rating && review) {
-            //         console.log(`Submitted rating: ${rating.value}, Review: ${review}`);
-            //         // Here you can add logic to send the review to a server
-            //         alert('Thank you for your review!');
-            //     } else {
-            //         alert('Please select a rating and write a review before submitting.');
-            //     }
-            // });
-
-            function findIndexById(array, id) {
-                return array.findIndex(item => item.id === id);
-            }
 
             //START: Added function to convert YYYY-MM-DD to MM DD YYYY
             function formatDate(inputDate) {
@@ -377,7 +278,6 @@
             const date = document.querySelector('#date');
             const rating = document.querySelector('#rating');
             const description = document.querySelector('#description')
-            const trailer = document.querySelector('#trailer')
             const carouselContainer = document.querySelector('#carousel')
 
             const url="http://192.168.1.9:5000";
@@ -412,63 +312,176 @@
                     gameData = fetchedGames[index];
 
                     fetch(gameData.media)
-                    .then(response => response.json())
-                    .then(data => {
-                        // Filter untuk mendapatkan URL dengan ekstensi .mp4
-                        const mp4Urls = data.filter(url => url.endsWith('.mp4'));
-                        const imageUrls = data.filter(url => url.endsWith('.jpg') || url.endsWith('.png'));
-                        
-                        console.log(imageUrls)
+                        .then(response => response.json())
+                        .then(data => {
+                            // Filter untuk mendapatkan URL dengan ekstensi .mp4
+                            const mp4Urls = data.filter(url => url.endsWith('.mp4'));
+                            const imageUrls = data.filter(url => url.endsWith('.jpg') || url.endsWith('.png'));
+                            
+                            console.log(imageUrls)
 
-                          // Render gambar secara dinamis
+                            // Clear existing carousel items
+                            carouselContainer.innerHTML = '';
+
+                            // Render video first if available
+                            if (mp4Urls.length > 0) {
+                                console.log("URL file .mp4:", mp4Urls[0]);
+                                const videoItem = document.createElement("div");
+                                videoItem.className = "carousel-item";
+                                videoItem.innerHTML = `
+                                    <div class="video-container relative group">
+                                        <video class="w-full h-[200px] md:h-[400px] rounded-lg overflow-hidden border" id="gameVideo">
+                                            <source src="${mp4Urls[0]}" type="video/mp4">
+                                        </video>
+                                        <button class="play-pause-button">▶</button>
+                                    </div>
+                                `;
+                                carouselContainer.appendChild(videoItem);
+                            }
+
+                            // Render images
                             imageUrls.forEach((url, index) => {
-                                // Membuat elemen div untuk setiap item gambar
                                 const carouselItem = document.createElement("div");
                                 carouselItem.className = "carousel-item";
 
-                                // Membuat elemen img
                                 const img = document.createElement("img");
                                 img.className = "w-full h-[200px] md:h-[400px] object-cover rounded-lg border border-gray-700";
                                 img.src = url;
                                 img.alt = `Image ${index + 1}`;
 
-                                // Menambahkan elemen img ke dalam div item
                                 carouselItem.appendChild(img);
-
-                                console.log("carousel item: " + carouselItem.outerHTML)
-                                
-                                // Menambahkan div item ke dalam carousel
                                 carouselContainer.appendChild(carouselItem);
-                                console.log("conatiner : " + carouselContainer.outerHTML)
                             });
 
-                        // Jika ada file .mp4, ambil yang pertama
-                        if (mp4Urls.length > 0) {
-                        console.log("URL file .mp4:", mp4Urls[0]); // Output: "http://192.168.1.9:5000/upload/trailer.mp4"
-                        trailer.setAttribute('src', mp4Urls[0])
-                    } else {
-                        console.log("Tidak ada file .mp4 di array.");
-                        }
+                            // Initialize carousel after media is rendered
+                            initializeCarousel();
+                            handleVideoPlayback();
+                        })
+                        .catch(error => {
+                            console.error("Terjadi kesalahan:", error);
+                        });
+
+                        title.textContent = gameData.title
+                        date.textContent = gameData.release_date
+                        rating.textContent  = gameData.average_rating ? gameData.average_rating : "Unrated"
+                        description.textContent = gameData.description
+                        document.title = `${gameData.title} | Sweet Potato`
+
                     })
                     .catch(error => {
-                        console.error("Terjadi kesalahan:", error);
+                        console.error('Error:', error);
                     });
 
+                function initializeCarousel() {
+                    const items = document.querySelectorAll('.carousel-item');
+                    let currentIndex = 0;
 
-                    title.textContent = gameData.title
-                    date.textContent = gameData.release_date
-                    rating.textContent = gameData.average_rating
-                    description.textContent = gameData.description
+                    function showItem(index) {
+                        carousel.style.transform = `translateX(-${index * 100}%)`;
+                    }
+                    
+                    function showNext() {
+                        currentIndex = (currentIndex + 1) % items.length;
+                        showItem(currentIndex);
+                    }
+                    
+                    function showPrev() {
+                        currentIndex = (currentIndex - 1 + items.length) % items.length;
+                        showItem(currentIndex);
+                    }
 
-                    // updateCarouselSize();
-                    // setInterval(showNext, 5000);
-                  
+                    function updateCarouselSize() {
+                        const isMobile = window.innerWidth <= 768;
+                        items.forEach(item => {
+                            if (isMobile) {
+                                item.style.width = '100%';
+                                item.style.height = '200px';
+                            } else {
+                                item.style.width = '100%';
+                                item.style.height = '400px';
+                            }
+                        });
+                        showItem(currentIndex); // Refresh current item position
+                    }
 
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+                    nextBtn.addEventListener('click', showNext);
+                    prevBtn.addEventListener('click', showPrev);
+                    
+                    updateCarouselSize();
+                    window.addEventListener('resize', updateCarouselSize);
+                }
 
+                function findIndexById(array, id) {
+                    return array.findIndex(item => item.id === id);
+                }
+
+                function handleVideoPlayback() {
+                    const video = document.getElementById('gameVideo');
+                    const playPauseButton = document.querySelector('.play-pause-button');
+
+                    if (video && playPauseButton) {
+                        playPauseButton.addEventListener('click', () => {
+                            if (video.paused) {
+                                video.play();
+                                playPauseButton.textContent = '❚❚';
+                            } else {
+                                video.pause();
+                                playPauseButton.textContent = '▶';
+                            }
+                        });
+
+                        video.addEventListener('play', () => {
+                            playPauseButton.textContent = '❚❚';
+                        });
+
+                        video.addEventListener('pause', () => {
+                            playPauseButton.textContent = '▶';
+                        });
+
+                        video.addEventListener('ended', () => {
+                            playPauseButton.textContent = '▶';
+                        });
+
+                        function handleVisibilityChange() {
+                            if (document.hidden) {
+                                video.pause();
+                                playPauseButton.textContent = '▶';
+                            }
+                        }
+
+                        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+                        if (!video.hasAttribute('data-listeners')) {
+                            video.setAttribute('data-listeners', 'true');
+                        }
+                    }
+                }
+
+            function findIndexById(array, id) {
+                return array.findIndex(item => item.id === id);
+            }
+
+            //START: Added function to convert YYYY-MM-DD to MM DD YYYY
+            function formatDate(inputDate) {
+                        //Jika input date = null, kembalikan string "TBD"
+                        if (!inputDate) {
+                            return "TBD";
+                        }
+
+                        // Konversi string menjadi objek Date
+                        const date = new Date(inputDate);
+                    
+                        // Daftar nama bulan (Bentuk String)
+                        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                    
+                        // Ekstrak bagian bulan, tanggal, dan tahun
+                        const month = monthNames[date.getMonth()];
+                        const day = date.getDate();
+                        const year = date.getFullYear();
+                    
+                        // Gabungkan dalam format "Dec 30, 2024"
+                        return `${month} ${day}, ${year}`;
+                    }
 
                 // Handle Submit Review
                 const submitReviewBtn = document.querySelector("#submitReviewBtn");
@@ -512,24 +525,21 @@
                             }),
                             credentials: "include"
                         });
-
-                        const data = await response.json();
-                        if (response.ok) {
-                            alert("Review submitted successfully!");
-                            // Reset form
-                            document.querySelector("#review").value = "";
-                            document.querySelector('input[name="rating"]:checked').checked = false;
-                        } else {
-                            alert(`Error: ${data.message}`);
-                        }
-                    } catch (error) {
-                        console.error("Error submitting review:", error);
-                        alert("An error occurred while submitting your review. Please try again.");
-                    }
-                });
+                    const data = await response.json();
+                if (response.ok) {
+                    alert("Review submitted successfully!");
+                    // Reset form
+            document.querySelector("#review").value = "";
+            document.querySelector('input[name="rating"]:checked').checked = false;
+            } else {
+                alert(`Error: ${data.message}`);
+            }
+            } catch (error) {
+                console.error("Error submitting review:", error);
+                alert("An error occurred while submitting your review. Please try again.");
+            }
+        });
     });
-
-
     </script>
 </body>
 </html>
