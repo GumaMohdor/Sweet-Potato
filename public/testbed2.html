@@ -90,56 +90,28 @@
         .star-rating input:checked ~ label {
             color: #FBBF24; /* Tailwind's yellow-400 */
         }
-        .genre-dropdown {
-            display: none;
+        .play-pause-button {
             position: absolute;
-            background-color: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.375rem;
-            padding: 0.5rem;
-            z-index: 50;
-            width: 400px; /* Adjust width as needed */
-            max-height: 600px; /* Limit height and enable scrolling */
-            overflow-y: auto;
-        }
-        .genre-dropdown.show {
-            display: block;
-        }
-        .genre-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-        .genre-item {
-            flex: 0 0 calc(33.333% - 0.5rem); /* Approximately 3 items per row */
-        }
-        #mobileGenreList {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 0.375rem;
-            margin-top: 0.5rem;
-            max-height: 60vh; /* Limit the height to 60% of the viewport height */
-            overflow-y: auto; /* Enable vertical scrolling */
-            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-        }
-        #mobileGenreList::-webkit-scrollbar {
-            width: 6px;
-        }
-        #mobileGenreList::-webkit-scrollbar-thumb {
-            background-color: rgba(255, 255, 255, 0.3);
-            border-radius: 3px;
-        }
-        #mobileGenreList::-webkit-scrollbar-track {
-            background-color: rgba(0, 0, 0, 0.1);
-        }
-
-        #mobileGenreList a {
-            display: block;
-            padding: 0.5rem;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.5);
             color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
-
-        #mobileGenreList a:hover {
-            background-color: rgba(255, 255, 255, 0.2);
+        .video-container:hover .play-pause-button {
+            display: flex;
+            opacity: 1;
         }
     </style>
     <title>A Space for The Unbound | Sweet Potato</title>   
@@ -275,68 +247,9 @@
 
             // Carousel functionality
             const carousel = document.querySelector('.carousel-inner');
-            const items = document.querySelectorAll('.carousel-item');
             const prevBtn = document.querySelector('#prevBtn');
             const nextBtn = document.querySelector('#nextBtn');
-            let currentIndex = 0;
-
-            function showItem(index) {
-                carousel.style.transform = `translateX(-${index * 100}%)`;
-            }
             
-            function showNext() {
-                currentIndex = (currentIndex + 1) % items.length;
-                showItem(currentIndex);
-            }
-            
-            function showPrev() {
-                currentIndex = (currentIndex - 1 + items.length) % items.length;
-                showItem(currentIndex);
-            }
-
-            function updateCarouselSize() {
-                const isMobile = window.innerWidth <= 768;
-                items.forEach(item => {
-                    if (isMobile) {
-                        item.style.width = '100%';
-                        item.style.height = '200px';
-                    } else {
-                        item.style.width = '100%';
-                        item.style.height = '400px';
-                    }
-                });
-                showItem(currentIndex); // Refresh current item position
-            }
-            
-            
-            nextBtn.addEventListener('click', showNext);
-            prevBtn.addEventListener('click', showPrev);
-            
-            // Call updateCarouselSize on load and resize
-            updateCarouselSize();
-            window.addEventListener('resize', updateCarouselSize);
-            
-            // Optional: Auto-play functionality
-            setInterval(showNext, 5000); // Change slide every 5 seconds
-            
-
-            // Review submission
-            const submitReviewBtn = document.querySelector('button');
-            submitReviewBtn.addEventListener('click', () => {
-                const rating = document.querySelector('input[name="rating"]:checked');
-                const review = document.querySelector('#review').value;
-                if (rating && review) {
-                    console.log(`Submitted rating: ${rating.value}, Review: ${review}`);
-                    // Here you can add logic to send the review to a server
-                    alert('Thank you for your review!');
-                } else {
-                    alert('Please select a rating and write a review before submitting.');
-                }
-            });
-
-            function findIndexById(array, id) {
-                return array.findIndex(item => item.id === id);
-            }
 
             //START: Added function to convert YYYY-MM-DD to MM DD YYYY
             function formatDate(inputDate) {
@@ -365,7 +278,6 @@
             const date = document.querySelector('#date');
             const rating = document.querySelector('#rating');
             const description = document.querySelector('#description')
-            const trailer = document.querySelector('#trailer')
             const carouselContainer = document.querySelector('#carousel')
 
             const url="http://192.168.1.9:5000";
@@ -400,78 +312,224 @@
                     gameData = fetchedGames[index];
 
                     fetch(gameData.media)
-                    .then(response => response.json())
-                    .then(data => {
-                        // Filter untuk mendapatkan URL dengan ekstensi .mp4
-                        const mp4Urls = data.filter(url => url.endsWith('.mp4'));
-                        const imageUrls = data.filter(url => url.endsWith('.jpg') || url.endsWith('.png'));
-                        
-                        console.log(imageUrls)
+                        .then(response => response.json())
+                        .then(data => {
+                            // Filter untuk mendapatkan URL dengan ekstensi .mp4
+                            const mp4Urls = data.filter(url => url.endsWith('.mp4'));
+                            const imageUrls = data.filter(url => url.endsWith('.jpg') || url.endsWith('.png'));
+                            
+                            console.log(imageUrls)
 
-                          // Render gambar secara dinamis
+                            // Clear existing carousel items
+                            carouselContainer.innerHTML = '';
+
+                            // Render video first if available
+                            if (mp4Urls.length > 0) {
+                                console.log("URL file .mp4:", mp4Urls[0]);
+                                const videoItem = document.createElement("div");
+                                videoItem.className = "carousel-item";
+                                videoItem.innerHTML = `
+                                    <div class="relative group">
+                                        <video class="w-full h-[200px] md:h-[400px] rounded-lg overflow-hidden border" id="gameVideo">
+                                            <source src="${mp4Urls[0]}" type="video/mp4">
+                                        </video>
+                                        <button class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-100 group-hover:opacity-0 transition duration-300 text-white text-xl play-button">
+                                            ▶ Play
+                                        </button>
+                                    </div>
+                                `;
+                                carouselContainer.appendChild(videoItem);
+                            }
+
+                            // Render images
                             imageUrls.forEach((url, index) => {
-                                // Membuat elemen div untuk setiap item gambar
                                 const carouselItem = document.createElement("div");
                                 carouselItem.className = "carousel-item";
 
-                                // Membuat elemen img
                                 const img = document.createElement("img");
                                 img.className = "w-full h-[200px] md:h-[400px] object-cover rounded-lg border border-gray-700";
                                 img.src = url;
                                 img.alt = `Image ${index + 1}`;
 
-                                // Menambahkan elemen img ke dalam div item
                                 carouselItem.appendChild(img);
-
-                                console.log("carousel item: " + carouselItem.outerHTML)
-                                
-                                // Menambahkan div item ke dalam carousel
                                 carouselContainer.appendChild(carouselItem);
-                                console.log("conatiner : " + carouselContainer.outerHTML)
                             });
 
-                        // Updated code to handle video insertion
-                        if (mp4Urls.length > 0) {
-                            console.log("URL file .mp4:", mp4Urls[0]);
-                            trailer.setAttribute('src', mp4Urls[0]);
-                            // Create a new video element
-                            const videoItem = document.createElement("div");
-                            videoItem.className = "carousel-item";
-                            videoItem.innerHTML = `
-                                <div class="relative group">
-                                    <video class="w-full h-[200px] md:h-[400px] rounded-lg overflow-hidden border border-gray-700" controls>
-                                        <source src="${mp4Urls[0]}" type="video/mp4">
-                                    </video>
-                                    <button class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition duration-300 text-white text-xl">
-                                        ▶ Play
-                                    </button>
-                                </div>
-                            `;
-                            // Insert the video as the first item in the carousel
-                            carouselContainer.insertBefore(videoItem, carouselContainer.firstChild);
-                        } else {
-                            console.log("Tidak ada file .mp4 di array.");
-                        }
-                    })
-                    .catch(error => {
-                        console.error("Terjadi kesalahan:", error);
-                    });
-
+                            // Initialize carousel after media is rendered
+                            initializeCarousel();
+                            handleVideoPlayback();
+                        })
+                        .catch(error => {
+                            console.error("Terjadi kesalahan:", error);
+                        });
 
                     title.textContent = gameData.title
                     date.textContent = gameData.release_date
                     rating.textContent = gameData.average_rating
                     description.textContent = gameData.description
-
-                    // updateCarouselSize();
-                    // setInterval(showNext, 5000);
                   
 
                 })
                 .catch(error => {
                     console.error('Error:', error);
                 });
-    });
+
+            function initializeCarousel() {
+                const items = document.querySelectorAll('.carousel-item');
+                let currentIndex = 0;
+
+                function showItem(index) {
+                    carousel.style.transform = `translateX(-${index * 100}%)`;
+                }
+                
+                function showNext() {
+                    currentIndex = (currentIndex + 1) % items.length;
+                    showItem(currentIndex);
+                }
+                
+                function showPrev() {
+                    currentIndex = (currentIndex - 1 + items.length) % items.length;
+                    showItem(currentIndex);
+                }
+
+                function updateCarouselSize() {
+                    const isMobile = window.innerWidth <= 768;
+                    items.forEach(item => {
+                        if (isMobile) {
+                            item.style.width = '100%';
+                            item.style.height = '200px';
+                        } else {
+                            item.style.width = '100%';
+                            item.style.height = '400px';
+                        }
+                    });
+                    showItem(currentIndex); // Refresh current item position
+                }
+
+                nextBtn.addEventListener('click', showNext);
+                prevBtn.addEventListener('click', showPrev);
+                
+                updateCarouselSize();
+                window.addEventListener('resize', updateCarouselSize);
+            }
+
+            // Review submission
+            const submitReviewBtn = document.querySelector('button');
+            submitReviewBtn.addEventListener('click', () => {
+                const rating = document.querySelector('input[name="rating"]:checked');
+                const review = document.querySelector('#review').value;
+                if (rating && review) {
+                    console.log(`Submitted rating: ${rating.value}, Review: ${review}`);
+                    // Here you can add logic to send the review to a server
+                    alert('Thank you for your review!');
+                } else {
+                    alert('Please select a rating and write a review before submitting.');
+                }
+            });
+
+            function findIndexById(array, id) {
+                return array.findIndex(item => item.id === id);
+            }
+
+            // New function to handle video playback 
+            function handleVideoPlayback() {
+                const video = document.getElementById('gameVideo');
+                const playButton = document.querySelector('.play-button');
+
+                if (video && playButton) {
+                    // Toggle play/pause on button click
+                    playButton.addEventListener('click', () => {
+                        if (video.paused) {
+                            video.play();
+                            playButton.style.opacity = '0';
+                            playButton.style.pointerEvents = 'none';
+                        } else {
+                            video.pause();
+                            playButton.style.opacity = '1';
+                            playButton.style.pointerEvents = 'auto';
+                        }
+                    });
+
+                    // Show play button when video ends
+                    video.addEventListener('ended', () => {
+                        playButton.style.opacity = '1';
+                        playButton.style.pointerEvents = 'auto';
+                    });
+
+                    // Handle play and pause events
+                    video.addEventListener('play', () => {
+                        playButton.style.opacity = '0';
+                        playButton.style.pointerEvents = 'none';
+                    });
+
+                    video.addEventListener('pause', () => {
+                        playButton.style.opacity = '1';
+                        playButton.style.pointerEvents = 'auto';
+                    });
+
+                    // Pause video if the document is not visible
+                    function handleVisibilityChange() {
+                        if (document.hidden) {
+                            video.pause();
+                            playButton.style.opacity = '1';
+                            playButton.style.pointerEvents = 'auto';
+                            console.log('Tab not visible, video paused.');
+                        }
+                    }
+
+                    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+                    // Ensure event listeners are added only once
+                    if (!video.hasAttribute('data-listeners')) {
+                        video.setAttribute('data-listeners', 'true');
+                    }
+                }
+                function findIndexById(array, id) {
+                    return array.findIndex(item => item.id === id);
+                }
+    
+                function handleVideoPlayback() {
+                    const video = document.getElementById('gameVideo');
+                    const playPauseButton = document.querySelector('.play-pause-button');
+    
+                    if (video && playPauseButton) {
+                        playPauseButton.addEventListener('click', () => {
+                            if (video.paused) {
+                                video.play();
+                                playPauseButton.textContent = '❚❚';
+                            } else {
+                                video.pause();
+                                playPauseButton.textContent = '▶';
+                            }
+                        });
+    
+                        video.addEventListener('play', () => {
+                            playPauseButton.textContent = '❚❚';
+                        });
+    
+                        video.addEventListener('pause', () => {
+                            playPauseButton.textContent = '▶';
+                        });
+    
+                        video.addEventListener('ended', () => {
+                            playPauseButton.textContent = '▶';
+                        });
+    
+                        function handleVisibilityChange() {
+                            if (document.hidden) {
+                                video.pause();
+                                playPauseButton.textContent = '▶';
+                            }
+                        }
+    
+                        document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+                        if (!video.hasAttribute('data-listeners')) {
+                            video.setAttribute('data-listeners', 'true');
+                        }
+                    }
+                }}
+        });
     </script>
 </body>
 </html>
