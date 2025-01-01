@@ -25,57 +25,6 @@
     </script>
     <title>Latest | Sweet Potato</title>
     <style>
-        .genre-dropdown {
-            display: none;
-            position: absolute;
-            background-color: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.375rem;
-            padding: 0.5rem;
-            z-index: 50;
-            width: 400px; /* Adjust width as needed */
-            max-height: 600px; /* Limit height and enable scrolling */
-            overflow-y: auto;
-        }
-        .genre-dropdown.show {
-            display: block;
-        }
-        .genre-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-        .genre-item {
-            flex: 0 0 calc(33.333% - 0.5rem); /* Approximately 3 items per row */
-        }
-        #mobileGenreList {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 0.375rem;
-            margin-top: 0.5rem;
-            max-height: 60vh; /* Limit the height to 60% of the viewport height */
-            overflow-y: auto; /* Enable vertical scrolling */
-            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-        }
-        #mobileGenreList::-webkit-scrollbar {
-            width: 6px;
-        }
-        #mobileGenreList::-webkit-scrollbar-thumb {
-            background-color: rgba(255, 255, 255, 0.3);
-            border-radius: 3px;
-        }
-        #mobileGenreList::-webkit-scrollbar-track {
-            background-color: rgba(0, 0, 0, 0.1);
-        }
-
-        #mobileGenreList a {
-            display: block;
-            padding: 0.5rem;
-            color: white;
-        }
-
-        #mobileGenreList a:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
         /* START: Added styles for star rating */
         .star-rating {
             display: inline-flex;
@@ -154,7 +103,6 @@
 </main>     
 
     <script>
-        // Existing burger menu code remains unchanged
         document.addEventListener('DOMContentLoaded', () => {
             const burgerIcon = document.querySelector('#burger-icon');
             const sideMenu = document.querySelector('#side-menu');
