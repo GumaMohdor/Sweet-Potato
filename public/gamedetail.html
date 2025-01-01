@@ -147,30 +147,26 @@
 <body class="bg-gray-100">
     <!-- Header with navigation -->
     <header class="bg-main fixed top-0 w-full shadow-md z-50">
+        <!-- Navigation bar -->
         <nav class="container mx-auto px-6 py-3">
             <div class="flex justify-between items-center">
+                <!-- Logo/Home link -->
                 <a href="index.html" class="text-2xl font-bold text-white font-luckiest">Sweet Potato</a>
+                <!-- Desktop navigation menu -->
                 <div class="hidden md:flex items-center space-x-4">
-                    <!-- START: Updated Genre link with dropdown -->
-                    <div class="relative">
-                        <a href="#" class="text-white hover:text-main-dark hover:bg-white px-6 py-2 rounded-md" id="genreDropdown">Genre</a>
-                        <div class="genre-dropdown" id="genreList">
-                            <div class="genre-list">
-                                <!-- Genre list will be populated by JavaScript -->
-                            </div>
-                        </div>
-                    </div>
-                    <!-- END: Updated Genre link with dropdown -->
-                    <a href="latestgames.html" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Latest</a>
+                    <a href="genre.html" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Genre</a>
+                    <a href="#" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Latest</a>
                     <a href="populargames.html" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Popular</a>
                     <a href="sign.html" class="bg-main-dark text-white px-4 py-2 rounded-md hover:bg-white hover:text-main-dark">Log In</a>
                 </div>
+                <!-- Mobile menu button -->
                 <button id="burger-icon" class="md:hidden text-white focus:outline-none">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                 </button>
             </div>
+            <!-- Search bar -->
             <div class="mt-4">
                 <div class="flex items-center space-x-2">
                     <input type="search" placeholder="Search" class="border bg-gray-200 border-gray-300 rounded-full px-3 py-2 focus:outline-none focus:border-main-dark w-full">
@@ -182,16 +178,14 @@
                 </div>
             </div>
         </nav>
+        <!-- Mobile side menu -->
         <div id="side-menu" class="hidden absolute top-14 left-0 w-full bg-main text-white shadow-lg z-40 md:hidden">
             <ul class="flex flex-col space-y-4 px-6 py-4">
-                <li><a href="#" class="block text-white hover:text-main-light" id="mobileGenreDropdown">Genre</a></li>
-                <li><a href="latestgames.html" class="block text-white hover:text-main-light">Latest</a></li>
+                <li><a href="genre.html" class="block text-white hover:text-main-light">Genre</a></li>
+                <li><a href="#" class="block text-white hover:text-main-light">Latest</a></li>
                 <li><a href="populargames.html" class="block text-white hover:text-main-light">Popular</a></li>
                 <li><a href="sign.html" class="block bg-main-dark px-4 py-2 rounded-md text-center hover:bg-main-light hover:text-main-dark">Log In</a></li>
             </ul>
-            <div id="mobileGenreList" class="hidden px-6 py-4 space-y-2">
-                <!-- Genre list will be populated by JavaScript -->
-            </div>
         </div>
     </header>
     
@@ -217,7 +211,7 @@
                 </div>
             </div>
         <!-- Video and Image Section with Carousel -->
-        <div class="flex flex-col md:flex-row">
+        <div class="flex flex-col md:flex-row place-self-center">
             <!-- Carousel container -->
             <div class="carousel relative w-full md:w-auto">
                 <div class="carousel-inner" id="carousel">
@@ -226,7 +220,7 @@
                         <div class="relative group">
                             <video class="w-full h-[200px] md:h-[400px] rounded-lg overflow-hidden border border-gray-700" controls autoplay>
                                 <!-- link to video  -->
-                                <source src="https://www.youtube.com/watch?v=uJ_1HMAGb4k" type="video/mp4" id="trailer">
+                                <source src="/placeholder.mp4" type="video/mp4" id="trailer">
                             </video>
                             <button class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition duration-300 text-white text-xl">
                                 ▶ Play
@@ -290,42 +284,6 @@
             burgerIcon.addEventListener('click', () => {
                 sideMenu.classList.toggle('hidden');
             });
-
-            // START: Added code for genre dropdown
-            const genreDropdown = document.getElementById('genreDropdown');
-            const genreList = document.getElementById('genreList');
-            const genres = [
-                'Action', 'Adventure', 'RPG', 'Strategy', 'Simulation', 'Sports',
-                'Puzzle', 'Racing', 'Fighting', 'Shooter', 'Platformer', 'Stealth',
-                'Horror', 'Survival', 'Open World', 'Battle Royale', 'MMORPG',
-                'Card Game', 'Visual Novel', 'Roguelike', 'Sandbox', 'Tower Defense',
-                'Rhythm', 'MOBA', 'Idle', 'Clicker', 'Educational', 'Party Game',
-                'Trivia', 'Board Game', 'Augmented Reality', 'Virtual Reality'
-            ];
-
-            // Populate genre list
-            const genreListContainer = genreList.querySelector('.genre-list');
-            genres.forEach(genre => {
-                const genreItem = document.createElement('a');
-                genreItem.href = `#${genre.toLowerCase()}`;
-                genreItem.className = 'genre-item text-gray-700 hover:bg-gray-100 block px-4 py-2 rounded';
-                genreItem.textContent = genre;
-                genreListContainer.appendChild(genreItem);
-            });
-
-            // Toggle genre dropdown
-            genreDropdown.addEventListener('click', (e) => {
-                e.preventDefault();
-                genreList.classList.toggle('show');
-            });
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!genreDropdown.contains(e.target) && !genreList.contains(e.target)) {
-                    genreList.classList.remove('show');
-                }
-            });
-            // END: Added code for genre dropdown
 
             // Carousel functionality
             const carousel = document.querySelector('.carousel-inner');
