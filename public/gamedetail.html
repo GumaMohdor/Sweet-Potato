@@ -270,7 +270,7 @@
                 <label for="review" class="block text-sm font-medium text-gray-700 mb-2">Your Review</label>
                 <textarea id="review" name="review" rows="4" class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-main-dark" placeholder="Write your review here..."></textarea>
             </div>
-            <button class="bg-main-dark text-white px-4 py-2 rounded-md hover:bg-main transition duration-300">Submit Review</button>
+            <button id="submitReviewBtn" class="bg-main-dark text-white px-4 py-2 rounded-md hover:bg-main transition duration-300">Submit Review</button>
         </div>
     </main>
     
@@ -333,18 +333,18 @@
             
 
             // Review submission
-            const submitReviewBtn = document.querySelector('button');
-            submitReviewBtn.addEventListener('click', () => {
-                const rating = document.querySelector('input[name="rating"]:checked');
-                const review = document.querySelector('#review').value;
-                if (rating && review) {
-                    console.log(`Submitted rating: ${rating.value}, Review: ${review}`);
-                    // Here you can add logic to send the review to a server
-                    alert('Thank you for your review!');
-                } else {
-                    alert('Please select a rating and write a review before submitting.');
-                }
-            });
+            // const submitReviewBtn = document.querySelector('button');
+            // submitReviewBtn.addEventListener('click', () => {
+            //     const rating = document.querySelector('input[name="rating"]:checked');
+            //     const review = document.querySelector('#review').value;
+            //     if (rating && review) {
+            //         console.log(`Submitted rating: ${rating.value}, Review: ${review}`);
+            //         // Here you can add logic to send the review to a server
+            //         alert('Thank you for your review!');
+            //     } else {
+            //         alert('Please select a rating and write a review before submitting.');
+            //     }
+            // });
 
             function findIndexById(array, id) {
                 return array.findIndex(item => item.id === id);
@@ -468,7 +468,68 @@
                 .catch(error => {
                     console.error('Error:', error);
                 });
+
+
+                // Handle Submit Review
+                const submitReviewBtn = document.querySelector("#submitReviewBtn");
+                submitReviewBtn.addEventListener("click", async (event) => {
+                    event.preventDefault();
+
+                    // Ambil nilai rating
+                    const rating = document.querySelector('input[name="rating"]:checked');
+                    if (!rating) {
+                        alert("Please select a rating.");
+                        return;
+                    }
+
+                    // Ambil nilai review
+                    const review = document.querySelector("#review").value;
+                    if (!review.trim()) {
+                        alert("Please write a review.");
+                        return;
+                    }
+
+                    // Ambil ID game dari URL (asumsi ID game ada di query string)
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const gameId = urlParams.get("id");
+                    if (!gameId) {
+                        alert("Game ID is missing!");
+                        return;
+                    }
+
+                    // Kirim data ke API
+                    try {
+                        const response = await fetch(`${url}/api/ratings`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${localStorage.getItem("token")}` // Opsional: jika API memerlukan token autentikasi
+                            },
+                            body: JSON.stringify({
+                                score: parseInt(rating.value),
+                                review: review.trim(),
+                                game_id: gameId
+                            }),
+                            credentials: "include"
+                        });
+
+                        const data = await response.json();
+                        if (response.ok) {
+                            alert("Review submitted successfully!");
+                            // Reset form
+                            document.querySelector("#review").value = "";
+                            document.querySelector('input[name="rating"]:checked').checked = false;
+                        } else {
+                            alert(`Error: ${data.message}`);
+                        }
+                    } catch (error) {
+                        console.error("Error submitting review:", error);
+                        alert("An error occurred while submitting your review. Please try again.");
+                    }
+                });
     });
+
+
     </script>
 </body>
 </html>
