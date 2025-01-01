@@ -117,29 +117,28 @@
 </head>
 <body class="bg-gray-100">
     <!-- START: Header and Navigation -->
+    <!-- Header section -->
     <header class="bg-main fixed top-0 w-full shadow-md z-50">
+        <!-- Navigation bar -->
         <nav class="container mx-auto px-6 py-3">
             <div class="flex justify-between items-center">
+                <!-- Logo/Home link -->
                 <a href="#" class="text-2xl font-bold text-white font-luckiest">Sweet Potato</a>
+                <!-- Desktop navigation menu -->
                 <div class="hidden md:flex items-center space-x-4">
-                    <div class="relative">
-                        <a href="#" class="text-white hover:text-main-dark hover:bg-white px-6 py-2 rounded-md" id="genreDropdown">Genre</a>
-                        <div class="genre-dropdown" id="genreList">
-                            <div class="genre-list">
-                                <!-- Genre list will be populated by JavaScript -->
-                            </div>
-                        </div>
-                    </div>
-                    <a href="latestgames.html" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Latest</a>
+                    <a href="genre.html" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Genre</a>
+                    <a href="genre.html" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Latest</a>
                     <a href="populargames.html" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Popular</a>
                     <a href="sign.html" class="bg-main-dark text-white px-4 py-2 rounded-md hover:bg-white hover:text-main-dark">Log In</a>
                 </div>
+                <!-- Mobile menu button -->
                 <button id="burger-icon" class="md:hidden text-white focus:outline-none">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                 </button>
             </div>
+            <!-- Search bar -->
             <div class="mt-4">
                 <div class="flex items-center space-x-2">
                     <input type="search" placeholder="Search" class="border bg-gray-200 border-gray-300 rounded-full px-3 py-2 focus:outline-none focus:border-main-dark w-full">
@@ -151,19 +150,16 @@
                 </div>
             </div>
         </nav>
+        <!-- Mobile side menu -->
         <div id="side-menu" class="hidden absolute top-14 left-0 w-full bg-main text-white shadow-lg z-40 md:hidden">
             <ul class="flex flex-col space-y-4 px-6 py-4">
-                <li><a href="#" class="block text-white hover:text-main-light" id="mobileGenreDropdown">Genre</a></li>
-                <li><a href="latestgames.html" class="block text-white hover:text-main-light">Latest</a></li>
+                <li><a href="genre.html" class="block text-white hover:text-main-light">Genre</a></li>
+                <li><a href="genre.html" class="block text-white hover:text-main-light">Latest</a></li>
                 <li><a href="populargames.html" class="block text-white hover:text-main-light">Popular</a></li>
                 <li><a href="sign.html" class="block bg-main-dark px-4 py-2 rounded-md text-center hover:bg-main-light hover:text-main-dark">Log In</a></li>
             </ul>
-            <div id="mobileGenreList" class="hidden px-6 py-4 space-y-2">
-                <!-- Genre list will be populated by JavaScript -->
-            </div>
         </div>
     </header>
-    <!-- END: Header and Navigation -->
 
     <main class="mt-32 container mx-auto px-6 bg-gray-100 mb-12">
         <!-- START: Featured games carousel -->
@@ -259,35 +255,38 @@
         </div>
         <!-- END: Popular Games section -->
     </main>
-
+    
     <script>
-        const url = "http://192.168.1.9:5000";
-        const games = [];
+        document.addEventListener('DOMContentLoaded', () => {
+            const burgerIcon = document.querySelector('#burger-icon');
+            const sideMenu = document.querySelector('#side-menu');
+            const url = "http://192.168.1.9:5000";
+            const games = [];
 
-        function fetchGames() {
-            fetch(`${url}/api/games/`)
-                .then(response => response.json())
-                .then(data => {
-                    const gameFetches = data.results.map(game => {
-                        return fetch(game.url)
-                            .then(response => response.json())
-                            .then(gameData => {
-                                gameData.release_date = formatDate(gameData.release_date);
-                                return gameData;
-                            });
+            function fetchGames() {
+                fetch(`${url}/api/games/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const gameFetches = data.results.map(game => {
+                            return fetch(game.url)
+                                .then(response => response.json())
+                                .then(gameData => {
+                                    gameData.release_date = formatDate(gameData.release_date);
+                                    return gameData;
+                                });
+                        });
+
+                        return Promise.all(gameFetches);
+                    })
+                    .then(fetchedGames => {
+                        games.push(...fetchedGames);
+                        renderNewReleased();
+                        renderTopRatedGames();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
                     });
-
-                    return Promise.all(gameFetches);
-                })
-                .then(fetchedGames => {
-                    games.push(...fetchedGames);
-                    renderNewReleased();
-                    renderTopRatedGames();
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
+            }
 
         function formatDate(inputDate) {
             if (!inputDate) {
@@ -418,70 +417,14 @@
             });
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const burgerIcon = document.querySelector('#burger-icon');
-            const sideMenu = document.querySelector('#side-menu');
 
             burgerIcon.addEventListener('click', () => {
                 sideMenu.classList.toggle('hidden');
             });
-
-            const genreDropdown = document.getElementById('genreDropdown');
-            const genreList = document.getElementById('genreList');
-            const genres = [
-                'Action', 'Adventure', 'RPG', 'Strategy', 'Simulation', 'Sports',
-                'Puzzle', 'Racing', 'Fighting', 'Shooter', 'Platformer', 'Stealth',
-                'Horror', 'Survival', 'Open World', 'Battle Royale', 'MMORPG',
-                'Card Game', 'Visual Novel', 'Roguelike', 'Sandbox', 'Tower Defense',
-                'Rhythm', 'MOBA', 'Idle', 'Clicker', 'Educational', 'Party Game',
-                'Trivia', 'Board Game', 'Augmented Reality', 'Virtual Reality'
-            ];
-
-            const genreListContainer = genreList.querySelector('.genre-list');
-            genres.forEach(genre => {
-                const genreItem = document.createElement('a');
-                genreItem.href = `#${genre.toLowerCase()}`;
-                genreItem.className = 'genre-item text-gray-700 hover:bg-gray-100 block px-4 py-2 rounded';
-                genreItem.textContent = genre;
-                genreListContainer.appendChild(genreItem);
-            });
-
-            genreDropdown.addEventListener('click', (e) => {
-                e.preventDefault();
-                genreList.classList.toggle('show');
-            });
-
-            document.addEventListener('click', (e) => {
-                if (!genreDropdown.contains(e.target) && !genreList.contains(e.target)) {
-                    genreList.classList.remove('show');
-                }
-            });
-
-            const mobileGenreDropdown = document.getElementById('mobileGenreDropdown');
-            const mobileGenreList = document.getElementById('mobileGenreList');
-
-            genres.forEach(genre => {
-                const genreItem = document.createElement('a');
-                genreItem.href = `#${genre.toLowerCase()}`;
-                genreItem.textContent = genre;
-                mobileGenreList.appendChild(genreItem);
-            });
-
-            mobileGenreDropdown.addEventListener('click', (e) => {
-                e.preventDefault();
-                mobileGenreList.classList.toggle('hidden');
-            });
-
-            document.addEventListener('click', (e) => {
-                if (!mobileGenreDropdown.contains(e.target) && !mobileGenreList.contains(e.target)) {
-                    mobileGenreList.classList.add('hidden');
-                }
-            });
-
+            
             setupCarousel('carouselInner', 'prevBtn', 'nextBtn');
             fetchGames();
-        });
-
+            
         function setupCarousel(containerId, prevBtnId, nextBtnId) {
             const container = document.getElementById(containerId);
             const prevBtn = document.getElementById(prevBtnId);
@@ -490,26 +433,27 @@
             const cardWidth = 280;
             const containerWidth = container.offsetWidth;
             const maxScroll = container.scrollWidth - containerWidth;
-
+            
             prevBtn.addEventListener('click', () => {
                 scrollAmount = Math.max(scrollAmount - cardWidth, 0);
                 container.style.transform = `translateX(-${scrollAmount}px)`;
                 updateButtonVisibility();
             });
-
+            
             nextBtn.addEventListener('click', () => {
                 scrollAmount = Math.min(scrollAmount + cardWidth, maxScroll);
                 container.style.transform = `translateX(-${scrollAmount}px)`;
                 updateButtonVisibility();
             });
-
+            
             function updateButtonVisibility() {
                 prevBtn.style.display = scrollAmount <= 0 ? 'none' : 'block';
                 nextBtn.style.display = scrollAmount >= maxScroll ? 'none' : 'block';
             }
-
+            
             updateButtonVisibility();
         }
+    });
     </script>
 </body>
 </html>
