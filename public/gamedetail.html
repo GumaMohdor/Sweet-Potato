@@ -127,7 +127,7 @@
                 <a href="index.html" class="text-2xl font-bold text-white font-luckiest">Sweet Potato</a>
                 <!-- Desktop navigation menu -->
                 <div class="hidden md:flex items-center space-x-4">
-                    <a href="genre.html" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Genre</a>
+                    <a href="genre.html" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Games</a>
                     <a href="#" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Latest</a>
                     <a href="populargames.html" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Popular</a>
                     <a href="sign.html" class="bg-main-dark text-white px-4 py-2 rounded-md hover:bg-white hover:text-main-dark">Log In</a>
@@ -540,6 +540,47 @@
             }
         });
     });
+    // START: Search game
+    const searchInput = document.querySelector('input[type="search"]');
+    let debounceTimer; // Variabel untuk menyimpan timer debounce
+    const debounceDelay = 500; // Delay dalam milidetik (misalnya 300ms)
+
+    document.addEventListener('DOMContentLoaded', () => {
+        searchInput?.focus(); // Kosongkan input search
+    });
+    
+    searchInput?.addEventListener('input', () => {
+        clearTimeout(debounceTimer); // Hapus timer jika ada input baru
+
+        debounceTimer = setTimeout(() => {
+            const query = searchInput ? searchInput.value.toLowerCase() : '';
+
+            latestReleasedGames.length = 0; // Kosongkan array game
+            fetch(`${url}/api/games?search=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    const gameFetches = data.results.map(game => {
+                        return fetch(game.url)
+                            .then(response => response.json())
+                            .then(gameData => {
+                                gameData.release_date = formatDate(gameData.release_date);
+                                return gameData; // Kembalikan data game
+                            });
+                    });
+
+                    // Tunggu semua `fetch` selesai
+                    return Promise.all(gameFetches);
+                })
+                .then(fetchedGames => {
+                    latestReleasedGames.push(...fetchedGames); // Masukkan semua data game
+                    renderLatestGames(); // Render game
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }, debounceDelay); // Set timer untuk delay eksekusi
+    });
+    // END: Search game
     </script>
 </body>
 </html>
