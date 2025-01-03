@@ -156,8 +156,7 @@
         const mediaInput = document.getElementById('media');
         const genres = document.getElementById('genre-dropdown');
 
-        // const url = 'https://blitzorn.pythonanywhere.com'
-        const url = 'http://192.168.1.9:5000';
+        const url = 'https://blitzorn.pythonanywhere.com/'
         function sortTable(columnIndex) {
         const rows = Array.from(dataTable.querySelectorAll('tr'));
         const isAscending = dataTable.getAttribute('data-sort') !== `column-${columnIndex}-asc`;
