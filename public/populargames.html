@@ -161,7 +161,7 @@
         
         const topRatedGames = [];
         // START: Updated game data
-        const url="http://192.168.1.9:5000";
+        const url="https://blitzorn.pythonanywhere.com/";
         fetch(`${url}/api/games/`)
             .then(response => response.json())
             .then(data => {

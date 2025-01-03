@@ -280,7 +280,7 @@
             const description = document.querySelector('#description')
             const carouselContainer = document.querySelector('#carousel')
 
-            const url="http://192.168.1.9:5000";
+            const url="https://blitzorn.pythonanywhere.com/";
             fetch(`${url}/api/games/`,  { mode: 'cors' })
                 .then(response => response.json())
                 .then(data => {

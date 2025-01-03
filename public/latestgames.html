@@ -115,7 +115,7 @@
         // START: Updated latest released games data with IDs
         const latestReleasedGames = []; // Array untuk menyimpan data game
         // Fetch data game dari API
-        const url="http://192.168.1.9:5000";
+        const url="https://blitzorn.pythonanywhere.com/";
         fetch(`${url}/api/games/`,  { mode: 'cors' })
             .then(response => response.json())
             .then(data => {
