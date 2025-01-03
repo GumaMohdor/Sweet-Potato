@@ -130,7 +130,7 @@
                     <a href="genre.html" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Games</a>
                     <a href="latestgames.html" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Latest</a>
                     <a href="populargames.html" class="text-white hover:text-main-dark hover:bg-white px-4 py-2 rounded-md">Popular</a>
-                    <a href="sign.html" class="bg-main-dark text-white px-4 py-2 rounded-md hover:bg-white hover:text-main-dark">Log In</a>
+                    <a href="sign.html" class="bg-main-dark text-white px-4 py-2 rounded-md hover:bg-white hover:text-main-dark">Log Out</a>
                 </div>
                 <!-- Mobile menu button -->
                 <button id="burger-icon" class="md:hidden text-white focus:outline-none">
@@ -281,6 +281,7 @@
             const carouselContainer = document.querySelector('#carousel')
 
             const url="https://blitzorn.pythonanywhere.com/";
+            //const url="http://192.168.1.9:5000/";
             fetch(`${url}/api/games/`,  { mode: 'cors' })
                 .then(response => response.json())
                 .then(data => {

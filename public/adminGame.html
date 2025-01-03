@@ -133,8 +133,12 @@
                     </select>
                 </div> 
                 <div class="mb-4">
+                    <label for="thumbnail" class="block text-sm font-medium mb-1">Thumbnail</label>
+                    <input type="file" id="thumbnail" name="thumbnail" class="w-full border border-gray-700 rounded px-3 py-2 bg-gray-700 text-white" accept="image/*">
+                </div>
+                <div class="mb-4">
                     <label for="media" class="block text-sm font-medium mb-1">Media</label>
-                    <input type="file" id="media" name="media" class="w-full border border-gray-700 rounded px-3 py-2 bg-gray-700 text-white" accept="image/*,video/*">
+                    <input type="file" id="media" name="media" class="w-full border border-gray-700 rounded px-3 py-2 bg-gray-700 text-white" accept="image/*,video/*" multiple>
                 </div>
                 <div class="flex justify-end space-x-2">
                     <button type="button" onclick="closePopup()" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">Cancel</button>
@@ -155,6 +159,7 @@
         const releaseDateInput = document.getElementById('release-date');
         const mediaInput = document.getElementById('media');
         const genres = document.getElementById('genre-dropdown');
+        const thumbnailInput = document.getElementById('thumbnail');
 
         const url = 'https://blitzorn.pythonanywhere.com/'
         function sortTable(columnIndex) {
@@ -374,10 +379,20 @@
             formData.append('release_date', releaseDateInput.value);
             const selectedGenres = Array.from(genres.selectedOptions).map(option => option.value);
             selectedGenres.forEach(genre => formData.append('genres', genre));
-            //formData.append('genres', selectedGenres);
 
-            if (mediaInput.files[0]) {
-                formData.append('media', mediaInput.files[0]);
+            // mediaInput.forEach(file => {
+            //     formData.append('media', file);
+            // });
+            const files = mediaInput.files;
+            for (const file of files) {
+                formData.append('media', file);
+            }
+            // if (mediaInput.files[0]) {
+            //     formData.append('media', mediaInput.files[0]);
+            // }
+
+            if (thumbnailInput.files[0]) {
+                formData.append('thumbnail', thumbnailInput.files[0]);
             }
 
             const id = dataIdInput.value;
