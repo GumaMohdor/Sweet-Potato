@@ -185,6 +185,13 @@
     </main>
     <!-- Start: JavaScript -->
     <script>
+        // START: Added function to navigate to game detail
+        function navigateToGameDetail(gameId) {
+            console.log('hi')
+            window.location.href = `gamedetail.html?id=${gameId}`;
+        }
+        // END: Added function to navigate to game detail
+
         // Event listener for DOMContentLoaded
         document.addEventListener('DOMContentLoaded', () => {
             // DOM element references
@@ -215,12 +222,6 @@
                 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
                 return `${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
             }
-
-            // START: Added function to navigate to game detail
-            function navigateToGameDetail(gameId) {
-            window.location.href = `gamedetail.html?id=${gameId}`;
-        }
-        // END: Added function to navigate to game detail
 
             // Function to populate the filter dropdown list
             function populateFilterList() {
