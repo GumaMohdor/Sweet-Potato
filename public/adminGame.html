@@ -328,6 +328,10 @@
 
         async function deleteGame(id) {
             try {
+                // Tampilkan konfirmasi kepada pengguna
+                const isConfirmed = confirm('Apakah Anda yakin ingin menghapus game ini?');
+                if (!isConfirmed) return; // Jika pengguna tidak setuju, hentikan eksekusi
+                
                 const token = localStorage.getItem('token');
                 const response = await fetch(`${url}/api/games/${id}`, { 
                     method: 'DELETE',
