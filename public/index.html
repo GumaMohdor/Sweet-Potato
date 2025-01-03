@@ -305,7 +305,11 @@
             return `${month} ${day}, ${year}`;
         }
 
-
+        // START: Added function to navigate to game detail
+        function navigateToGameDetail(gameId) {
+            window.location.href = `gamedetail.html?id=${gameId}`;
+        }
+        // END: Added function to navigate to game detail
         function sortGamesByReleaseDate(games) {
             return games.sort((a, b) => {
                 const dateA = new Date(a.release_date);

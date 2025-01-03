@@ -216,10 +216,11 @@
                 return `${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
             }
 
-            // Function to navigate to game detail page
+            // START: Added function to navigate to game detail
             function navigateToGameDetail(gameId) {
-                window.location.href = `gamedetail.html?id=${gameId}`;
-            }
+            window.location.href = `gamedetail.html?id=${gameId}`;
+        }
+        // END: Added function to navigate to game detail
 
             // Function to populate the filter dropdown list
             function populateFilterList() {
